@@ -5,10 +5,17 @@ import store from "./store";
 import Buefy from "buefy";
 import "buefy/dist/buefy.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faHome, faUser, faEdit, faCogs, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHome,
+  faUser,
+  faEdit,
+  faCogs,
+  faSignOutAlt,
+  faDownload,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faHome, faUser, faEdit, faCogs, faSignOutAlt);
+library.add(faHome, faUser, faEdit, faCogs, faSignOutAlt, faDownload);
 
 Vue.component("vue-fontawesome", FontAwesomeIcon);
 Vue.config.productionTip = false;
