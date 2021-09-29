@@ -20,6 +20,11 @@ const routes: Array<RouteConfig> = [
     name: "Subjects",
     component: () => import("../views/MySubjects.vue"),
   },
+  {
+    path: "/settings",
+    name: "Settings",
+    component: () => import("../views/Settings.vue"),
+  },
 ];
 
 const router = new VueRouter({
