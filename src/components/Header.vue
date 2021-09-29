@@ -11,22 +11,16 @@
           </span>
         </div>
         <div id="navbarMenuHeroA" class="navbar-menu navbar-end">
-          <router-link to="/" id="frontpage" class="navbar-item">
-            <b-icon icon="home"></b-icon>
-            <span>Startseite</span>
+          <router-link
+            v-for="(info, index) of routerInfo"
+            :key="index"
+            :to="info.link"
+            id="frontpage"
+            class="navbar-item"
+          >
+            <b-icon :icon="info.icon"></b-icon>
+            <span>{{ info.text }}</span>
           </router-link>
-          <router-link to="/my-subjects" id="wahl" class="navbar-item">
-            <b-icon icon="edit"></b-icon>
-            <span>Meine Wahl</span>
-          </router-link>
-          <router-link to="/admin" id="admin" class="navbar-item">
-            <b-icon icon="user"></b-icon>
-            <span>Admin</span>
-          </router-link>
-          <a id="settings" class="navbar-item">
-            <b-icon icon="cogs"></b-icon>
-            <span>Einstellungen</span>
-          </a>
           <a class="navbar-item">
             <b-icon icon="sign-out-alt"></b-icon>
             <span>Logout</span>
@@ -60,7 +54,14 @@
 import { Vue, Component } from "vue-property-decorator";
 
 @Component
-export default class Header extends Vue {}
+export default class Header extends Vue {
+  routerInfo = [
+    { link: "/", icon: "home", text: "Startseite1" },
+    { link: "/my-subjects", icon: "edit", text: "Meine Wahl" },
+    { link: "/admin", icon: "user", text: "Admin" },
+    { link: "/settings", icon: "cogs", text: "Einstellungen" },
+  ];
+}
 </script>
 
 <style lang="scss">
