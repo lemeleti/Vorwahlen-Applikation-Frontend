@@ -18,7 +18,7 @@
       </div>
 
       <div class="right-sidemenu">
-        <RightMenu />
+        <RightMenu v-if="$route.path === '/'" />
       </div>
     </div>
     <Footer />
