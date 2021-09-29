@@ -12,10 +12,29 @@ import {
   faCogs,
   faSignOutAlt,
   faDownload,
+  faChevronDown,
+  faChartPie,
+  faArrowUp,
+  faSquare,
+  faCheck,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faHome, faUser, faEdit, faCogs, faSignOutAlt, faDownload);
+library.add(
+  faHome,
+  faUser,
+  faEdit,
+  faCogs,
+  faSignOutAlt,
+  faDownload,
+  faChevronDown,
+  faChartPie,
+  faArrowUp,
+  faSquare,
+  faCheck,
+  faPlus
+);
 
 Vue.component("vue-fontawesome", FontAwesomeIcon);
 Vue.config.productionTip = false;
