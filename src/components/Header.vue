@@ -58,6 +58,7 @@ export default class Header extends Vue {
   routerInfo = [
     { link: "/", icon: "home", text: "Startseite" },
     { link: "/my-subjects", icon: "edit", text: "Meine Wahl" },
+    { link: "/statistics", icon: "chart-pie", text: "Statistiken" },
     { link: "/admin", icon: "user", text: "Admin" },
     { link: "/settings", icon: "cogs", text: "Einstellungen" },
   ];
