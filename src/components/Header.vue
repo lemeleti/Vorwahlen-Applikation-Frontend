@@ -56,7 +56,7 @@ import { Vue, Component } from "vue-property-decorator";
 @Component
 export default class Header extends Vue {
   routerInfo = [
-    { link: "/", icon: "home", text: "Startseite1" },
+    { link: "/", icon: "home", text: "Startseite" },
     { link: "/my-subjects", icon: "edit", text: "Meine Wahl" },
     { link: "/admin", icon: "user", text: "Admin" },
     { link: "/settings", icon: "cogs", text: "Einstellungen" },
