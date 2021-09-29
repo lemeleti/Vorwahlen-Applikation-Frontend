@@ -21,7 +21,7 @@
       <hr />
       <div class="block">
         <p class="subtitle">Aus dem Bereich Wirtschaft und Recht</p>
-        <b-table :data="data" :columns="columns"></b-table>
+        <b-table :data="wirtschaft" :columns="columns"></b-table>
       </div>
       <b-button
         label="Vorwahlen exportieren"
@@ -233,5 +233,7 @@ export default class Admin extends Vue {
       id: "RAP-EN",
     },
   ];
+
+  wirtschaft = [];
 }
 </script>
