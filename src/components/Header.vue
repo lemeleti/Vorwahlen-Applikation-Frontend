@@ -1,42 +1,37 @@
 <template>
   <header class="hero is-info is-small">
     <div class="hero-head">
-      <nav class="navbar container">
-        <img src="@/assets/logo.png" alt="ZHAW Logo" id="logo" />
-        <div class="navbar-brand">
-          <span class="navbar-burger" data-target="navbarMenuHeroA">
-            <span></span>
-            <span></span>
-            <span></span>
-          </span>
-        </div>
-        <div id="navbarMenuHeroA" class="navbar-menu navbar-end">
-          <router-link
+      <b-navbar centered type="is-info">
+        <template #brand>
+          <b-navbar-item tag="div">
+            <img src="@/assets/logo.png" alt="ZHAW" />
+          </b-navbar-item>
+        </template>
+        <template #start>
+          <b-navbar-item
             v-for="(info, index) of routerInfo"
+            tag="router-link"
             :key="index"
             :to="info.link"
-            id="frontpage"
-            class="navbar-item"
           >
             <b-icon :icon="info.icon"></b-icon>
             <span>{{ info.text }}</span>
-          </router-link>
-          <a class="navbar-item">
-            <b-icon icon="sign-out-alt"></b-icon>
+          </b-navbar-item>
+        </template>
+
+        <template #end>
+          <b-navbar-item>
+            <b-icon icon="bell"></b-icon>
+          </b-navbar-item>
+          <b-navbar-item>
+            <b-icon icon="search"></b-icon>
+          </b-navbar-item>
+          <b-navbar-item>
+            <b-icon icon="logout"></b-icon>
             <span>Logout</span>
-          </a>
-          <a class="navbar-item">
-            <span class="icon">
-              <i class="fas fa-bell"></i>
-            </span>
-          </a>
-          <a class="navbar-item">
-            <span class="icon">
-              <i class="fas fa-search"></i>
-            </span>
-          </a>
-        </div>
-      </nav>
+          </b-navbar-item>
+        </template>
+      </b-navbar>
     </div>
 
     <div class="hero-body">
