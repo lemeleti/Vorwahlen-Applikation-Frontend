@@ -3,8 +3,8 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import Buefy from "buefy";
-import axios from 'axios';
-import VueAxios from 'vue-axios';
+import axios from "axios";
+import VueAxios from "vue-axios";
 import "buefy/dist/buefy.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
