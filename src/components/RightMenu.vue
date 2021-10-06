@@ -1,6 +1,6 @@
 <template>
   <div class="column is-narrow side-menu is-hidden-touch">
-    <section class="section">
+    <section class="section" v-if="$route.path === '/'">
       <div class="tile is-vertical" id="rightMenu">
         <RightMenuBox
           :content="belegung"
