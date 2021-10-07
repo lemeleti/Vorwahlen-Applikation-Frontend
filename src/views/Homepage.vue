@@ -57,11 +57,11 @@ import { Module } from "@/models/module";
 export default class Homepage extends Vue {
   modalTitle = "";
   isModalActive = false;
-  modules = [] as Module[];
+  modules = new Array<Module>();
 
   beforeMount(): void {
     Vue.axios.get<Module[]>("http://localhost:8080/module").then((resp) => {
-      this.modules = resp.data;
+      if (resp.data.length != 0) this.modules.push(...resp.data);
     });
   }
 
