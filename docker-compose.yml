@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  wpm-frontend:
+    build: .
+    restart: always
+    networks:
+      - web
+      - wpm
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.plex.rule=Host(`pa.lubojanski.me`) # Zu ersetzen
+      - traefik.http.routers.plex.entrypoints=web
+    
+networks:
+  web:
+    external: true
+
+  wpm:
+    external: true
