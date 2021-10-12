@@ -7,6 +7,8 @@ services:
     networks:
       - web
       - wpm
+    environment:
+      SERVER_URL: ${DOMAIN}
     labels:
       - traefik.enable=true
       - traefik.http.routers.plex.rule=Host(`pa.lubojanski.me`) # Zu ersetzen
