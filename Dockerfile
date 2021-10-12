@@ -1,5 +1,7 @@
 FROM node:lts-bullseye as build-stage
 WORKDIR /app
+ARG VUE_APP_SERVER_URL
+ENV VUE_APP_SERVER_URL=$VUE_APP_SERVER_URL
 COPY package*.json ./
 RUN npm install
 COPY ./ .
