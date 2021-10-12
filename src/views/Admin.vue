@@ -95,8 +95,11 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import ModuleListUpload from "@/mixins/ModuleListUpload";
 
-@Component
+@Component({
+  mixins: [ModuleListUpload],
+})
 export default class Admin extends Vue {
   columns = [
     {
