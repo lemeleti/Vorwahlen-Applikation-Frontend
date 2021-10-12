@@ -53,6 +53,9 @@ Vue.use(Buefy, {
   defaultIconComponent: "vue-fontawesome",
   defaultIconPack: "fas",
 });
+
+axios.defaults.baseURL = process.env.SERVER_URL || "http://localhost:8080";
+
 Vue.use(VueAxios, axios);
 Vue.use(VueSweetalert2);
 

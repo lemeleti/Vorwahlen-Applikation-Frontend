@@ -60,9 +60,20 @@ export default class Homepage extends Vue {
   modules = new Array<Module>();
 
   beforeMount(): void {
-    Vue.axios.get<Module[]>("http://localhost:8080/module").then((resp) => {
-      if (resp.data.length != 0) this.modules.push(...resp.data);
-    });
+    console.log(Vue.axios.defaults.baseURL);
+    
+    Vue.axios
+      .get<Module[]>("module")
+      .then((resp) => {
+        if (resp.data.length != 0) this.modules.push(...resp.data);
+      })
+      .catch((err) => {
+        Vue.swal({
+          title: "Fehler beim Laden der Module",
+          text: `Die Module konnten nicht geladen werden. ${err}`,
+          icon: "error",
+        });
+      });
   }
 
   showAdditionalSubjectInfo(title: string): void {
