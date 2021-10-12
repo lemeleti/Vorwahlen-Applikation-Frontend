@@ -60,8 +60,6 @@ export default class Homepage extends Vue {
   modules = new Array<Module>();
 
   beforeMount(): void {
-    console.log(Vue.axios.defaults.baseURL);
-    
     Vue.axios
       .get<Module[]>("module")
       .then((resp) => {
