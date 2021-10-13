@@ -4,7 +4,7 @@ import ExcelJs, { Buffer, Workbook, Worksheet } from "exceljs";
 
 @Component
 export default class ModuleListUpload extends Vue {
-  async beforeMount(): Promise<void> {
+  public async importModuleList(): Promise<void> {
     const workbook = new ExcelJs.Workbook();
     const file = await this.getFile();
 
