@@ -23,23 +23,33 @@
         <p class="subtitle">Aus dem Bereich Wirtschaft und Recht</p>
         <b-table :data="wirtschaft" :columns="columns"></b-table>
       </div>
-      <b-button
-        label="Vorwahlen exportieren"
-        type="is-success"
-        icon-left="download"
-      ></b-button>
+      <div class="buttons">
+        <b-button
+          label="Vorwahlen exportieren"
+          type="is-success"
+          icon-left="download"
+        ></b-button>
+        <b-button
+          label="Module importieren"
+          type="is-info"
+          icon-left="file-upload"
+          @click="this.importModules"
+        >
+        </b-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Component, Mixins } from "vue-property-decorator";
 import ModuleListUpload from "@/mixins/ModuleListUpload";
 
-@Component({
-  mixins: [ModuleListUpload],
-})
-export default class Admin extends Vue {
+@Component
+export default class Admin extends Mixins(ModuleListUpload) {
+  async importModules(): Promise<void> {
+    await this.importModuleList();
+  }
   columns = [
     {
       field: "title",
