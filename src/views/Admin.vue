@@ -29,67 +29,6 @@
         icon-left="download"
       ></b-button>
     </div>
-
-    <div class="modal" id="wahluploadmodal">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Modulliste importieren</p>
-          <button class="delete modal-cancel" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="content">
-            Bitte wählen Sie die entsprechende Modulliste aus welche Sie
-            importieren möchten. Achten Sie darauf, dass die Liste nur
-            Erweiterungen enthält. Zum Löschen von Fächern, setzen Sie bitte im
-            Menüpunkt "Zurücksetzen" die Datenbank zurück und importieren Sie
-            dann die Liste erneut.
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-          <div class="file has-name" id="modul-upload">
-            <label class="file-label">
-              <input class="file-input" type="file" name="resume" />
-              <span class="file-cta">
-                <span class="file-icon">
-                  <i class="fas fa-upload"></i>
-                </span>
-                <span class="file-label"> Liste auswählen </span>
-              </span>
-              <span class="file-name">
-                Liste_alle_Module_SM2025_SGL_Def.xlsx
-              </span>
-            </label>
-          </div>
-          <button class="button is-danger modal-cancel">Abbrechen</button>
-        </footer>
-      </div>
-    </div>
-
-    <div class="modal" id="zurucksetzenmodal">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Modulliste zurücksetzen</p>
-          <button class="delete modal-cancel" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="content">
-            Mit dem Bestätigen vom Löschen werden alle derzeitig gespeicherten
-            Module aus der Datenbank entfernt.
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-          <button class="button is-danger">
-            <span class="icon is-small">
-              <i class="fas fa-trash"></i>
-            </span>
-            <span>Löschen</span>
-          </button>
-          <button class="button modal-cancel">Abbrechen</button>
-        </footer>
-      </div>
-    </div>
   </div>
 </template>
 
