@@ -10,7 +10,7 @@ install:
   - npm ci
 
 cache:
-  - ".npm"
+  - "/home/appveyor/.npm"
   - node_modules
 
 build_script:
