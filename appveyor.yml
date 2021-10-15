@@ -18,6 +18,7 @@ test_script:
   - npm run lint
 
 deploy_script:
+  - chmod +x deploy.sh
   - sh: ./deploy.sh
 
   # We do not want to build git tags.
