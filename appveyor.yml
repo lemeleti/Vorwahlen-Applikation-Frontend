@@ -5,6 +5,7 @@ environment:
     secure: o71pevAd3AAskRz34CZIak0HRHKebCm8MM1mE7g9w3dWajlADYoFLR++PXpt5G1MK6fYPQGrjZEqDV6jpN5uPg==
 
 install:
+  - nvm use 15
   - npm ci
 
 build_script:
