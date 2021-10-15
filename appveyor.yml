@@ -12,7 +12,7 @@ artifacts:
 
 install:
   - nvm use 15
-  - npm ci
+  - npm ci --prefer-offline --only=production
 
 cache:
   - "/home/appveyor/.npm"
