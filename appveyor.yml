@@ -1,0 +1,25 @@
+image: Ubuntu2004
+
+environment:
+  DOCKERHUB_PASS:
+    secure: o71pevAd3AAskRz34CZIak0HRHKebCm8MM1mE7g9w3dWajlADYoFLR++PXpt5G1MK6fYPQGrjZEqDV6jpN5uPg==
+
+install:
+  - npm ci
+
+build_script:
+  # Bundle sources
+  - npm run build
+
+test_script:
+  # Add proper tests
+  - npm run lint
+
+deploy_script:
+  - sh: ./deploy.sh
+
+  # We do not want to build git tags.
+skip_tags: true
+
+# Use integers as build versions (1, 2, 3, …) instead of 1.0.X.
+version: "{build}"
