@@ -10,7 +10,7 @@ install:
   - npm ci
 
 cache:
-  - "~/.npm"
+  - ".npm"
   - node_modules
 
 build_script:
