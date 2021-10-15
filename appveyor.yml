@@ -9,6 +9,10 @@ install:
   - nvm use 15
   - npm ci
 
+cache:
+  - .npm
+  - node_modules
+
 build_script:
   # Bundle sources
   - npm run build
