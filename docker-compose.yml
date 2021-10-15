@@ -2,10 +2,7 @@ version: "3"
 
 services:
   wpm-frontend:
-    build:
-      context: .
-      args:
-        VUE_APP_SERVER_URL: "http://pa.lubojanski.me" # Zu ersetzen
+    image: vorwahlen/frontend:latest
     restart: always
     networks:
       - web
