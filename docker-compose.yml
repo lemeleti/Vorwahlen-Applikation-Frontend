@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  wpm-frontend:
+    image: vorwahlen/frontend:latest
+    container_name: wpm-frontend
+    restart: always
+    networks:
+      - wpm
+    ports:
+      - "80:80"
+      - "443:443"
+    
+networks:
+  wpm:
+    external: false
