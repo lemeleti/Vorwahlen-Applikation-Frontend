@@ -54,8 +54,11 @@ Vue.use(Buefy, {
   defaultIconPack: "fas",
 });
 
-axios.defaults.baseURL =
-  process.env.VUE_APP_SERVER_URL || "http://localhost:8080";
+if (process.env.NODE_ENV === "development") {
+  axios.defaults.baseURL = "http://localhost:8080";
+} else if (process.env.NODE_ENV === "production") {
+  axios.defaults.baseURL = "/api";
+}
 
 Vue.use(VueAxios, axios);
 Vue.use(VueSweetalert2);
