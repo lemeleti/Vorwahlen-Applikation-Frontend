@@ -2,7 +2,7 @@
   <div id="app">
     <Header />
     <!-- Content -->
-    <div class="columns sticky-footer">
+    <div class="columns section">
       <div class="column main-content">
         <main class="section container is-widescreen">
           <div class="tile box is-radiusless">
@@ -39,13 +39,16 @@ export default class App extends Vue {}
 
 <style lang="scss">
 body {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
   background-color: #f1f1f1;
 }
 
-.sticky-footer {
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.section {
   flex: 1;
 }
 
