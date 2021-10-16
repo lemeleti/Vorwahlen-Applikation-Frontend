@@ -13,7 +13,7 @@
         </main>
       </div>
 
-      <div class="right-sidemenu">
+      <div class="right-sidemenu" v-if="this.$route.name === 'Home'">
         <RightMenu />
       </div>
     </div>
