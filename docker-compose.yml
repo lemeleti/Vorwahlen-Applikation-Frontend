@@ -3,18 +3,14 @@ version: "3"
 services:
   wpm-frontend:
     image: vorwahlen/frontend:latest
+    container_name: wpm-frontend
     restart: always
     networks:
-      - web
       - wpm
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.plex.rule=Host(`pa.lubojanski.me`) # Zu ersetzen
-      - traefik.http.routers.plex.entrypoints=web
+    ports:
+      - "80:80"
+      - "443:443"
     
 networks:
-  web:
-    external: true
-
   wpm:
-    external: true
+    external: false
