@@ -10,7 +10,7 @@
             v-for="(info, index) of routerInfo"
             tag="router-link"
             :key="index"
-            :to="info.link"
+            :to="{ name: info.name }"
           >
             <b-icon :icon="info.icon"></b-icon>
             <span>{{ info.text }}</span>
@@ -49,11 +49,11 @@ import { Vue, Component } from "vue-property-decorator";
 @Component
 export default class Header extends Vue {
   routerInfo = [
-    { link: "/", icon: "home", text: "Startseite" },
-    { link: "/my-subjects", icon: "edit", text: "Meine Wahl" },
-    { link: "/statistics", icon: "chart-pie", text: "Statistiken" },
-    { link: "/admin", icon: "user", text: "Admin" },
-    { link: "/settings", icon: "cogs", text: "Einstellungen" },
+    { name: "Home", icon: "home", text: "Startseite" },
+    { name: "Subjects", icon: "edit", text: "Meine Wahl" },
+    { name: "Statistiken", icon: "chart-pie", text: "Statistiken" },
+    { name: "Admin", icon: "user", text: "Admin" },
+    { name: "Settings", icon: "cogs", text: "Einstellungen" },
   ];
 }
 </script>
