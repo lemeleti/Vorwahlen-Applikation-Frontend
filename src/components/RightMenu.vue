@@ -1,25 +1,19 @@
 <template>
   <div class="column is-narrow side-menu is-hidden-touch">
-    <section class="section">
-      <div class="tile is-vertical" id="rightMenu">
-        <RightMenuBox
-          :content="belegung"
-          title="Aktuelle Belegung"
-          id="belegung"
-        />
-        <RightMenuBox
-          :content="kommilitonen"
-          title="Wahl anderer Studenten"
-          id="kommilitonen"
-        />
-        <RightMenuBox
-          :content="my_subjects"
-          title="Ihre Auswahl"
-          id="auswahl"
-        />
-        <RightMenuBox :content="legende" title="Legende" id="legende" />
-      </div>
-    </section>
+    <div class="tile is-vertical" id="rightMenu">
+      <RightMenuBox
+        :content="belegung"
+        title="Aktuelle Belegung"
+        id="belegung"
+      />
+      <RightMenuBox
+        :content="kommilitonen"
+        title="Wahl anderer Studenten"
+        id="kommilitonen"
+      />
+      <RightMenuBox :content="my_subjects" title="Ihre Auswahl" id="auswahl" />
+      <RightMenuBox :content="legende" title="Legende" id="legende" />
+    </div>
   </div>
 </template>
 

@@ -4,7 +4,7 @@
     <!-- Content -->
     <div class="columns section">
       <div class="column main-content">
-        <main class="section container is-fullhd">
+        <main class="container is-fullhd">
           <div class="tile box is-radiusless">
             <div id="includeContent" class="tile is-child">
               <router-view />
