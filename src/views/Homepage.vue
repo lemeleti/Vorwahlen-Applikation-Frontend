@@ -30,7 +30,7 @@
       <div class="columns is-multiline" id="konsekutiv">
         <SubjectCard
           @showAdditionalSubjectInfo="showAdditionalSubjectInfo"
-          v-for="(module, index) in this.modules"
+          v-for="(module, index) in this.moduleStore.getModules"
           :key="index"
           :title="`${module.module_title} (${module.language})`"
         />
@@ -43,35 +43,27 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import { getModule } from "vuex-module-decorators";
 import SubjectCard from "@/components/SubjectCard.vue";
 import SubjectInfoModal from "@/components/SubjectInfoModal.vue";
+import ModuleList from "@/components/ModuleList.vue";
+import ModuleStore from "@/store/modules/ModuleStore";
 import "vue-class-component/hooks";
-import { Module } from "@/models/module";
 
 @Component({
   components: {
     SubjectCard,
     SubjectInfoModal,
+    ModuleList,
   },
 })
 export default class Homepage extends Vue {
   modalTitle = "";
   isModalActive = false;
-  modules = new Array<Module>();
+  moduleStore = getModule(ModuleStore);
 
   beforeMount(): void {
-    Vue.axios
-      .get<Module[]>("module")
-      .then((resp) => {
-        if (resp.data.length != 0) this.modules.push(...resp.data);
-      })
-      .catch((err) => {
-        Vue.swal({
-          title: "Fehler beim Laden der Module",
-          text: `Die Module konnten nicht geladen werden. ${err}`,
-          icon: "error",
-        });
-      });
+    this.moduleStore.initStore();
   }
 
   showAdditionalSubjectInfo(title: string): void {
