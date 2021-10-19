@@ -1,4 +1,4 @@
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component } from "vue-property-decorator";
 import ExcelJs, { Buffer, Workbook, Worksheet } from "exceljs";
 
 @Component
@@ -52,7 +52,10 @@ export default class ExcelSheetUpload extends Vue {
     return file;
   }
 
-  private async selectWorkSheet(workbook: Workbook, file: File): Promise<number> {
+  private async selectWorkSheet(
+    workbook: Workbook,
+    file: File
+  ): Promise<number> {
     return new Promise<number>((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsArrayBuffer(file);
