@@ -23,11 +23,13 @@
             Mehr Info
             <b-icon icon="plus"></b-icon>
           </span>
-          <span class="card-footer-item is-clickable chooseSubject">
+          <span
+            class="card-footer-item is-clickable chooseSubject"
+            @click="toggleSelection"
+          >
             <span class="item-text">Auswählen</span>
-            <b-icon icon="square"></b-icon>
-            <span class="icon has-text-success is-hidden">
-              <i class="fas fa-check" aria-hidden="true"></i>
+            <span class="icon has-text-success" v-if="isSelected">
+              <b-icon icon="check"></b-icon>
             </span>
           </span>
         </footer>
@@ -38,13 +40,27 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import { getModule } from "vuex-module-decorators";
+import ModuleStore from "@/store/modules/ModuleStore";
 
 @Component
 export default class SubjectCard extends Vue {
   @Prop() title!: string;
+  @Prop() moduleId!: string;
+  isSelected = false;
+  moduleStore = getModule(ModuleStore);
 
   showAdditionalSubjectInfo(): void {
     this.$emit("showAdditionalSubjectInfo", this.title);
+  }
+
+  toggleSelection(): void {
+    if (this.isSelected) {
+      this.moduleStore.removeFromMySelection(this.moduleId);
+    } else {
+      this.moduleStore.saveToMySelection(this.moduleId);
+    }
+    this.isSelected = !this.isSelected;
   }
 }
 </script>
