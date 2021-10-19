@@ -43,6 +43,13 @@
           @click="this.importClassList"
         >
         </b-button>
+        <b-button
+          label="Dispensationen importieren"
+          type="is-info"
+          icon-left="file-upload"
+          @click="this.importDispensations"
+        >
+        </b-button>
       </div>
     </div>
   </div>
@@ -63,6 +70,12 @@ export default class Admin extends Mixins(ModuleListUpload) {
   async importClassList(): Promise<void> {
     this.listTitle = "Klassenliste";
     this.importPath = "class";
+    await this.importList();
+  }
+
+  async importDispensations(): Promise<void> {
+    this.listTitle = "Dispensationsliste";
+    this.importPath = "dispensation";
     await this.importList();
   }
   columns = [
