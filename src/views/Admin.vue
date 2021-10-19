@@ -36,6 +36,13 @@
           @click="this.importModules"
         >
         </b-button>
+        <b-button
+          label="Klassenliste importieren"
+          type="is-info"
+          icon-left="file-upload"
+          @click="this.importClassList"
+        >
+        </b-button>
       </div>
     </div>
   </div>
@@ -48,7 +55,15 @@ import ModuleListUpload from "@/mixins/ModuleListUpload";
 @Component
 export default class Admin extends Mixins(ModuleListUpload) {
   async importModules(): Promise<void> {
-    await this.importModuleList();
+    this.listTitle = "Modulliste";
+    this.importPath = "module";
+    await this.importList();
+  }
+
+  async importClassList(): Promise<void> {
+    this.listTitle = "Klassenliste";
+    this.importPath = "class";
+    await this.importList();
   }
   columns = [
     {

@@ -1,28 +1,27 @@
-import { Vue, Component } from "vue-property-decorator";
-import "vue-class-component/hooks";
+import { Vue, Component, Prop } from "vue-property-decorator";
 import ExcelJs, { Buffer, Workbook, Worksheet } from "exceljs";
 
 @Component
-export default class ModuleListUpload extends Vue {
-  public async importModuleList(): Promise<void> {
+export default class ExcelSheetUpload extends Vue {
+  listTitle = "";
+  importPath = "";
+
+  public async importList(): Promise<void> {
     const workbook = new ExcelJs.Workbook();
     const file = await this.getFile();
 
     if (file) {
       try {
         const worksheetIndex = await this.selectWorkSheet(workbook, file);
-        await this.sendModuleListToServer(
-          workbook.worksheets[worksheetIndex],
-          file
-        );
+        await this.sendListToServer(workbook.worksheets[worksheetIndex], file);
         Vue.swal({
           title: "Import erfolgreich",
-          text: "Die Modulliste wurde erfolgreich importiert.",
+          text: `Die ${this.listTitle} wurde erfolgreich importiert.`,
           icon: "success",
         });
       } catch (err) {
         Vue.swal({
-          title: "Fehler beim Erstellen der Module.",
+          title: `Fehler beim Erstellen der ${this.listTitle}.`,
           text: `Beim Hochladen / Erstellen der Datei ist etwas schiefgelaufen. ${err}`,
           icon: "error",
         });
@@ -30,9 +29,9 @@ export default class ModuleListUpload extends Vue {
     }
   }
 
-  async getFile(): Promise<File> {
+  private async getFile(): Promise<File> {
     const { value: file } = await Vue.swal({
-      title: "Modulliste",
+      title: `${this.listTitle} importieren`,
       input: "file",
       confirmButtonText: "Hochladen",
       cancelButtonText: "Abbrechen",
@@ -53,7 +52,7 @@ export default class ModuleListUpload extends Vue {
     return file;
   }
 
-  async selectWorkSheet(workbook: Workbook, file: File): Promise<number> {
+  private async selectWorkSheet(workbook: Workbook, file: File): Promise<number> {
     return new Promise<number>((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsArrayBuffer(file);
@@ -76,10 +75,10 @@ export default class ModuleListUpload extends Vue {
     });
   }
 
-  sendModuleListToServer(worksheet: Worksheet, file: File): Promise<void> {
+  private sendListToServer(worksheet: Worksheet, file: File): Promise<void> {
     const formData = new FormData();
-    formData.append("file", file, "modulelist.xlsx");
+    formData.append("file", file, `${this.listTitle}.xlsx`);
     formData.append("worksheet", worksheet.name);
-    return Vue.axios.post("module", formData);
+    return Vue.axios.post(this.importPath, formData);
   }
 }
