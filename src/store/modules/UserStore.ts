@@ -12,7 +12,9 @@ export default class UserStore extends VuexModule {
   @Mutation
   async fetchUserDataAsync(): Promise<void> {
     try {
-      const resp = await Vue.axios.get<User>("../session/info");
+      const resp = await Vue.axios.get<User>("../session/info", {
+        maxRedirects: 0,
+      });
       if (resp.status == 200) {
         this.user = resp.data;
         this.isAuthenticated = true;
