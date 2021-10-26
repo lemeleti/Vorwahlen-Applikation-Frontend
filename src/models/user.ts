@@ -4,4 +4,5 @@ export default interface User {
   affiliation: string;
   homeOrg: string;
   mail: string;
+  role: string;
 }
