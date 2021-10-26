@@ -7,7 +7,7 @@
         </template>
         <template #start>
           <b-navbar-item
-            v-for="(info, index) of routerInfo"
+            v-for="(info, index) of getRouterLinks"
             tag="router-link"
             :key="index"
             :to="{ name: info.name }"
@@ -24,8 +24,20 @@
           <b-navbar-item>
             <b-icon icon="search"></b-icon>
           </b-navbar-item>
-          <b-navbar-item>
-            <b-icon icon="logout"></b-icon>
+          <b-navbar-item
+            v-if="!userStore.isUserAuthenticated"
+            tag="router-link"
+            :to="{ name: 'Login' }"
+          >
+            <b-icon icon="sign-in-alt"></b-icon>
+            <span>Login</span>
+          </b-navbar-item>
+          <b-navbar-item
+            v-if="userStore.isUserAuthenticated"
+            tag="a"
+            @click="logout"
+          >
+            <b-icon icon="sign-in-alt"></b-icon>
             <span>Logout</span>
           </b-navbar-item>
         </template>
@@ -45,16 +57,56 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import { getModule } from "vuex-module-decorators";
+import UserStore from "@/store/modules/UserStore";
+
+interface NavbarItemInfo {
+  name: string;
+  icon: string;
+  text: string;
+  authNeeded: boolean;
+}
 
 @Component
 export default class Header extends Vue {
-  routerInfo = [
-    { name: "Home", icon: "home", text: "Startseite" },
-    { name: "Subjects", icon: "edit", text: "Meine Wahl" },
-    { name: "Statistiken", icon: "chart-pie", text: "Statistiken" },
-    { name: "Admin", icon: "user", text: "Admin" },
-    { name: "Settings", icon: "cogs", text: "Einstellungen" },
+  userStore = getModule(UserStore);
+  routerInfo: Array<NavbarItemInfo> = [
+    { name: "Home", icon: "home", text: "Startseite", authNeeded: false },
+    { name: "Subjects", icon: "edit", text: "Meine Wahl", authNeeded: true },
+    {
+      name: "Statistiken",
+      icon: "chart-pie",
+      text: "Statistiken",
+      authNeeded: false,
+    },
+    { name: "Admin", icon: "user", text: "Admin", authNeeded: true },
+    {
+      name: "Settings",
+      icon: "cogs",
+      text: "Einstellungen",
+      authNeeded: false,
+    },
   ];
+
+  get getRouterLinks(): Array<NavbarItemInfo> {
+    if (this.userStore.isUserAuthenticated) {
+      return this.routerInfo;
+    }
+    const allowedRoutes = new Array<NavbarItemInfo>();
+    this.routerInfo.forEach((link) => {
+      if (!link.authNeeded) {
+        allowedRoutes.push(link);
+      }
+    });
+    return allowedRoutes;
+  }
+
+  logout(): void {
+    this.userStore.removeUserData();
+    Vue.axios.get("../Shibboleth.sso/Logout");
+    Vue.axios.get("/session/destroy");
+    this.$router.push({ name: "Home" });
+  }
 }
 </script>
 
