@@ -1,9 +1,9 @@
+/* eslint-disable prettier/prettier */
 import Vue from "vue";
 import VueRouter, { NavigationGuardNext, RouteConfig } from "vue-router";
 import { getModule } from "vuex-module-decorators";
 import Home from "../views/Homepage.vue";
 import UserStore from "@/store/modules/UserStore";
-import User from "@/models/user";
 
 const userStore = getModule(UserStore);
 Vue.use(VueRouter);
@@ -59,7 +59,6 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, _from, next) => {
-  // eslint-disable-next-line prettier/prettier
   if (to.matched.some((record) => 
   record.meta.requiresAdmin && record.meta.requiresAuthentication)) {
     routeIfUserIsAdmin(next);
@@ -71,15 +70,13 @@ router.beforeEach(async (to, _from, next) => {
 });
 
 async function routeIfUserIsAdmin(next: NavigationGuardNext<Vue>) {
-  const isAdmin = (await Vue.axios.get<boolean>("session/is-admin")).data;
-  if (isAdmin) {
+  if (await isUserAuthenticated() && 
+    (await Vue.axios.get<boolean>("session/is-admin")).data) {
     next();
-  } else {
-    next({ name: "Home" });
   }
+  next({ name: "Home" });
 }
 
-// eslint-disable-next-line prettier/prettier
 async function routeIfUserIsLoggedIn(next: NavigationGuardNext<Vue>) {
   if (await isUserAuthenticated()) {
     next();
@@ -91,7 +88,7 @@ async function routeIfUserIsLoggedIn(next: NavigationGuardNext<Vue>) {
 async function isUserAuthenticated(): Promise<boolean> {
   return (
     userStore.isUserInitialized ||
-    (await Vue.axios.get<User>("session/info")).status == 200
+    (await Vue.axios.get<boolean>("session/is-authenticated")).data
   );
 }
 

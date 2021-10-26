@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import Vue from "vue";
 
 import { Module, VuexModule, Action, Mutation } from "vuex-module-decorators";
@@ -13,25 +14,14 @@ export default class UserStore extends VuexModule {
   @Mutation
   async fetchUserDataAsync(): Promise<void> {
     try {
-      const resp = await Vue.axios.get<User>("../session/info");
-      if (resp.status === 200) {
-        this.user = resp.data;
+      const isAuthenticated = (await Vue.axios.get<boolean>("session/is-authenticated")).data;
+      if (isAuthenticated) {
+        this.user = (await Vue.axios.get<User>("../session/info")).data;
         this.isAuthenticated = true;
         this.isStoreInitialized = true;
       }
     } catch (e) {
-      if (Vue.axios.isAxiosError(e) && e.response) {
-        const status = e.response.status;
-        if (status !== 401 && status !== 403) {
-          Vue.swal({
-            title: "Fehler bei der Anfrage",
-            text: "Bei der Anfrage nach dem Status ist etwas schiefgelaufen",
-            icon: "error",
-          });
-        }
-      } else {
-        console.error(e);
-      }
+      console.error(e);
     }
   }
 
