@@ -66,40 +66,73 @@ interface NavbarItemInfo {
   icon: string;
   text: string;
   authNeeded: boolean;
+  adminNeeded: boolean;
 }
 
 @Component
 export default class Header extends Vue {
   userStore = getModule(UserStore);
   routerInfo: Array<NavbarItemInfo> = [
-    { name: "Home", icon: "home", text: "Startseite", authNeeded: false },
-    { name: "Subjects", icon: "edit", text: "Meine Wahl", authNeeded: true },
+    {
+      name: "Home",
+      icon: "home",
+      text: "Startseite",
+      authNeeded: false,
+      adminNeeded: false,
+    },
+    {
+      name: "Subjects",
+      icon: "edit",
+      text: "Meine Wahl",
+      authNeeded: true,
+      adminNeeded: false,
+    },
     {
       name: "Statistiken",
       icon: "chart-pie",
       text: "Statistiken",
       authNeeded: false,
+      adminNeeded: false,
     },
-    { name: "Admin", icon: "user", text: "Admin", authNeeded: true },
+    {
+      name: "Admin",
+      icon: "user",
+      text: "Admin",
+      authNeeded: true,
+      adminNeeded: true,
+    },
     {
       name: "Settings",
       icon: "cogs",
       text: "Einstellungen",
       authNeeded: false,
+      adminNeeded: false,
     },
   ];
 
   get getRouterLinks(): Array<NavbarItemInfo> {
-    if (this.userStore.isUserAuthenticated) {
-      return this.routerInfo;
-    }
     const allowedRoutes = new Array<NavbarItemInfo>();
+    if (this.userStore.isUserAuthenticated) {
+      this.setRoutesIfAuthenticated(allowedRoutes);
+    } else {
+      this.routerInfo.forEach((link) => {
+        if (!link.authNeeded) {
+          allowedRoutes.push(link);
+        }
+      });
+    }
+
+    return allowedRoutes;
+  }
+
+  setRoutesIfAuthenticated(allowedRoutes: Array<NavbarItemInfo>): void {
     this.routerInfo.forEach((link) => {
-      if (!link.authNeeded) {
+      if (link.adminNeeded && this.userStore.isUserAdmin) {
+        allowedRoutes.push(link);
+      } else if (!link.adminNeeded) {
         allowedRoutes.push(link);
       }
     });
-    return allowedRoutes;
   }
 
   logout(): void {
