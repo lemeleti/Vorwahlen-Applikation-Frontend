@@ -6,8 +6,9 @@ import store from "@/store";
 
 @Module({ store, dynamic: true, name: "userStore" })
 export default class UserStore extends VuexModule {
-  user: User = <User>{};
-  isAuthenticated = false;
+  private user: User = <User>{};
+  private isAuthenticated = false;
+  private isStoreInitialized = false;
 
   @Mutation
   async fetchUserDataAsync(): Promise<void> {
@@ -16,6 +17,7 @@ export default class UserStore extends VuexModule {
       if (resp.status == 200) {
         this.user = resp.data;
         this.isAuthenticated = true;
+        this.isStoreInitialized = true;
       }
     } catch (e) {
       console.log(e);
@@ -26,6 +28,7 @@ export default class UserStore extends VuexModule {
   removeUserData(): void {
     this.user = <User>{};
     this.isAuthenticated = false;
+    this.isStoreInitialized = false;
   }
 
   @Action({ commit: "fetchUserDataAsync" })
@@ -35,5 +38,13 @@ export default class UserStore extends VuexModule {
 
   get isUserAuthenticated(): boolean {
     return this.isAuthenticated;
+  }
+
+  get isUserAdmin(): boolean {
+    return this.user.role === "ADMIN";
+  }
+
+  get isUserInitialized(): boolean {
+    return this.isStoreInitialized;
   }
 }
