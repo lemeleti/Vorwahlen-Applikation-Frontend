@@ -26,7 +26,7 @@
           </b-navbar-item>
           <b-navbar-item
             v-if="!userStore.isUserAuthenticated"
-            tag="a"
+            tag="router-link"
             :to="{ name: 'Login' }"
           >
             <b-icon icon="sign-in-alt"></b-icon>
@@ -35,6 +35,7 @@
           <b-navbar-item
             v-if="userStore.isUserAuthenticated"
             tag="a"
+            href="#"
             @click="logout"
           >
             <b-icon icon="sign-in-alt"></b-icon>
@@ -103,9 +104,8 @@ export default class Header extends Vue {
 
   logout(): void {
     this.userStore.removeUserData();
-    Vue.axios.get("../Shibboleth.sso/Logout");
     Vue.axios.get("/session/destroy");
-    this.$router.push({ name: "Home" });
+    this.$router.push({ name: "Logout" });
   }
 }
 </script>

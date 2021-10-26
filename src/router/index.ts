@@ -38,6 +38,16 @@ const routes: Array<RouteConfig> = [
   {
     path: "/Shibboleth.sso/Login?target=https%3A%2F%2Fvorwahlen.cloudlab.zhaw.ch",
     name: "Login",
+    beforeEnter(to) {
+      window.location.href = to.path;
+    },
+  },
+  {
+    path: "/Shibboleth.sso/Logout",
+    name: "Logout",
+    beforeEnter(to) {
+      window.location.href = to.path;
+    },
   },
 ];
 
@@ -47,7 +57,7 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuthentication)) {
     if (moduleStore.isUserAuthenticated) {
       next();
