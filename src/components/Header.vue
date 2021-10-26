@@ -26,7 +26,7 @@
           </b-navbar-item>
           <b-navbar-item
             v-if="!userStore.isUserAuthenticated"
-            tag="router-link"
+            tag="a"
             :to="{ name: 'Login' }"
           >
             <b-icon icon="sign-in-alt"></b-icon>
