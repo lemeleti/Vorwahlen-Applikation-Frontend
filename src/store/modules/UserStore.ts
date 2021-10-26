@@ -14,9 +14,9 @@ export default class UserStore extends VuexModule {
   @Mutation
   async fetchUserDataAsync(): Promise<void> {
     try {
-      const isAuthenticated = (await Vue.axios.get<boolean>("session/is-authenticated")).data;
+      const isAuthenticated = (await Vue.axios.get<boolean>("../session/is-authenticated")).data;
       if (isAuthenticated) {
-        this.user = (await Vue.axios.get<User>("../session/info")).data;
+        this.user = (await Vue.axios.get<User>("/session/info")).data;
         this.isAuthenticated = true;
         this.isStoreInitialized = true;
       }
