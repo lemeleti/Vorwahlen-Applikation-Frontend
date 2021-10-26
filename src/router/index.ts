@@ -70,11 +70,13 @@ router.beforeEach(async (to, _from, next) => {
 });
 
 async function routeIfUserIsAdmin(next: NavigationGuardNext<Vue>) {
-  if (await isUserAuthenticated() && 
-    (await Vue.axios.get<boolean>("session/is-admin")).data) {
+  const isAuthenticated = await isUserAuthenticated();
+  const isAdmin = (await Vue.axios.get<boolean>("session/is-admin")).data;
+  if (isAuthenticated && isAdmin) {
     next();
+  } else {
+    next({ name: "Home" });
   }
-  next({ name: "Home" });
 }
 
 async function routeIfUserIsLoggedIn(next: NavigationGuardNext<Vue>) {
