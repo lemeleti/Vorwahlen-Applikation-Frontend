@@ -25,6 +25,7 @@ import {
   faBell,
   faSearch,
   faFileUpload,
+  faSignInAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 require("@/assets/main.scss");
@@ -44,7 +45,8 @@ library.add(
   faPlus,
   faBell,
   faSearch,
-  faFileUpload
+  faFileUpload,
+  faSignInAlt
 );
 
 Vue.component("vue-fontawesome", FontAwesomeIcon);
