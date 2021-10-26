@@ -61,9 +61,9 @@ const router = new VueRouter({
 router.beforeEach(async (to, _from, next) => {
   if (to.matched.some((record) => 
   record.meta.requiresAdmin && record.meta.requiresAuthentication)) {
-    routeIfUserIsAdmin(next);
+    await routeIfUserIsAdmin(next);
   } else if (to.matched.some((record) => record.meta.requiresAuthentication)) {
-    routeIfUserIsLoggedIn(next);
+    await routeIfUserIsLoggedIn(next);
   } else {
     next();
   }
