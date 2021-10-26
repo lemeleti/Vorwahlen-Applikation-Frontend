@@ -1,5 +1,5 @@
 import Vue from "vue";
-import VueRouter, { NavigationGuardNext, Route, RouteConfig } from "vue-router";
+import VueRouter, { NavigationGuardNext, RouteConfig } from "vue-router";
 import { getModule } from "vuex-module-decorators";
 import Home from "../views/Homepage.vue";
 import UserStore from "@/store/modules/UserStore";
@@ -64,7 +64,7 @@ router.beforeEach(async (to, _from, next) => {
   record.meta.requiresAdmin && record.meta.requiresAuthentication)) {
     routeIfUserIsAdmin(next);
   } else if (to.matched.some((record) => record.meta.requiresAuthentication)) {
-    routeIfUserIsLoggedIn(to, next);
+    routeIfUserIsLoggedIn(next);
   } else {
     next();
   }
@@ -80,14 +80,11 @@ async function routeIfUserIsAdmin(next: NavigationGuardNext<Vue>) {
 }
 
 // eslint-disable-next-line prettier/prettier
-async function routeIfUserIsLoggedIn(to: Route, next: NavigationGuardNext<Vue>) {
+async function routeIfUserIsLoggedIn(next: NavigationGuardNext<Vue>) {
   if (await isUserAuthenticated()) {
     next();
   } else {
-    next({
-      name: "Login",
-      query: { redirect: to.fullPath },
-    });
+    next({ name: "Login" });
   }
 }
 

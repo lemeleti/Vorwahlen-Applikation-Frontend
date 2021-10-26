@@ -14,13 +14,24 @@ export default class UserStore extends VuexModule {
   async fetchUserDataAsync(): Promise<void> {
     try {
       const resp = await Vue.axios.get<User>("../session/info");
-      if (resp.status == 200) {
+      if (resp.status === 200) {
         this.user = resp.data;
         this.isAuthenticated = true;
         this.isStoreInitialized = true;
       }
     } catch (e) {
-      console.log(e);
+      if (Vue.axios.isAxiosError(e) && e.response) {
+        const status = e.response.status;
+        if (status !== 401 && status !== 403) {
+          Vue.swal({
+            title: "Fehler bei der Anfrage",
+            text: "Bei der Anfrage nach dem Status ist etwas schiefgelaufen",
+            icon: "error",
+          });
+        }
+      } else {
+        console.error(e);
+      }
     }
   }
 
