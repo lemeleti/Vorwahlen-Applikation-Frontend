@@ -48,8 +48,11 @@
     <div class="hero-body">
       <div class="container has-text-centered">
         <p class="title">Modulvorwahlen</p>
-        <p class="subtitle">
+        <p class="subtitle" v-if="!userStore.isUserAuthenticated">
           Herzlich willkommen auf der Modulwahlseite der ZHAW.
+        </p>
+        <p v-if="userStore.isUserAuthenticated" class="subtitle">
+          Willkommen {{ userStore.name }}
         </p>
       </div>
     </div>

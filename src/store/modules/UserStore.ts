@@ -48,4 +48,8 @@ export default class UserStore extends VuexModule {
   get isUserInitialized(): boolean {
     return this.isStoreInitialized;
   }
+
+  get name(): string {
+    return this.user.name.concat(" ", this.user.lastName);
+  }
 }
