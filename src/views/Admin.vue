@@ -57,7 +57,7 @@
 
 <script lang="ts">
 import { Component, Mixins } from "vue-property-decorator";
-import ModuleListUpload from "@/mixins/ModuleListUpload";
+import ModuleListUpload from "@/mixins/ExcelSheetUpload";
 
 @Component
 export default class Admin extends Mixins(ModuleListUpload) {
