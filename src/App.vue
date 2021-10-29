@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header />
+    <Header :isAuthenticated="isAuthenticated" />
     <!-- Content -->
     <div class="columns section">
       <div class="column main-content">
@@ -23,9 +23,12 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import { getModule } from "vuex-module-decorators";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import RightMenu from "@/components/RightMenu.vue";
+import UserStore from "@/store/modules/UserStore";
+import "vue-class-component/hooks";
 
 @Component({
   components: {
@@ -34,7 +37,14 @@ import RightMenu from "@/components/RightMenu.vue";
     RightMenu,
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  userStore = getModule(UserStore);
+  isAuthenticated = false;
+
+  mounted(): void {
+    this.userStore.fetchUserData();
+  }
+}
 </script>
 
 <style lang="scss">

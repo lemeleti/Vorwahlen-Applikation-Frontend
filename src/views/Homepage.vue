@@ -47,7 +47,6 @@ import { Vue, Component } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
 import SubjectCard from "@/components/SubjectCard.vue";
 import SubjectInfoModal from "@/components/SubjectInfoModal.vue";
-import ModuleList from "@/components/ModuleList.vue";
 import ModuleStore from "@/store/modules/ModuleStore";
 import "vue-class-component/hooks";
 
@@ -55,7 +54,6 @@ import "vue-class-component/hooks";
   components: {
     SubjectCard,
     SubjectInfoModal,
-    ModuleList,
   },
 })
 export default class Homepage extends Vue {
