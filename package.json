@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
@@ -47,5 +48,11 @@
     "typescript": "~4.1.5",
     "vue-template-compiler": "^2.6.11",
     "vuex-module-decorators": "^1.0.1"
+  },
+  "resolutions": {
+    "glob-parent": "^5.1.2",
+    "ansi-regex": "^5.0.1",
+    "set-value": "^4.0.1",
+    "nth-check": "^2.0.1"
   }
 }
