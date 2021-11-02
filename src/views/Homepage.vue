@@ -1,5 +1,6 @@
 <template>
   <div id="content">
+    <ModuleElection />
     <div id="konsekutiv-wrapper" class="content">
       <h1>Konsekutive Wahlpflichtmodule</h1>
       <p>
@@ -47,6 +48,7 @@ import { Vue, Component } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
 import SubjectCard from "@/components/SubjectCard.vue";
 import SubjectInfoModal from "@/components/SubjectInfoModal.vue";
+import ModuleElection from "@/components/ModuleElection.vue";
 import ModuleStore from "@/store/modules/ModuleStore";
 import "vue-class-component/hooks";
 
@@ -54,6 +56,7 @@ import "vue-class-component/hooks";
   components: {
     SubjectCard,
     SubjectInfoModal,
+    ModuleElection,
   },
 })
 export default class Homepage extends Vue {
