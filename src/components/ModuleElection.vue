@@ -5,18 +5,32 @@ import { VNode } from "vue";
 import Module from "@/models/module";
 
 @Component
-export default class ModuleList extends Vue {
+export default class ModuleElection extends Vue {
   @Prop() modules!: Array<Module>;
 
   tiles5Semester = [] as VNode[];
   tiles6Semester = [] as VNode[];
 
   defaultModules = [
-    {name: "Wahlpflichtmodul", color: "is-contextModule", fithSemester: 2, sixthSemester: 1},
-    {name: "Projektarbeit in Informatik", color: "is-projectModule", fithSemester: 1, sixthSemester: 0},
-    {name: "Wahlpflichtmodul", color: "is-electiveModule", fithSemester: 5, sixthSemester: 4},
+    {
+      name: "Wahlpflichtmodul",
+      color: "is-contextModule",
+      fithSemester: 2,
+      sixthSemester: 1,
+    },
+    {
+      name: "Projektarbeit in Informatik",
+      color: "is-projectModule",
+      fithSemester: 1,
+      sixthSemester: 0,
+    },
+    {
+      name: "Wahlpflichtmodul",
+      color: "is-electiveModule",
+      fithSemester: 5,
+      sixthSemester: 4,
+    },
   ];
-
 
   tilesPerRow = 3;
 
@@ -30,15 +44,11 @@ export default class ModuleList extends Vue {
 
     for (let module of this.defaultModules) {
       for (let i = 0; i < module.fithSemester; i++) {
-        tilesFithSemester.push(
-          this.createTile(module.name, module.color)
-        );
+        tilesFithSemester.push(this.createTile(module.name, module.color));
       }
 
       for (let i = 0; i < module.sixthSemester; i++) {
-        tilesSixthSemester.push(
-          this.createTile(module.name, module.color)
-        );
+        tilesSixthSemester.push(this.createTile(module.name, module.color));
       }
     }
     this.tiles5Semester.push(...this.createRows(tilesFithSemester));
