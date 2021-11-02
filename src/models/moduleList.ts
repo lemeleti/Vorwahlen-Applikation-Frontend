@@ -11,6 +11,7 @@ export interface Node {
   moduleName: string;
   moduleId: string;
   moduleCategorie: ModuleCategories;
+  semester: number;
   credits: number;
   isFiller: boolean;
 }
@@ -119,6 +120,15 @@ export class ModuleList {
       index = index.next;
     }
     return modules;
+  }
+
+  /**
+   * Get pointer to the head of the list.
+   * @returns {Node | null} Returns the current head
+   * if the list is not empty otherwise returns null;
+   */
+  public getHead(): Node | null {
+    return this.head;
   }
 
   /**
