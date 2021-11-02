@@ -3,38 +3,19 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import "vue-class-component/hooks";
 import { VNode } from "vue";
 import Module from "@/models/module";
+import { generateFillerList } from "@/tools/listGenerator";
+import { ModuleCategories, ModuleList } from "@/models/moduleList";
 
 @Component
 export default class ModuleElection extends Vue {
-  @Prop() modules!: Array<Module>;
-
+  moduleList: ModuleList | null = null;
   tiles5Semester = [] as VNode[];
   tiles6Semester = [] as VNode[];
 
-  defaultModules = [
-    {
-      name: "Wahlpflichtmodul",
-      color: "is-contextModule",
-      fithSemester: 2,
-      sixthSemester: 1,
-    },
-    {
-      name: "Projektarbeit in Informatik",
-      color: "is-projectModule",
-      fithSemester: 1,
-      sixthSemester: 0,
-    },
-    {
-      name: "Wahlpflichtmodul",
-      color: "is-electiveModule",
-      fithSemester: 5,
-      sixthSemester: 4,
-    },
-  ];
-
   tilesPerRow = 3;
 
-  created(): void {
+  beforeMount(): void {
+    this.moduleList = generateFillerList();
     this.createDefaultLayout();
   }
 
@@ -42,17 +23,29 @@ export default class ModuleElection extends Vue {
     const tilesFithSemester = new Array<VNode>();
     const tilesSixthSemester = new Array<VNode>();
 
-    for (let module of this.defaultModules) {
-      for (let i = 0; i < module.fithSemester; i++) {
-        tilesFithSemester.push(this.createTile(module.name, module.color));
+    if (this.moduleList) {
+      let index = this.moduleList.getHead();
+      while (index) {
+        if (index.semester === 5) {
+          tilesFithSemester.push(
+            this.createTile(
+              index.moduleName,
+              this.getColorFromCategorie(index.moduleCategorie)
+            )
+          );
+        } else if (index.semester === 6) {
+          tilesSixthSemester.push(
+            this.createTile(
+              index.moduleName,
+              this.getColorFromCategorie(index.moduleCategorie)
+            )
+          );
+        }
+        index = index.next;
       }
-
-      for (let i = 0; i < module.sixthSemester; i++) {
-        tilesSixthSemester.push(this.createTile(module.name, module.color));
-      }
+      this.tiles5Semester.push(...this.createRows(tilesFithSemester));
+      this.tiles6Semester.push(...this.createRows(tilesSixthSemester));
     }
-    this.tiles5Semester.push(...this.createRows(tilesFithSemester));
-    this.tiles6Semester.push(...this.createRows(tilesSixthSemester));
   }
 
   private createRows(tiles: Array<VNode>): Array<VNode> {
@@ -80,6 +73,26 @@ export default class ModuleElection extends Vue {
         <div class={attrs}>{name}</div>
       </div>
     );
+  }
+
+  private getColorFromCategorie(cat: ModuleCategories): string {
+    let color = "";
+    switch (cat) {
+      case ModuleCategories.UEBERFACHLICH:
+      case ModuleCategories.FACHLICH:
+        color = "is-electiveModule";
+        break;
+
+      case ModuleCategories.KONTEXT:
+        color = "is-contextModule";
+        break;
+
+      case ModuleCategories.PROJEKT:
+        color = "is-projectModule";
+        break;
+    }
+
+    return color;
   }
 
   render(): VNode {
