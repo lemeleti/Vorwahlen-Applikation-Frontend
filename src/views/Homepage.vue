@@ -1,6 +1,6 @@
 <template>
   <div id="content">
-    <ModuleElection />
+    <ModuleElection v-model="this.moduleStore.getModules" />
     <div id="konsekutiv-wrapper" class="content">
       <h1>Konsekutive Wahlpflichtmodule</h1>
       <p>
@@ -75,7 +75,7 @@ export default class Homepage extends Vue {
   createConnection(): void {
     let socketAddr = "http://localhost:8080/stomp-ws-endpoint";
     if (process.env.NODE_ENV === "production") {
-      socketAddr = "https://vorwahlen.cloudlab.zhaw.ch/api";
+      socketAddr = "https://vorwahlen.cloudlab.zhaw.ch/api/stomp-ws-endpoint";
     }
 
     const socket: WebSocket = new SockJS(socketAddr);
