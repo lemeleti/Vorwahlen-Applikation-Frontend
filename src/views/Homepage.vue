@@ -51,6 +51,8 @@ import SubjectInfoModal from "@/components/SubjectInfoModal.vue";
 import ModuleElection from "@/components/ModuleElection.vue";
 import ModuleStore from "@/store/modules/ModuleStore";
 import "vue-class-component/hooks";
+import Stomp from "stompjs";
+import SockJS from "sockjs-client";
 
 @Component({
   components: {
@@ -67,12 +69,28 @@ export default class Homepage extends Vue {
   created(): void {
     if (this.moduleStore.isStoreUninitialized) {
       this.moduleStore.updateModules();
+  mounted(): void {
+    if (!this.moduleStore.isClientConnected) {
+      this.createConnection();
     }
+  }
+
+  createConnection(): void {
+    const socket: WebSocket = new SockJS("http://localhost:8080/stomp-ws-endpoint");
+    const stomp: Stomp.Client = Stomp.over(socket);
+    stomp.connect({}, () => {
+      stomp.subscribe("/user/queue/electionSaveStatus", this.saveStatus);
+    });
+    this.moduleStore.setStompClient(stomp);
   }
 
   showAdditionalSubjectInfo(title: string): void {
     this.modalTitle = title;
     this.isModalActive = !this.isModalActive;
+  }
+
+  saveStatus(): void {
+    //TODO implement
   }
 }
 </script>

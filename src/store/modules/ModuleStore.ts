@@ -5,7 +5,7 @@ import { ModuleList } from "@/models/moduleList";
 import { generateFillerList } from "@/tools/listGenerator";
 import IModule from "@/models/module";
 import store from "@/store";
-
+import Stomp from "stompjs";
 interface ModuleWrapper {
   moduleArr: Array<IModule>;
 }
@@ -14,6 +14,7 @@ interface ModuleWrapper {
 export default class ModuleStore extends VuexModule {
   moduleArr: Array<IModule> = getModulesFromStorage();
   mySelection: ModuleList | null = generateFillerList();
+  client: Stomp.Client | null = null;
 
   @Mutation
   addModules(arr: Array<IModule>): void {
@@ -25,6 +26,9 @@ export default class ModuleStore extends VuexModule {
     const module: IModule | undefined = findModuleById(this.moduleArr, moduleId);
     if (this.mySelection && module) {
       this.mySelection.replaceModule(module.category, module);
+      if (this.client && this.client.connected) {
+        this.client.send("/app/save", {}, JSON.stringify(this.mySelection.export()));
+      }
     }
   }
 
@@ -33,7 +37,15 @@ export default class ModuleStore extends VuexModule {
     const module: IModule | undefined = findModuleById(this.moduleArr, moduleId);
     if (this.mySelection && module) {
       this.mySelection.removeModule(module);
+      if (this.client && this.client.connected) {
+        this.client.send("/app/save", {}, JSON.stringify(this.mySelection.export()));
+      }
     }
+  }
+
+  @Mutation
+  setStompClient(client: Stomp.Client): void {
+    this.client = client;
   }
 
   @MutationAction
@@ -49,6 +61,10 @@ export default class ModuleStore extends VuexModule {
 
   get isStoreUninitialized(): boolean {
     return this.moduleArr.length == 0;
+  }
+
+  get isClientConnected(): boolean {
+    return this.client !== null && this.client.connected;
   }
 }
 
