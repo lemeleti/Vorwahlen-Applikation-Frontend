@@ -16,6 +16,11 @@ export interface Node {
   isFiller: boolean;
 }
 
+export interface ModuleExport {
+  electedModules: Array<string>;
+  overflowedElectedModules: Array<string>;
+}
+
 /**
  * Enumeration of all different module categories.
  */
@@ -34,6 +39,7 @@ export enum ModuleCategories {
 export class ModuleList {
   private head!: Node | null;
   private tail!: Node | null;
+  private overflowedModules: Array<Module> = [];
 
   /**
    * Creates a module list instance.
@@ -77,6 +83,8 @@ export class ModuleList {
     if (nextModule) {
       this.mapModuleToNode(module, nextModule);
       isReplaced = true;
+    } else {
+      this.overflowedModules.push(module);
     }
 
     return isReplaced;
