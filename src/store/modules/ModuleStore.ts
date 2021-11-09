@@ -12,7 +12,7 @@ interface ModuleWrapper {
 
 @Module({ store, dynamic: true, name: "moduleStore" })
 export default class ModuleStore extends VuexModule {
-  moduleArr: Array<IModule> = [];
+  moduleArr: Array<IModule> = getModulesFromStorage();
   mySelection: ModuleList | null = generateFillerList();
 
   @Mutation
@@ -39,6 +39,7 @@ export default class ModuleStore extends VuexModule {
   @MutationAction
   async updateModules(): Promise<ModuleWrapper> {
     const moduleArr: Array<IModule> = (await Vue.axios.get<Array<IModule>>("module")).data;
+    localStorage.setItem("modules", JSON.stringify(moduleArr));
     return { moduleArr };
   }
 
@@ -54,3 +55,13 @@ export default class ModuleStore extends VuexModule {
 function findModuleById(modules: Array<IModule>, moduleId: string): IModule | undefined {
   return modules.find((module: IModule) => module.module_no === moduleId);
 }
+
+function getModulesFromStorage(): Array<IModule> {
+  const savedModules = localStorage.getItem("modules");
+  let module: Array<IModule> = [];
+  if (savedModules) {
+    module = <Array<IModule>>JSON.parse(savedModules);
+  }
+  return module;
+}
+
