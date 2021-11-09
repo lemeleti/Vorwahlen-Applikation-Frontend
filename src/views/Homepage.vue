@@ -64,8 +64,10 @@ export default class Homepage extends Vue {
   isModalActive = false;
   moduleStore = getModule(ModuleStore);
 
-  beforeMount(): void {
-    this.moduleStore.initStore();
+  created(): void {
+    if (this.moduleStore.isStoreUninitialized) {
+      this.moduleStore.updateModules();
+    }
   }
 
   showAdditionalSubjectInfo(title: string): void {
