@@ -98,17 +98,26 @@ export class ModuleList {
    * otherwise false.
    */
   public removeModule(module: Module): boolean {
-    let isRemoved = false;
+    let isRemoved = true;
     let index = this.head;
+    const overflowedModuleIndex = this.overflowedModules.indexOf(module);
+    const replacementModule = this.findReplacementModule(module.category);
 
-    while (index) {
-      if (index.moduleId === module.module_no) {
-        index.moduleName = index.moduleCategorie;
-        index.moduleId = "NA";
-        isRemoved = true;
-        index.isFiller = true;
-      }
+    while (index && index.moduleId !== module.module_no) {
       index = index.next;
+    }
+
+    if (index && replacementModule) {
+      index.moduleName = replacementModule.module_title;
+      index.moduleId = replacementModule.module_no;
+      const replacementModuleIndex = this.overflowedModules.indexOf(replacementModule);
+      this.overflowedModules.splice(replacementModuleIndex, 1);
+    } else if (index) {
+      this.restoreNodeToDefault(index);
+    } else if (overflowedModuleIndex) {
+      this.overflowedModules.splice(overflowedModuleIndex, 1);
+    } else {
+      isRemoved = false;
     }
 
     return isRemoved;
@@ -118,16 +127,13 @@ export class ModuleList {
    * Exports all user elected modules by their id.
    * @param {Array<string>} arr Array containing elected module id's.
    */
-  public export(): Array<string> {
-    const modules = new Array<string>();
-    let index = this.head;
-    while (index) {
-      if (!index.isFiller) {
-        modules.push(index.moduleId);
-      }
-      index = index.next;
-    }
-    return modules;
+  public export(): ModuleExport {
+    return <ModuleExport>{
+      electedModules: this.extractElectedModulesIds(),
+      overflowedElectedModules: this.overflowedModules.map(
+        (module: Module) => module.module_no
+      ),
+    };
   }
 
   /**
@@ -147,6 +153,16 @@ export class ModuleList {
     return stringify(moduleList);
   }
 
+  private restoreNodeToDefault(node: Node) {
+    node.moduleName = this.getTextForCategory(node.moduleCategorie);
+    node.moduleId = "NA";
+    node.isFiller = true;
+  }
+
+  private findReplacementModule(cat: ModuleCategories): Module | undefined {
+    return this.overflowedModules.find((module: Module) => module.category === cat);
+  }
+
   private getNextFillerByCat(cat: ModuleCategories): Node | null {
     let res = null;
     let index = this.head;
@@ -159,6 +175,18 @@ export class ModuleList {
     }
 
     return res;
+  }
+
+  private extractElectedModulesIds(): Array<string> {
+    const electedModules = new Array<string>();
+    let index = this.head;
+    while (index) {
+      if (!index.isFiller) {
+        electedModules.push(index.moduleId);
+      }
+      index = index.next;
+    }
+    return electedModules;
   }
 
   private mapModuleToNode(module: Module, node: Node): void {
