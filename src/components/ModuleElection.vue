@@ -78,12 +78,12 @@ export default class ModuleElection extends Vue {
   private getColorFromCategorie(cat: ModuleCategories): string {
     let color = "";
     switch (cat) {
-      case ModuleCategories.UEBERFACHLICH:
-      case ModuleCategories.FACHLICH:
+      case ModuleCategories.INTERDISCIPLINARY_MODULE:
+      case ModuleCategories.SUBJECT_MODULE:
         color = "is-electiveModule";
         break;
 
-      case ModuleCategories.KONTEXT:
+      case ModuleCategories.CONTEXT_MODULE:
         color = "is-contextModule";
         break;
 

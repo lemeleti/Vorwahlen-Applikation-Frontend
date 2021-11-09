@@ -2,7 +2,7 @@ import { ModuleList, Node, ModuleCategories } from "../models/moduleList";
 
 /**
  * //TODO handle semester elsewhere.
- * @returns 
+ * @returns
  */
 export function generateFillerList(): ModuleList {
   const numKontextModules = 3;
@@ -15,7 +15,7 @@ export function generateFillerList(): ModuleList {
     credits: 0,
     isFiller: true,
     semester: 5,
-    moduleCategorie: ModuleCategories.FACHLICH,
+    moduleCategorie: ModuleCategories.SUBJECT_MODULE,
     moduleId: "N/A",
     moduleName: "",
   };
@@ -25,7 +25,7 @@ export function generateFillerList(): ModuleList {
     const kontextNode = { ...baseNode };
     kontextNode.credits = 2;
     kontextNode.moduleName = "Kontext-Wahlpflichtmodul";
-    kontextNode.moduleCategorie = ModuleCategories.KONTEXT;
+    kontextNode.moduleCategorie = ModuleCategories.CONTEXT_MODULE;
 
     if (i == 2) {
       kontextNode.semester = 6;
@@ -39,7 +39,7 @@ export function generateFillerList(): ModuleList {
     const fachlichNode = { ...baseNode };
     fachlichNode.credits = 4;
     fachlichNode.moduleName = "Fachliches Wahlpflichtmodul";
-    fachlichNode.moduleCategorie = ModuleCategories.FACHLICH;
+    fachlichNode.moduleCategorie = ModuleCategories.SUBJECT_MODULE;
 
     if (i >= 4) {
       fachlichNode.semester = 6;
@@ -52,7 +52,8 @@ export function generateFillerList(): ModuleList {
   const ueberfachlichModule = { ...baseNode };
   ueberfachlichModule.credits = 4;
   ueberfachlichModule.moduleName = "Überfachliches Wahlpflichtmodul";
-  ueberfachlichModule.moduleCategorie = ModuleCategories.UEBERFACHLICH;
+  ueberfachlichModule.moduleCategorie =
+    ModuleCategories.INTERDISCIPLINARY_MODULE;
   moduleList.add(ueberfachlichModule);
 
   // create project modules

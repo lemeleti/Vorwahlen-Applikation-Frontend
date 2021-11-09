@@ -20,10 +20,10 @@ export interface Node {
  * Enumeration of all different module categories.
  */
 export enum ModuleCategories {
-  FACHLICH = "Fachliches Wahlpflichmodul",
-  UEBERFACHLICH = "Ueberfachliches Wahlpflichmodul",
-  KONTEXT = "Kontext Wahlpflichmodul",
-  PROJEKT = "Projektmodul",
+  SUBJECT_MODULE = "SUBJECT_MODULE",
+  INTERDISCIPLINARY_MODULE = "INTERDISCIPLINARY_MODULE",
+  CONTEXT_MODULE = "CONTEXT_MODULE",
+  PROJEKT = "PROJEKT",
 }
 
 /**
@@ -157,5 +157,25 @@ export class ModuleList {
     node.moduleName = module.module_title;
     node.moduleId = module.module_no;
     node.isFiller = false;
+  }
+
+  private getTextForCategory(cat: ModuleCategories): string {
+    let text = "";
+
+    switch (cat) {
+      case ModuleCategories.SUBJECT_MODULE:
+        text = "Fachliches Wahlpflichmodul";
+        break;
+      case ModuleCategories.INTERDISCIPLINARY_MODULE:
+        text = "Ueberfachliches Wahlpflichmodul";
+        break;
+      case ModuleCategories.CONTEXT_MODULE:
+        text = "Kontext Wahlpflichmodul";
+        break;
+      case ModuleCategories.PROJEKT:
+        text = "Projektmodul";
+    }
+
+    return text;
   }
 }
