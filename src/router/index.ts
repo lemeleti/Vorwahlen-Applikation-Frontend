@@ -90,7 +90,7 @@ async function routeIfUserIsLoggedIn(next: NavigationGuardNext<Vue>) {
 async function isUserAuthenticated(): Promise<boolean> {
   return (
     userStore.isUserInitialized ||
-    (await Vue.axios.get<boolean>("../session/is-authenticated")).data
+    (await Vue.axios.get<boolean>("session/is-authenticated")).data
   );
 }
 
