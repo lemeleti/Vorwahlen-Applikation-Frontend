@@ -1,6 +1,8 @@
 import Vue from "vue";
 
 import { Module, VuexModule, Mutation } from "vuex-module-decorators";
+import { ModuleList } from "@/models/moduleList";
+import { generateFillerList } from "@/tools/listGenerator";
 import IModule from "@/models/module";
 import store from "@/store";
 
@@ -26,6 +28,7 @@ export default class ModuleStore extends VuexModule {
         });
     }
   }
+  mySelection: ModuleList | null = generateFillerList();
 
   @Mutation
   addModules(arr: Array<IModule>): void {
@@ -35,6 +38,10 @@ export default class ModuleStore extends VuexModule {
   @Mutation
   saveToMySelection(moduleId: string): void {
     this.mySelection.push(moduleId);
+    const module: IModule | undefined = findModuleById(this.moduleArr, moduleId);
+    if (this.mySelection && module) {
+      this.mySelection.replaceModule(module.category, module);
+    }
   }
 
   @Mutation
@@ -42,6 +49,9 @@ export default class ModuleStore extends VuexModule {
     const index = this.mySelection.indexOf(moduleId, 0);
     if (index > -1) {
       this.mySelection.splice(index, 1);
+    const module: IModule | undefined = findModuleById(this.moduleArr, moduleId);
+    if (this.mySelection && module) {
+      this.mySelection.removeModule(module);
     }
   }
 
@@ -52,4 +62,7 @@ export default class ModuleStore extends VuexModule {
   get getModules(): Array<IModule> {
     return this.moduleArr;
   }
+
+function findModuleById(modules: Array<IModule>, moduleId: string): IModule | undefined {
+  return modules.find((module: IModule) => module.module_no === moduleId);
 }
