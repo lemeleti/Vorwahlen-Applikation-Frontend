@@ -66,9 +66,6 @@ export default class Homepage extends Vue {
   isModalActive = false;
   moduleStore = getModule(ModuleStore);
 
-  created(): void {
-    if (this.moduleStore.isStoreUninitialized) {
-      this.moduleStore.updateModules();
   mounted(): void {
     if (!this.moduleStore.isClientConnected) {
       this.createConnection();
