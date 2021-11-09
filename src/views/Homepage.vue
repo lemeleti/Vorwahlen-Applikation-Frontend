@@ -73,7 +73,12 @@ export default class Homepage extends Vue {
   }
 
   createConnection(): void {
-    const socket: WebSocket = new SockJS("http://localhost:8080/stomp-ws-endpoint");
+    let socketAddr = "http://localhost:8080/stomp-ws-endpoint";
+    if (process.env.NODE_ENV === "production") {
+      socketAddr = "https://vorwahlen.cloudlab.zhaw.ch/api";
+    }
+
+    const socket: WebSocket = new SockJS(socketAddr);
     const stomp: Stomp.Client = Stomp.over(socket);
     stomp.connect({}, () => {
       stomp.subscribe("/user/queue/electionSaveStatus", this.saveStatus);
