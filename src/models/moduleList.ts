@@ -114,7 +114,7 @@ export class ModuleList {
       this.overflowedModules.splice(replacementModuleIndex, 1);
     } else if (index) {
       this.restoreNodeToDefault(index);
-    } else if (overflowedModuleIndex) {
+    } else if (overflowedModuleIndex >= 0) {
       this.overflowedModules.splice(overflowedModuleIndex, 1);
     } else {
       isRemoved = false;
