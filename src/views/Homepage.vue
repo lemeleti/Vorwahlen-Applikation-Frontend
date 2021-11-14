@@ -54,6 +54,11 @@ import "vue-class-component/hooks";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
 
+interface Election {
+  electionSaved: boolean;
+  electionValid: boolean;
+}
+
 @Component({
   components: {
     SubjectCard,
@@ -86,8 +91,14 @@ export default class Homepage extends Vue {
     this.isModalActive = !this.isModalActive;
   }
 
-  saveStatus(): void {
-    //TODO implement
+  saveStatus(message: Stomp.Message): void {
+    const election: Election = JSON.parse(message.body);
+    this.moduleStore.updateElectionStatus(election.electionValid);
+    this.$buefy.toast.open({
+      message: "Ihre Auswahl wurde gespeichert",
+      duration: 2000,
+      type: "is-info",
+    });
   }
 }
 </script>
