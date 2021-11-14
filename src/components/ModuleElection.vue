@@ -1,111 +1,91 @@
-<script lang="tsx">
-import { Component, Prop, Vue } from "vue-property-decorator";
+<template>
+  <div>
+    <div class="notification is-success" v-if="moduleStore.isElectionValid">
+      Ihre Wahl ist gültig.
+    </div>
+    <div class="notification is-danger" v-if="!moduleStore.isElectionValid">
+      Ihre Wahl ist derzeit ungültig.
+    </div>
+    <div class="tile is-ancestor is-vertical">
+      <div
+        class="tile notification is-vertical is-radiusless"
+        v-for="semester in 2"
+        :key="semester"
+      >
+        <div class="tile">
+          <div
+            class="tile is-parent has-text-centered"
+            v-for="(tile, tileIndex) of getTilesForSemester(semester)"
+            :key="tileIndex"
+          >
+            <div
+              class="is-child notification is-radiusless"
+              :class="tile.moduleColor"
+              style="color: black"
+            >
+              {{ tile.moduleName }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
 import "vue-class-component/hooks";
-import { VNode } from "vue";
-import Module from "@/models/module";
-import { generateFillerList } from "@/tools/listGenerator";
-import { ModuleCategories, ModuleList } from "@/models/moduleList";
+import { ModuleCategories } from "@/models/moduleList";
+import { getModule } from "vuex-module-decorators";
+import UserStore from "@/store/modules/UserStore";
+import ModuleStore from "@/store/modules/ModuleStore";
+
+interface ModuleTile {
+  moduleName: string;
+  moduleColor: string;
+  semester: number;
+}
 
 @Component
 export default class ModuleElection extends Vue {
-  moduleList: ModuleList | null = null;
-  tiles5Semester = [] as VNode[];
-  tiles6Semester = [] as VNode[];
+  moduleStore: ModuleStore = getModule(ModuleStore);
+  userStore: UserStore = getModule(UserStore);
 
-  tilesPerRow = 3;
+  public getTilesForSemester(semester: number): Array<ModuleTile> {
+    semester += 4;
 
-  beforeMount(): void {
-    this.moduleList = generateFillerList();
-    this.createDefaultLayout();
-  }
+    const tiles: Array<ModuleTile> = [];
+    let index = this.moduleStore.getModuleList.getHead();
 
-  private createDefaultLayout(): void {
-    const tilesFithSemester = new Array<VNode>();
-    const tilesSixthSemester = new Array<VNode>();
-
-    if (this.moduleList) {
-      let index = this.moduleList.getHead();
-      while (index) {
-        if (index.semester === 5) {
-          tilesFithSemester.push(
-            this.createTile(
-              index.moduleName,
-              this.getColorFromCategorie(index.moduleCategorie)
-            )
-          );
-        } else if (index.semester === 6) {
-          tilesSixthSemester.push(
-            this.createTile(
-              index.moduleName,
-              this.getColorFromCategorie(index.moduleCategorie)
-            )
-          );
-        }
-        index = index.next;
+    while (index) {
+      if (index.semester === semester) {
+        tiles.push({
+          semester: index.semester,
+          moduleName: index.moduleName,
+          moduleColor: this.getColorForCategory(index.moduleCategorie),
+        });
       }
-      this.tiles5Semester.push(...this.createRows(tilesFithSemester));
-      this.tiles6Semester.push(...this.createRows(tilesSixthSemester));
+      index = index.next;
     }
+
+    return tiles;
   }
 
-  private createRows(tiles: Array<VNode>): Array<VNode> {
-    const rows = new Array<VNode>();
-    let buffer = new Array<VNode>();
-    for (let i = 0; i < tiles.length; i++) {
-      if (i % this.tilesPerRow == 0 && i > 0) {
-        buffer.push(tiles[i]);
-        rows.push(<div class="tile">{buffer}</div>);
-        buffer = new Array<VNode>();
-      } else {
-        buffer.push(tiles[i]);
-      }
-    }
-    if (buffer.length > 0) {
-      rows.push(<div class="tile">{buffer}</div>);
-    }
-    return rows;
-  }
-
-  private createTile(name: string, color: string): VNode {
-    const attrs = `tile is-child is-radiusless notification ${color}`;
-    return (
-      <div class="tile is-parent">
-        <div class={attrs}>{name}</div>
-      </div>
-    );
-  }
-
-  private getColorFromCategorie(cat: ModuleCategories): string {
+  private getColorForCategory(cat: ModuleCategories): string {
     let color = "";
     switch (cat) {
       case ModuleCategories.INTERDISCIPLINARY_MODULE:
       case ModuleCategories.SUBJECT_MODULE:
         color = "is-electiveModule";
         break;
-
       case ModuleCategories.CONTEXT_MODULE:
         color = "is-contextModule";
         break;
-
       case ModuleCategories.PROJEKT:
         color = "is-projectModule";
-        break;
     }
 
     return color;
-  }
-
-  render(): VNode {
-    return (
-      <div class="tile is-ancestor is-vertical">
-        <div class="tile is-vertical notification is-radiusless">
-          {this.tiles5Semester}
-        </div>
-        <div class="tile is-vertical notification is-radiusless">
-          {this.tiles6Semester}
-        </div>
-      </div>
-    );
   }
 }
 </script>
