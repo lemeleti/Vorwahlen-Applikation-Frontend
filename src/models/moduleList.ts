@@ -110,7 +110,8 @@ export class ModuleList {
     if (index && replacementModule) {
       index.moduleName = replacementModule.module_title;
       index.moduleId = replacementModule.module_no;
-      const replacementModuleIndex = this.overflowedModules.indexOf(replacementModule);
+      const replacementModuleIndex =
+        this.overflowedModules.indexOf(replacementModule);
       this.overflowedModules.splice(replacementModuleIndex, 1);
     } else if (index) {
       this.restoreNodeToDefault(index);
@@ -160,7 +161,9 @@ export class ModuleList {
   }
 
   private findReplacementModule(cat: ModuleCategories): Module | undefined {
-    return this.overflowedModules.find((module: Module) => module.category === cat);
+    return this.overflowedModules.find(
+      (module: Module) => module.category === cat
+    );
   }
 
   private getNextFillerByCat(cat: ModuleCategories): Node | null {
