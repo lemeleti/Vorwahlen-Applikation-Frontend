@@ -79,7 +79,7 @@ export class ModuleList {
    */
   public replaceModule(cat: ModuleCategories, module: Module): boolean {
     let isReplaced = false;
-    const nextModule: Node | null = this.getNextFillerByCat(cat);
+    const nextModule: Node | null = this.getNextFiller(module);
     if (nextModule) {
       this.mapModuleToNode(module, nextModule);
       isReplaced = true;
@@ -166,11 +166,16 @@ export class ModuleList {
     );
   }
 
-  private getNextFillerByCat(cat: ModuleCategories): Node | null {
+  private getNextFiller(module: Module): Node | null {
     let res = null;
     let index = this.head;
+    const semester = module.full_time_semester_list[0]; //TODO check if student is vz or tz
     while (index) {
-      if (index.moduleCategorie === cat && index.isFiller) {
+      if (
+        index.moduleCategorie === module.category &&
+        index.isFiller &&
+        semester === index.semester
+      ) {
         res = index;
         break;
       }
