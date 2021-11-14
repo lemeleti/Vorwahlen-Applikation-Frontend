@@ -11,6 +11,8 @@ import { generateFillerList } from "@/tools/listGenerator";
 import IModule from "@/models/module";
 import store from "@/store";
 import Stomp from "stompjs";
+import ModuleElection from "@/models/moduleElection";
+import { AxiosResponse } from "axios";
 interface ModuleWrapper {
   moduleArr: Array<IModule>;
 }
@@ -19,6 +21,7 @@ interface ModuleWrapper {
 export default class ModuleStore extends VuexModule {
   moduleArr: Array<IModule> = getModulesFromStorage();
   mySelection: ModuleList = generateFillerList();
+  isElectionValid = false;
   client: Stomp.Client | null = null;
 
   @Mutation
@@ -74,6 +77,35 @@ export default class ModuleStore extends VuexModule {
     ).data;
     localStorage.setItem("modules", JSON.stringify(moduleArr));
     return { moduleArr };
+  }
+
+  @Mutation
+  updateModuleSelection(): void {
+    const mySelection: ModuleList = generateFillerList();
+    Vue.axios
+      .get<ModuleElection>("/election")
+      .then((resp: AxiosResponse<ModuleElection>) => {
+        const election: ModuleElection = resp.data;
+        const electedModules: Array<string> = election.electedModules.concat(
+          election.overflowedElectedModules
+        );
+        for (const moduleName of electedModules) {
+          const module: IModule | undefined = findModuleById(
+            this.moduleArr,
+            moduleName
+          );
+          if (module) {
+            mySelection.replaceModule(module.category, module);
+          }
+        }
+        this.isElectionValid = election.electionValid;
+        this.mySelection = mySelection;
+      });
+  }
+
+  @Mutation
+  updateElectionStatus(status: boolean): void {
+    this.isElectionValid = status;
   }
 
   get getModules(): Array<IModule> {
