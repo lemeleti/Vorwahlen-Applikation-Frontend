@@ -59,6 +59,10 @@ export default class ModuleStore extends VuexModule {
     return this.moduleArr;
   }
 
+  get getModuleList(): ModuleList {
+    return this.mySelection;
+  }
+
   get isStoreUninitialized(): boolean {
     return this.moduleArr.length == 0;
   }
