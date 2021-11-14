@@ -1,6 +1,6 @@
 <template>
   <div id="content">
-    <ModuleElection v-model="this.moduleStore.getModules" />
+    <ModuleElection />
     <div id="konsekutiv-wrapper" class="content">
       <h1>Konsekutive Wahlpflichtmodule</h1>
       <p>
