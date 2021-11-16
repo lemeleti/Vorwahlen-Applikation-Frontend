@@ -5,22 +5,24 @@ import {
   VuexModule,
   Mutation,
   MutationAction,
+  Action,
 } from "vuex-module-decorators";
-import { ModuleList } from "@/models/moduleList";
-import { generateFillerList } from "@/tools/listGenerator";
+import { ModuleList, Node } from "@/models/moduleList";
 import IModule from "@/models/module";
 import store from "@/store";
 import Stomp from "stompjs";
-import ModuleElection from "@/models/moduleElection";
-import { AxiosResponse } from "axios";
 interface ModuleWrapper {
   moduleArr: Array<IModule>;
+}
+
+interface Structure {
+  [index: string]: Array<Node> | Array<IModule>;
 }
 
 @Module({ store, dynamic: true, name: "moduleStore" })
 export default class ModuleStore extends VuexModule {
   moduleArr: Array<IModule> = getModulesFromStorage();
-  mySelection: ModuleList = generateFillerList();
+  mySelection: ModuleList | null = null;
   isElectionValid = false;
   client: Stomp.Client | null = null;
 
@@ -29,39 +31,32 @@ export default class ModuleStore extends VuexModule {
     this.moduleArr.push(...arr);
   }
 
-  @Mutation
+  @Action
   saveToMySelection(moduleId: string): void {
-    const module: IModule | undefined = findModuleById(
-      this.moduleArr,
-      moduleId
-    );
+    const module: IModule | undefined = this.context.getters["findModuleById"](moduleId);
     if (this.mySelection && module) {
       this.mySelection.replaceModule(module.category, module);
-      if (this.client && this.client.connected) {
-        this.client.send(
-          "/app/save",
-          {},
-          JSON.stringify(this.mySelection.export())
-        );
-      }
+      this.context.commit("saveChanges");
+    }
+  }
+
+  @Action
+  removeFromMySelection(moduleId: string): void {
+    const module: IModule | undefined = this.context.getters["findModuleById"](moduleId);
+    if (this.mySelection && module) {
+      this.mySelection.removeModule(module);
+      this.context.commit("saveChanges");
     }
   }
 
   @Mutation
-  removeFromMySelection(moduleId: string): void {
-    const module: IModule | undefined = findModuleById(
-      this.moduleArr,
-      moduleId
-    );
-    if (this.mySelection && module) {
-      this.mySelection.removeModule(module);
-      if (this.client && this.client.connected) {
-        this.client.send(
-          "/app/save",
-          {},
-          JSON.stringify(this.mySelection.export())
-        );
-      }
+  saveChanges(): void {
+    if (this.client && this.client.connected && this.mySelection) {
+      this.client.send(
+        "/app/save",
+        {},
+        JSON.stringify(this.mySelection.export())
+      );
     }
   }
 
@@ -80,39 +75,53 @@ export default class ModuleStore extends VuexModule {
   }
 
   @Mutation
-  updateModuleSelection(): void {
-    const mySelection: ModuleList = generateFillerList();
-    Vue.axios
-      .get<ModuleElection>("/election")
-      .then((resp: AxiosResponse<ModuleElection>) => {
-        const election: ModuleElection = resp.data;
-        const electedModules: Array<string> = election.electedModules.concat(
-          election.overflowedElectedModules
-        );
-        for (const moduleName of electedModules) {
-          const module: IModule | undefined = findModuleById(
-            this.moduleArr,
-            moduleName
-          );
-          if (module) {
-            mySelection.replaceModule(module.category, module);
-          }
-        }
-        this.isElectionValid = election.electionValid;
-        this.mySelection = mySelection;
-      });
+  updateElectionStatus(status: boolean): void {
+    this.isElectionValid = status;
   }
 
   @Mutation
-  updateElectionStatus(status: boolean): void {
-    this.isElectionValid = status;
+  setModuleSelection(selection: ModuleList): void {
+    this.mySelection = selection;
+  }
+
+  @Action
+  async initModuleSelection(): Promise<void> {
+    const moduleList: ModuleList = new ModuleList();
+    const moduleStructure: Structure = (
+      await Vue.axios.get<Structure>("/election/structure")
+    ).data;
+    const electedModules: Array<Node> = <Array<Node>>(
+      moduleStructure["electedModules"]
+    );
+    const overflowedElectedModules: Array<IModule> = <Array<IModule>>(
+      moduleStructure["overflowedElectedModules"]
+    );
+
+    if (electedModules) {
+      for (const node of electedModules) {
+        moduleList.add(node);
+      }
+    }
+
+    if (overflowedElectedModules) {
+      moduleList.setOverflowedModules(overflowedElectedModules);
+    }
+    this.context.commit("setModuleSelection", moduleList);
   }
 
   get getModules(): Array<IModule> {
     return this.moduleArr;
   }
 
-  get getModuleList(): ModuleList {
+  get findModuleById() {
+    return (moduleId: string): IModule | undefined => {
+      return this.moduleArr.find(
+        (module: IModule) => module.module_no === moduleId
+      );
+    };
+  }
+
+  get getModuleList(): ModuleList | null {
     return this.mySelection;
   }
 
@@ -123,13 +132,6 @@ export default class ModuleStore extends VuexModule {
   get isClientConnected(): boolean {
     return this.client !== null && this.client.connected;
   }
-}
-
-function findModuleById(
-  modules: Array<IModule>,
-  moduleId: string
-): IModule | undefined {
-  return modules.find((module: IModule) => module.module_no === moduleId);
 }
 
 function getModulesFromStorage(): Array<IModule> {
