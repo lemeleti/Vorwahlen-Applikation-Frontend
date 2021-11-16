@@ -1,11 +1,5 @@
 <template>
   <div>
-    <div class="notification is-success" v-if="moduleStore.isElectionValid">
-      Ihre Wahl ist gültig.
-    </div>
-    <div class="notification is-danger" v-if="!moduleStore.isElectionValid">
-      Ihre Wahl ist derzeit ungültig.
-    </div>
     <div class="tile is-ancestor is-vertical">
       <div
         class="tile notification is-vertical is-radiusless"
@@ -28,6 +22,12 @@
           </div>
         </div>
       </div>
+    </div>
+    <div
+      class="box notification election-status "
+      :class="getElectionStatusColor()"
+    >
+      {{ getElectionStatus() }}
     </div>
   </div>
 </template>
@@ -73,6 +73,22 @@ export default class ModuleElection extends Vue {
     return tiles;
   }
 
+  public getElectionStatus(): string {
+    let text = "Ihre Auswahl ist im Moment nicht gültig.";
+    if (this.moduleStore.isElectionValid) {
+      text = "Ihre Auswahl ist gültig.";
+    }
+    return text;
+  }
+
+  public getElectionStatusColor(): string {
+    let color = "is-warning";
+    if (this.moduleStore.isElectionValid) {
+      color = "is-success";
+    }
+    return color;
+  }
+
   private getColorForCategory(cat: ModuleCategories): string {
     let color = "";
     switch (cat) {
@@ -97,3 +113,12 @@ export default class ModuleElection extends Vue {
   }
 }
 </script>
+
+<style>
+.election-status {
+  position: fixed !important;
+  right: 5px;
+  bottom: 5px;
+  z-index: 1;
+}
+</style>
