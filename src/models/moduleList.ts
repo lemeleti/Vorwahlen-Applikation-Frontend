@@ -10,7 +10,7 @@ export interface Node {
   next: Node | null;
   moduleName: string;
   moduleId: string;
-  moduleCategorie: ModuleCategories;
+  moduleCategory: ModuleCategories;
   semester: number;
   credits: number;
   isFiller: boolean;
@@ -155,7 +155,7 @@ export class ModuleList {
   }
 
   private restoreNodeToDefault(node: Node) {
-    node.moduleName = this.getTextForCategory(node.moduleCategorie);
+    node.moduleName = this.getTextForCategory(node.moduleCategory);
     node.moduleId = "NA";
     node.isFiller = true;
   }
@@ -172,7 +172,7 @@ export class ModuleList {
     const semester = module.full_time_semester_list[0]; //TODO check if student is vz or tz
     while (index) {
       if (
-        index.moduleCategorie === module.category &&
+        index.moduleCategory === module.category &&
         index.isFiller &&
         semester === index.semester
       ) {

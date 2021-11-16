@@ -64,6 +64,7 @@ export default class ModuleElection extends Vue {
           moduleName: index.moduleName,
           moduleColor: this.getColorForCategory(index.moduleCategorie),
         });
+            moduleColor: this.getColorForCategory(index.moduleCategory),
       }
       index = index.next;
     }
