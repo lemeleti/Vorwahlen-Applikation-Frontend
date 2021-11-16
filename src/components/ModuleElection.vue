@@ -82,8 +82,14 @@ export default class ModuleElection extends Vue {
       case ModuleCategories.CONTEXT_MODULE:
         color = "is-contextModule";
         break;
-      case ModuleCategories.PROJEKT:
+      case ModuleCategories.PROJECT_MODULE:
+      case ModuleCategories.BACHELOR_MODULE:
         color = "is-projectModule";
+        break;
+      case ModuleCategories.DISPENSED_PA_MODULE:
+      case ModuleCategories.DISPENSED_WPM_MODULE:
+        color = "is-info";
+        break;
     }
 
     return color;

@@ -28,7 +28,10 @@ export enum ModuleCategories {
   SUBJECT_MODULE = "SUBJECT_MODULE",
   INTERDISCIPLINARY_MODULE = "INTERDISCIPLINARY_MODULE",
   CONTEXT_MODULE = "CONTEXT_MODULE",
-  PROJEKT = "PROJEKT",
+  PROJECT_MODULE = "PROJECT_MODULE",
+  BACHELOR_MODULE = "BACHELOR_MODULE",
+  DISPENSED_PA_MODULE = "DISPENSED_PA_MODULE",
+  DISPENSED_WPM_MODULE = "DISPENSED_WPM_MODULE",
 }
 
 /**
@@ -216,7 +219,7 @@ export class ModuleList {
       case ModuleCategories.CONTEXT_MODULE:
         text = "Kontext Wahlpflichmodul";
         break;
-      case ModuleCategories.PROJEKT:
+      case ModuleCategories.PROJECT_MODULE:
         text = "Projektmodul";
     }
 
