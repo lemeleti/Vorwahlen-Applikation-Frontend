@@ -128,6 +128,14 @@ export class ModuleList {
   }
 
   /**
+   * Sets the the list of overflowed modules
+   * @param {Array<Module>} overflowedModules list of overflowed modules
+   */
+  public setOverflowedModules(overflowedModules: Array<Module>): void {
+    this.overflowedModules = overflowedModules;
+  }
+
+  /**
    * Exports all user elected modules by their id.
    * @param {Array<string>} arr Array containing elected module id's.
    */
