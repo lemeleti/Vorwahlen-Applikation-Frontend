@@ -48,8 +48,8 @@ export default class App extends Vue {
   }
 
   created(): void {
+    this.moduleStore.initModuleSelection();
     this.moduleStore.updateModules();
-    this.moduleStore.updateModuleSelection();
   }
 }
 </script>
