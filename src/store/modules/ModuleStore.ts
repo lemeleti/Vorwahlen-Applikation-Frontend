@@ -33,7 +33,8 @@ export default class ModuleStore extends VuexModule {
 
   @Action
   saveToMySelection(moduleId: string): void {
-    const module: IModule | undefined = this.context.getters["findModuleById"](moduleId);
+    const module: IModule | undefined =
+      this.context.getters["findModuleById"](moduleId);
     if (this.mySelection && module) {
       this.mySelection.replaceModule(module.category, module);
       this.context.commit("saveChanges");
@@ -42,7 +43,8 @@ export default class ModuleStore extends VuexModule {
 
   @Action
   removeFromMySelection(moduleId: string): void {
-    const module: IModule | undefined = this.context.getters["findModuleById"](moduleId);
+    const module: IModule | undefined =
+      this.context.getters["findModuleById"](moduleId);
     if (this.mySelection && module) {
       this.mySelection.removeModule(module);
       this.context.commit("saveChanges");

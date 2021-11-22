@@ -24,8 +24,9 @@
       </div>
     </div>
     <div
-      class="box notification election-status "
+      class="box notification election-status"
       :class="getElectionStatusColor()"
+      v-if="userStore.isUserAuthenticated"
     >
       {{ getElectionStatus() }}
     </div>

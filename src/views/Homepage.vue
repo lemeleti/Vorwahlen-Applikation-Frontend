@@ -1,6 +1,6 @@
 <template>
   <div id="content">
-    <ModuleElection />
+    <ModuleElection v-if="userStore.isAuthenticated" />
     <div id="konsekutiv-wrapper" class="content">
       <h1>Konsekutive Wahlpflichtmodule</h1>
       <p>
@@ -53,6 +53,7 @@ import ModuleStore from "@/store/modules/ModuleStore";
 import "vue-class-component/hooks";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
+import UserStore from "@/store/modules/UserStore";
 
 interface Election {
   electionSaved: boolean;
@@ -69,7 +70,8 @@ interface Election {
 export default class Homepage extends Vue {
   modalTitle = "";
   isModalActive = false;
-  moduleStore = getModule(ModuleStore);
+  moduleStore: ModuleStore = getModule(ModuleStore);
+  userStore: UserStore = getModule(UserStore);
 
   mounted(): void {
     if (!this.moduleStore.isClientConnected) {
