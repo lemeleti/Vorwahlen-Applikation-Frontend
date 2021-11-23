@@ -36,7 +36,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import "vue-class-component/hooks";
-import { ModuleCategories } from "@/models/moduleList";
+import ModuleCategory from "@/models/moduleCategory";
 import { getModule } from "vuex-module-decorators";
 import UserStore from "@/store/modules/UserStore";
 import ModuleStore from "@/store/modules/ModuleStore";
@@ -90,22 +90,22 @@ export default class ModuleElection extends Vue {
     return color;
   }
 
-  private getColorForCategory(cat: ModuleCategories): string {
+  private getColorForCategory(cat: ModuleCategory): string {
     let color = "";
     switch (cat) {
-      case ModuleCategories.INTERDISCIPLINARY_MODULE:
-      case ModuleCategories.SUBJECT_MODULE:
+      case ModuleCategory.INTERDISCIPLINARY_MODULE:
+      case ModuleCategory.SUBJECT_MODULE:
         color = "is-electiveModule";
         break;
-      case ModuleCategories.CONTEXT_MODULE:
+      case ModuleCategory.CONTEXT_MODULE:
         color = "is-contextModule";
         break;
-      case ModuleCategories.PROJECT_MODULE:
-      case ModuleCategories.BACHELOR_MODULE:
+      case ModuleCategory.PROJECT_MODULE:
+      case ModuleCategory.BACHELOR_MODULE:
         color = "is-projectModule";
         break;
-      case ModuleCategories.DISPENSED_PA_MODULE:
-      case ModuleCategories.DISPENSED_WPM_MODULE:
+      case ModuleCategory.DISPENSED_PA_MODULE:
+      case ModuleCategory.DISPENSED_WPM_MODULE:
         color = "is-info";
         break;
     }
