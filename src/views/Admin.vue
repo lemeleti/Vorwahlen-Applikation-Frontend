@@ -50,13 +50,20 @@
           @click="this.importDispensations"
         >
         </b-button>
+        <b-button
+          label="Aktuelle Vorwahl exportieren"
+          type="is-success"
+          icon-left="file-download"
+          @click="this.exportModuleElection"
+        >
+        </b-button>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Mixins } from "vue-property-decorator";
+import { Vue, Component, Mixins } from "vue-property-decorator";
 import ModuleListUpload from "@/mixins/ExcelSheetUpload";
 
 @Component
@@ -78,6 +85,15 @@ export default class Admin extends Mixins(ModuleListUpload) {
     this.importPath = "dispensation";
     await this.importList();
   }
+
+  async exportModuleElection(): Promise<void> {
+    const data: Blob = (
+      await Vue.axios.get<Blob>("/election/export", { responseType: "blob" })
+    ).data;
+    const url: string = window.URL.createObjectURL(data);
+    window.open(url);
+  }
+
   columns = [
     {
       field: "title",
