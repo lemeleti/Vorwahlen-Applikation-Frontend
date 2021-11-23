@@ -1,9 +1,15 @@
-import { ModuleCategories } from "./moduleList";
+import ModuleCategory from "./moduleCategory";
+
+interface ExecutionSemester {
+  [index: string]: Array<number>;
+}
 
 export default interface Module {
-  module_no: string;
-  module_title: string;
-  full_time_semester_list: Array<number>;
-  category: ModuleCategories;
+  moduleNo: string;
+  moduleTitle: string;
+  executionSemester: ExecutionSemester;
+  category: ModuleCategory;
   language: string;
+  credits: number;
+  consecutiveModuleNo: string;
 }
