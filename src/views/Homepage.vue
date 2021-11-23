@@ -33,8 +33,8 @@
           @showAdditionalSubjectInfo="showAdditionalSubjectInfo"
           v-for="(module, index) in this.moduleStore.getModules"
           :key="index"
-          :title="`${module.module_title} (${module.language})`"
-          :moduleId="module.module_no"
+          :title="`${module.moduleTitle} (${module.language})`"
+          :moduleId="module.moduleNo"
         />
       </div>
     </div>
