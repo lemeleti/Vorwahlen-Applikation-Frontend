@@ -54,11 +54,7 @@ import "vue-class-component/hooks";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
 import UserStore from "@/store/modules/UserStore";
-
-interface Election {
-  electionSaved: boolean;
-  electionValid: boolean;
-}
+import ElectionTansfer from "@/models/electionTransfer";
 
 @Component({
   components: {
@@ -83,7 +79,10 @@ export default class Homepage extends Vue {
     const socket: WebSocket = new SockJS("/api/stomp-ws-endpoint");
     const stomp: Stomp.Client = Stomp.over(socket);
     stomp.connect({}, () => {
-      stomp.subscribe("/user/queue/electionSaveStatus", this.saveStatus);
+      stomp.subscribe(
+        "/user/queue/electionSaveStatus",
+        this.updateElectionInformation
+      );
     });
     this.moduleStore.setStompClient(stomp);
   }
@@ -93,9 +92,9 @@ export default class Homepage extends Vue {
     this.isModalActive = !this.isModalActive;
   }
 
-  saveStatus(message: Stomp.Message): void {
-    const election: Election = JSON.parse(message.body);
-    this.moduleStore.updateElectionStatus(election.electionValid);
+  updateElectionInformation(message: Stomp.Message): void {
+    const electionData: ElectionTansfer = JSON.parse(message.body);
+    this.moduleStore.setElectionData(electionData);
     this.$buefy.toast.open({
       message: "Ihre Auswahl wurde gespeichert",
       duration: 2000,

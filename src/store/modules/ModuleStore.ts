@@ -7,22 +7,20 @@ import {
   MutationAction,
   Action,
 } from "vuex-module-decorators";
-import { ModuleList, Node } from "@/models/moduleList";
 import IModule from "@/models/module";
 import store from "@/store";
 import Stomp from "stompjs";
+import ElectionStructureElement from "@/models/electionStructureElement";
+import ElectionTansfer from "@/models/electionTransfer";
 interface ModuleWrapper {
   moduleArr: Array<IModule>;
-}
-
-interface Structure {
-  [index: string]: Array<Node> | Array<IModule>;
 }
 
 @Module({ store, dynamic: true, name: "moduleStore" })
 export default class ModuleStore extends VuexModule {
   moduleArr: Array<IModule> = getModulesFromStorage();
-  mySelection: ModuleList | null = null;
+  electedModules: Array<ElectionStructureElement> = [];
+  overflowedElectedModules: Array<ElectionStructureElement> = [];
   isElectionValid = false;
   client: Stomp.Client | null = null;
 
@@ -32,34 +30,18 @@ export default class ModuleStore extends VuexModule {
   }
 
   @Action
-  saveToMySelection(moduleId: string): void {
-    const module: IModule | undefined =
-      this.context.getters["findModuleById"](moduleId);
-    if (this.mySelection && module) {
-      this.mySelection.replaceModule(module.category, module);
-      this.context.commit("saveChanges");
-    }
-  }
-
-  @Action
-  removeFromMySelection(moduleId: string): void {
-    const module: IModule | undefined =
-      this.context.getters["findModuleById"](moduleId);
-    if (this.mySelection && module) {
-      this.mySelection.removeModule(module);
-      this.context.commit("saveChanges");
+  async updateElection(moduleNo: string): Promise<void> {
+    if (this.client && this.client.connected) {
+      this.client.send("/app/save", {}, moduleNo);
     }
   }
 
   @Mutation
-  saveChanges(): void {
-    if (this.client && this.client.connected && this.mySelection) {
-      this.client.send(
-        "/app/save",
-        {},
-        JSON.stringify(this.mySelection.export())
-      );
-    }
+  setElectionData(electionData: ElectionTansfer): void {
+    this.electedModules = electionData.electionStructure.electedModules;
+    this.overflowedElectedModules =
+      electionData.electionStructure.overflowedModules;
+    this.isElectionValid = electionData.electionValid;
   }
 
   @Mutation
@@ -81,50 +63,29 @@ export default class ModuleStore extends VuexModule {
     this.isElectionValid = status;
   }
 
-  @Mutation
-  setModuleSelection(selection: ModuleList): void {
-    this.mySelection = selection;
-  }
-
   @Action
   async initModuleSelection(): Promise<void> {
-    const moduleList: ModuleList = new ModuleList();
-    const moduleStructure: Structure = (
-      await Vue.axios.get<Structure>("/election/structure")
+    const electionData: ElectionTansfer = (
+      await Vue.axios.get<ElectionTansfer>("/election")
     ).data;
-    const electedModules: Array<Node> = <Array<Node>>(
-      moduleStructure["electedModules"]
-    );
-    const overflowedElectedModules: Array<IModule> = <Array<IModule>>(
-      moduleStructure["overflowedElectedModules"]
-    );
 
-    if (electedModules) {
-      for (const node of electedModules) {
-        moduleList.add(node);
-      }
-    }
-
-    if (overflowedElectedModules) {
-      moduleList.setOverflowedModules(overflowedElectedModules);
-    }
-    this.context.commit("setModuleSelection", moduleList);
+    this.context.commit("setElectionData", electionData);
   }
 
   get getModules(): Array<IModule> {
     return this.moduleArr;
   }
 
+  get getElectedModules(): Array<ElectionStructureElement> {
+    return this.electedModules;
+  }
+
   get findModuleById() {
     return (moduleId: string): IModule | undefined => {
       return this.moduleArr.find(
-        (module: IModule) => module.module_no === moduleId
+        (module: IModule) => module.moduleNo === moduleId
       );
     };
-  }
-
-  get getModuleList(): ModuleList | null {
-    return this.mySelection;
   }
 
   get isStoreUninitialized(): boolean {

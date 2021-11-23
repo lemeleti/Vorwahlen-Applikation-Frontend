@@ -56,18 +56,15 @@ export default class ModuleElection extends Vue {
     semester += 4;
 
     const tiles: Array<ModuleTile> = [];
-    if (this.moduleStore.getModuleList) {
-      let index = this.moduleStore.getModuleList.getHead();
-
-      while (index) {
-        if (index.semester === semester) {
+    if (this.moduleStore.getElectedModules) {
+      for (const element of this.moduleStore.getElectedModules) {
+        if (element.semester === semester) {
           tiles.push({
-            semester: index.semester,
-            moduleName: index.moduleName,
-            moduleColor: this.getColorForCategory(index.moduleCategory),
+            semester: element.semester,
+            moduleName: element.name,
+            moduleColor: this.getColorForCategory(element.category),
           });
         }
-        index = index.next;
       }
     }
 
