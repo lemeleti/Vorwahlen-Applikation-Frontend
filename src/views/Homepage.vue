@@ -82,10 +82,13 @@ export default class Homepage extends Vue {
   updateElectionInformation(message: Stomp.Message): void {
     const electionData: ElectionTansfer = JSON.parse(message.body);
     this.moduleStore.setElectionData(electionData);
-    this.$buefy.toast.open({
-      message: "Ihre Auswahl wurde gespeichert",
-      duration: 2000,
-      type: "is-info",
+    this.$buefy.notification.open({
+      hasIcon: true,
+      type: "is-success",
+      ariaCloseLabel: "Benachrichtigung schliessen",
+      message: "Ihre Modulvorwahl wurde erfolgreich gespeichert",
+      icon: "check",
+      iconPack: "fa",
     });
   }
 }
