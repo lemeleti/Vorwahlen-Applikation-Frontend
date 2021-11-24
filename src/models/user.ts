@@ -5,4 +5,7 @@ export default interface User {
   homeOrg: string;
   mail: string;
   role: string;
+  isIP: boolean;
+  isTZ: boolean;
+  isSecondElection: boolean;
 }
