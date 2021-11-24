@@ -1,33 +1,20 @@
 <template>
   <div id="content">
+    <b-message
+      title="Hinweis für alle Studierende mit dem Internationalen Profil"
+      type="is-info"
+      has-icon icon="info"
+      aria-close-label="Close message"
+      v-if="userStore.isUserIP"
+    >
+      Bitte führen Sie die Modulvorwahl für das fünfte Semester ebenfalls durch,
+      auch wenn Sie in diesem Semester als Outgoing eingetragen sind. Ausserdem
+      müssen alle Studierende das Modul
+      <strong>"Intercultural Communication and Management"</strong> belegen.
+    </b-message>
+
     <ModuleElection v-if="userStore.isAuthenticated" />
     <div id="konsekutiv-wrapper" class="content">
-      <h1>Konsekutive Wahlpflichtmodule</h1>
-      <p>
-        Sie dürfen auch konsekutive Wahlpflichtmodul als einzelne Module
-        besuchen. Sie müssen bis Studienende mindestens zweimal zwei konsekutive
-        Module belegen. Anders ausgedrückt: Total vier solche Module, wobei je
-        zwei konsekutiv sein müssen.
-      </p>
-      <p>
-        Beachten Sie, dass die Module mit "1" im Herbstsemester und die Module
-        mit "2" im Frühlingssemester stattfinden.
-      </p>
-      <p>
-        <b>IT18 Teilzeit:</b> Wenn Sie im aktuellen Studienjahr schon zwei
-        konsekutive Module belegt haben, wählen Sie mindestens einmal zwei
-        konsekutive Module, ansonsten mindestens zweimal zwei konsekutive
-        Module.
-      </p>
-      <p>
-        <b>IT19 Teilzeit:</b> Wählen Sie bis zu zwei konsekutive Module
-        (empfohlen: zwei Module). Achten Sie speziell auf die nötigen
-        Vorkenntnisse der Module.
-      </p>
-      <p>
-        <b>IT19 Vollzeit:</b> Wählen Sie mindestens zweimal zwei konsekutive
-        Module
-      </p>
       <div class="columns is-multiline" id="konsekutiv">
         <SubjectCard
           @showAdditionalSubjectInfo="showAdditionalSubjectInfo"
