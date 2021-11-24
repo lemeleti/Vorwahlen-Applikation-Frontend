@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div class="tile is-ancestor is-vertical">
+    <div class="tile is-ancestor is-vertical is-flex-wrap-wrap">
       <div
         class="tile notification is-vertical is-radiusless"
         v-for="semester in 2"
         :key="semester"
       >
-        <div class="tile">
+        <div class="tile is-flex-wrap-wrap is-justify-content-start">
           <div
-            class="tile is-parent has-text-centered"
+            class="tile is-parent has-text-centered is-3"
             v-for="(tile, tileIndex) of getTilesForSemester(semester)"
             :key="tileIndex"
           >
             <div
-              class="is-child notification is-radiusless"
+              class="tile is-child notification is-radiusless"
               :class="tile.moduleColor"
               style="color: black"
             >
