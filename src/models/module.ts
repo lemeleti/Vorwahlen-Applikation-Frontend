@@ -1,12 +1,15 @@
+import ModuleCategory from "./moduleCategory";
+
+interface ExecutionSemester {
+  [index: string]: Array<number>;
+}
+
 export default interface Module {
-  module_no: string;
-  short_module_no: string;
-  module_title: string;
-  module_group: string;
-  is_ip_module: boolean;
-  insitute: string;
-  credits: number;
+  moduleNo: string;
+  moduleTitle: string;
+  executionSemester: ExecutionSemester;
+  category: ModuleCategory;
   language: string;
-  full_time_semester_list: Array<number>;
-  part_time_semester_list: Array<number>;
+  credits: number;
+  consecutiveModuleNo: string;
 }

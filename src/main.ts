@@ -26,6 +26,8 @@ import {
   faSearch,
   faFileUpload,
   faSignInAlt,
+  faFileDownload,
+  faInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 require("@/assets/main.scss");
@@ -46,7 +48,9 @@ library.add(
   faBell,
   faSearch,
   faFileUpload,
-  faSignInAlt
+  faSignInAlt,
+  faFileDownload,
+  faInfo
 );
 
 Vue.component("vue-fontawesome", FontAwesomeIcon);
@@ -56,11 +60,7 @@ Vue.use(Buefy, {
   defaultIconPack: "fas",
 });
 
-if (process.env.NODE_ENV === "development") {
-  axios.defaults.baseURL = "http://localhost:8080";
-} else if (process.env.NODE_ENV === "production") {
-  axios.defaults.baseURL = "/api";
-}
+axios.defaults.baseURL = "/api";
 
 Vue.use(VueAxios, axios);
 Vue.use(VueSweetalert2);

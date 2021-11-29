@@ -56,9 +56,9 @@ export default class SubjectCard extends Vue {
 
   toggleSelection(): void {
     if (this.isSelected) {
-      this.moduleStore.removeFromMySelection(this.moduleId);
+      this.moduleStore.updateElection(this.moduleId);
     } else {
-      this.moduleStore.saveToMySelection(this.moduleId);
+      this.moduleStore.updateElection(this.moduleId);
     }
     this.isSelected = !this.isSelected;
   }

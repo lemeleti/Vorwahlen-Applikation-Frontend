@@ -29,6 +29,7 @@ import Footer from "@/components/Footer.vue";
 import RightMenu from "@/components/RightMenu.vue";
 import UserStore from "@/store/modules/UserStore";
 import "vue-class-component/hooks";
+import ModuleStore from "./store/modules/ModuleStore";
 
 @Component({
   components: {
@@ -39,10 +40,16 @@ import "vue-class-component/hooks";
 })
 export default class App extends Vue {
   userStore = getModule(UserStore);
+  moduleStore = getModule(ModuleStore);
   isAuthenticated = false;
 
   mounted(): void {
     this.userStore.fetchUserData();
+  }
+
+  created(): void {
+    this.moduleStore.initModuleSelection();
+    this.moduleStore.updateModules();
   }
 }
 </script>

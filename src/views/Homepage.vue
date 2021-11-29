@@ -1,39 +1,27 @@
 <template>
   <div id="content">
+    <b-message
+      title="Hinweis für alle Studierende mit dem Internationalen Profil"
+      type="is-info"
+      has-icon icon="info"
+      aria-close-label="Close message"
+      v-if="userStore.isUserIP"
+    >
+      Bitte führen Sie die Modulvorwahl für das fünfte Semester ebenfalls durch,
+      auch wenn Sie in diesem Semester als Outgoing eingetragen sind. Ausserdem
+      müssen alle Studierende das Modul
+      <strong>"Intercultural Communication and Management"</strong> belegen.
+    </b-message>
+
+    <ModuleElection v-if="userStore.isAuthenticated" />
     <div id="konsekutiv-wrapper" class="content">
-      <h1>Konsekutive Wahlpflichtmodule</h1>
-      <p>
-        Sie dürfen auch konsekutive Wahlpflichtmodul als einzelne Module
-        besuchen. Sie müssen bis Studienende mindestens zweimal zwei konsekutive
-        Module belegen. Anders ausgedrückt: Total vier solche Module, wobei je
-        zwei konsekutiv sein müssen.
-      </p>
-      <p>
-        Beachten Sie, dass die Module mit "1" im Herbstsemester und die Module
-        mit "2" im Frühlingssemester stattfinden.
-      </p>
-      <p>
-        <b>IT18 Teilzeit:</b> Wenn Sie im aktuellen Studienjahr schon zwei
-        konsekutive Module belegt haben, wählen Sie mindestens einmal zwei
-        konsekutive Module, ansonsten mindestens zweimal zwei konsekutive
-        Module.
-      </p>
-      <p>
-        <b>IT19 Teilzeit:</b> Wählen Sie bis zu zwei konsekutive Module
-        (empfohlen: zwei Module). Achten Sie speziell auf die nötigen
-        Vorkenntnisse der Module.
-      </p>
-      <p>
-        <b>IT19 Vollzeit:</b> Wählen Sie mindestens zweimal zwei konsekutive
-        Module
-      </p>
       <div class="columns is-multiline" id="konsekutiv">
         <SubjectCard
           @showAdditionalSubjectInfo="showAdditionalSubjectInfo"
           v-for="(module, index) in this.moduleStore.getModules"
           :key="index"
-          :title="`${module.module_title} (${module.language})`"
-          :moduleId="module.module_no"
+          :title="`${module.moduleTitle} (${module.language})`"
+          :moduleId="module.moduleNo"
         />
       </div>
     </div>
@@ -47,27 +35,61 @@ import { Vue, Component } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
 import SubjectCard from "@/components/SubjectCard.vue";
 import SubjectInfoModal from "@/components/SubjectInfoModal.vue";
+import ModuleElection from "@/components/ModuleElection.vue";
 import ModuleStore from "@/store/modules/ModuleStore";
 import "vue-class-component/hooks";
+import Stomp from "stompjs";
+import SockJS from "sockjs-client";
+import UserStore from "@/store/modules/UserStore";
+import ElectionTansfer from "@/models/electionTransfer";
 
 @Component({
   components: {
     SubjectCard,
     SubjectInfoModal,
+    ModuleElection,
   },
 })
 export default class Homepage extends Vue {
   modalTitle = "";
   isModalActive = false;
-  moduleStore = getModule(ModuleStore);
+  moduleStore: ModuleStore = getModule(ModuleStore);
+  userStore: UserStore = getModule(UserStore);
 
-  beforeMount(): void {
-    this.moduleStore.initStore();
+  mounted(): void {
+    if (!this.moduleStore.isClientConnected) {
+      this.createConnection();
+    }
+  }
+
+  createConnection(): void {
+    const socket: WebSocket = new SockJS("/api/stomp-ws-endpoint");
+    const stomp: Stomp.Client = Stomp.over(socket);
+    stomp.connect({}, () => {
+      stomp.subscribe(
+        "/user/queue/electionSaveStatus",
+        this.updateElectionInformation
+      );
+    });
+    this.moduleStore.setStompClient(stomp);
   }
 
   showAdditionalSubjectInfo(title: string): void {
     this.modalTitle = title;
     this.isModalActive = !this.isModalActive;
+  }
+
+  updateElectionInformation(message: Stomp.Message): void {
+    const electionData: ElectionTansfer = JSON.parse(message.body);
+    this.moduleStore.setElectionData(electionData);
+    this.$buefy.notification.open({
+      hasIcon: true,
+      type: "is-success",
+      ariaCloseLabel: "Benachrichtigung schliessen",
+      message: "Ihre Modulvorwahl wurde erfolgreich gespeichert",
+      icon: "check",
+      iconPack: "fa",
+    });
   }
 }
 </script>
