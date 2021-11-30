@@ -3,7 +3,8 @@
     <b-message
       title="Hinweis für alle Studierende mit dem Internationalen Profil"
       type="is-info"
-      has-icon icon="info"
+      has-icon
+      icon="info"
       aria-close-label="Close message"
       v-if="userStore.isUserIP"
     >
@@ -12,20 +13,24 @@
       müssen alle Studierende das Modul
       <strong>"Intercultural Communication and Management"</strong> belegen.
     </b-message>
-
     <ModuleElection v-if="userStore.isAuthenticated" />
-    <div id="konsekutiv-wrapper" class="content">
-      <div class="columns is-multiline" id="konsekutiv">
-        <SubjectCard
-          @showAdditionalSubjectInfo="showAdditionalSubjectInfo"
-          v-for="(module, index) in this.moduleStore.getModules"
-          :key="index"
-          :title="`${module.moduleTitle} (${module.language})`"
-          :moduleId="module.moduleNo"
-        />
-      </div>
-    </div>
     <hr />
+    <TileBox
+      v-for="(description, category, index) in getElectionCategoryMap()"
+      :key="index"
+    >
+      <template #title>{{ description }}</template>
+      <template #content>
+        <Module
+          v-for="(module, moduleIndex) of getModulesByCategory(category)"
+          :key="moduleIndex"
+          :color="moduleStore.getColorForCategory(module.category)"
+          :moduleNo="module.moduleNo"
+        >
+          <template #title>{{ module.moduleTitle }}</template>
+        </Module>
+      </template>
+    </TileBox>
     <SubjectInfoModal :title="modalTitle" :isModalActive.sync="isModalActive" />
   </div>
 </template>
@@ -33,21 +38,29 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
-import SubjectCard from "@/components/SubjectCard.vue";
 import SubjectInfoModal from "@/components/SubjectInfoModal.vue";
 import ModuleElection from "@/components/ModuleElection.vue";
+import TileBox from "@/components/TileBox.vue";
 import ModuleStore from "@/store/modules/ModuleStore";
 import "vue-class-component/hooks";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
 import UserStore from "@/store/modules/UserStore";
 import ElectionTansfer from "@/models/electionTransfer";
+import Module from "@/components/Module.vue";
+import IModule from "@/models/module";
+import ModuleCategory from "@/models/moduleCategory";
+
+interface ElectionCategoryMap {
+  [index: string]: string;
+}
 
 @Component({
   components: {
-    SubjectCard,
     SubjectInfoModal,
     ModuleElection,
+    TileBox,
+    Module,
   },
 })
 export default class Homepage extends Vue {
@@ -60,6 +73,36 @@ export default class Homepage extends Vue {
     if (!this.moduleStore.isClientConnected) {
       this.createConnection();
     }
+  }
+
+  getElectionCategoryMap(): ElectionCategoryMap {
+    const electionCategoryMap: ElectionCategoryMap = {};
+    electionCategoryMap[ModuleCategory.CONSECUTIVE_MODULE] =
+      "Konsekutive Wahlpflichmodule";
+    electionCategoryMap[ModuleCategory.SUBJECT_MODULE] =
+      "Fachliche Wahlpflichmodule";
+    electionCategoryMap[ModuleCategory.INTERDISCIPLINARY_MODULE] =
+      "Überfachliche Wahlpflichmodule";
+    electionCategoryMap[ModuleCategory.CONTEXT_MODULE] =
+      "Kontext Wahlpflichmodule";
+
+    return electionCategoryMap;
+  }
+
+  getModulesByCategory(category: ModuleCategory): Array<IModule> {
+    let modules: Array<IModule> = [];
+    const filteredModules = this.moduleStore.getModules.filter(
+      (module: IModule) =>
+        module.category === category && module.consecutiveModuleNo === ""
+    );
+    if (filteredModules.length > 0) {
+      modules = filteredModules;
+    } else {
+      modules = this.moduleStore.getModules.filter(
+        (module: IModule) => module.consecutiveModuleNo !== ""
+      );
+    }
+    return modules;
   }
 
   createConnection(): void {
