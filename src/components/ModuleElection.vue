@@ -72,6 +72,7 @@ export default class ModuleElection extends Vue {
   }
 
   public getElectionStatus(): string {
+      moduleColor: this.moduleStore.getColorForCategory(element.category),
     let text = "Ihre Auswahl ist im Moment nicht gültig.";
     if (this.moduleStore.isElectionValid) {
       text = "Ihre Auswahl ist gültig.";
@@ -84,29 +85,6 @@ export default class ModuleElection extends Vue {
     if (this.moduleStore.isElectionValid) {
       color = "is-success";
     }
-    return color;
-  }
-
-  private getColorForCategory(cat: ModuleCategory): string {
-    let color = "";
-    switch (cat) {
-      case ModuleCategory.INTERDISCIPLINARY_MODULE:
-      case ModuleCategory.SUBJECT_MODULE:
-        color = "is-electiveModule";
-        break;
-      case ModuleCategory.CONTEXT_MODULE:
-        color = "is-contextModule";
-        break;
-      case ModuleCategory.PROJECT_MODULE:
-      case ModuleCategory.BACHELOR_MODULE:
-        color = "is-projectModule";
-        break;
-      case ModuleCategory.DISPENSED_PA_MODULE:
-      case ModuleCategory.DISPENSED_WPM_MODULE:
-        color = "is-info";
-        break;
-    }
-
     return color;
   }
 }

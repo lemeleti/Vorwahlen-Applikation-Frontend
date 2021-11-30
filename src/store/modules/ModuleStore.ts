@@ -12,6 +12,7 @@ import store from "@/store";
 import Stomp from "stompjs";
 import ElectionStructureElement from "@/models/electionStructureElement";
 import ElectionTansfer from "@/models/electionTransfer";
+import ModuleCategory from "@/models/moduleCategory";
 interface ModuleWrapper {
   moduleArr: Array<IModule>;
 }
@@ -78,6 +79,36 @@ export default class ModuleStore extends VuexModule {
 
   get getElectedModules(): Array<ElectionStructureElement> {
     return this.electedModules;
+  }
+
+  get getOverflowedModules(): Array<ElectionStructureElement> {
+    return this.overflowedElectedModules;
+  }
+
+  get getColorForCategory() {
+    return (cat: ModuleCategory): string => {
+      let color = "";
+      switch (cat) {
+        case ModuleCategory.INTERDISCIPLINARY_MODULE:
+          color = "is-warning";
+          break;
+        case ModuleCategory.SUBJECT_MODULE:
+          color = "is-electiveModule";
+          break;
+        case ModuleCategory.CONTEXT_MODULE:
+          color = "is-contextModule";
+          break;
+        case ModuleCategory.PROJECT_MODULE:
+        case ModuleCategory.BACHELOR_MODULE:
+          color = "is-projectModule";
+          break;
+        case ModuleCategory.DISPENSED_PA_MODULE:
+        case ModuleCategory.DISPENSED_WPM_MODULE:
+          color = "is-info";
+          break;
+      }
+      return color;
+    };
   }
 
   get findModuleById() {
