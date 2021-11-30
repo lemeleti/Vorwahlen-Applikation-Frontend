@@ -52,4 +52,12 @@ export default class UserStore extends VuexModule {
   get isUserIP(): boolean {
     return this.user.isIP;
   }
+
+  get isUserTZ(): boolean {
+    return this.user.isTZ;
+  }
+
+  get isSecondElection(): boolean {
+    return this.user.isSecondElection;
+  }
 }
