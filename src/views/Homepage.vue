@@ -78,13 +78,13 @@ export default class Homepage extends Vue {
   getElectionCategoryMap(): ElectionCategoryMap {
     const electionCategoryMap: ElectionCategoryMap = {};
     electionCategoryMap[ModuleCategory.CONSECUTIVE_MODULE] =
-      "Konsekutive Wahlpflichmodule";
+      "Konsekutive Wahlpflichtmodule";
     electionCategoryMap[ModuleCategory.SUBJECT_MODULE] =
-      "Fachliche Wahlpflichmodule";
+      "Fachliche Wahlpflichtmodule";
     electionCategoryMap[ModuleCategory.INTERDISCIPLINARY_MODULE] =
-      "Überfachliche Wahlpflichmodule";
+      "Überfachliche Wahlpflichtmodule";
     electionCategoryMap[ModuleCategory.CONTEXT_MODULE] =
-      "Kontext Wahlpflichmodule";
+      "Kontext Wahlpflichtmodule";
 
     return electionCategoryMap;
   }
