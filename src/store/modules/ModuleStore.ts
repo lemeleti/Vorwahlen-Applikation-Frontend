@@ -92,6 +92,7 @@ export default class ModuleStore extends VuexModule {
         case ModuleCategory.INTERDISCIPLINARY_MODULE:
           color = "is-warning";
           break;
+        case ModuleCategory.CONSECUTIVE_MODULE:
         case ModuleCategory.SUBJECT_MODULE:
           color = "is-electiveModule";
           break;
@@ -125,6 +126,25 @@ export default class ModuleStore extends VuexModule {
 
   get isClientConnected(): boolean {
     return this.client !== null && this.client.connected;
+  }
+
+  get isModuleSelected() {
+    return (moduleNo: string): boolean => {
+      let isElected = false;
+      if (
+        (this.electedModules &&
+          this.electedModules.find(
+            (element: ElectionStructureElement) => element.id === moduleNo
+          )) ||
+        (this.overflowedElectedModules &&
+          this.overflowedElectedModules.find(
+            (element: ElectionStructureElement) => element.id === moduleNo
+          ))
+      ) {
+        isElected = true;
+      }
+      return isElected;
+    };
   }
 }
 
