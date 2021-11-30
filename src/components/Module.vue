@@ -9,12 +9,12 @@
       <b-field id="selectModule">
         <b-checkbox
           :value="true"
-          type="is-success"
+          type="is-info"
           v-model="moduleSelected"
         ></b-checkbox>
       </b-field>
       <b-icon
-        icon="info-circle"
+        icon="info"
         type="is-info"
         id="moduleInfo"
         class="is-clickable"
@@ -58,8 +58,8 @@ export default class Module extends Vue {
 }
 
 #moduleInfo {
-  bottom: 0;
-  right: 0px;
+  top: 0;
+  left: 0px;
   position: absolute;
 }
 </style>
