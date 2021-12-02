@@ -37,6 +37,10 @@ export default class UserStore extends VuexModule {
     return this.isAuthenticated;
   }
 
+  get email(): string {
+    return this.user.mail;
+  }
+
   get isUserAuthenticated(): boolean {
     return this.isAuthenticated;
   }
