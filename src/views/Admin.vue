@@ -52,13 +52,13 @@ export default class Admin extends Mixins(ModuleListUpload) {
 
   async importClassList(): Promise<void> {
     this.listTitle = "Klassenliste";
-    this.importPath = "class";
+    this.importPath = "students";
     await this.importList();
   }
 
   async importDispensations(): Promise<void> {
     this.listTitle = "Dispensationsliste";
-    this.importPath = "dispensation";
+    this.importPath = "students/dispensations";
     await this.importList();
   }
 
