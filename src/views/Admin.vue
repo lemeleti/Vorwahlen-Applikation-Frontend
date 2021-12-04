@@ -1,5 +1,6 @@
 <template>
   <div id="content">
+    <StudentAdministration />
     <div class="buttons">
       <b-button
         label="Vorwahlen exportieren"
@@ -11,20 +12,6 @@
         type="is-info"
         icon-left="file-upload"
         @click="this.importModules"
-      >
-      </b-button>
-      <b-button
-        label="Klassenliste importieren"
-        type="is-info"
-        icon-left="file-upload"
-        @click="this.importClassList"
-      >
-      </b-button>
-      <b-button
-        label="Dispensationen importieren"
-        type="is-info"
-        icon-left="file-upload"
-        @click="this.importDispensations"
       >
       </b-button>
       <b-button
@@ -41,24 +28,17 @@
 <script lang="ts">
 import { Vue, Component, Mixins } from "vue-property-decorator";
 import ModuleListUpload from "@/mixins/ExcelSheetUpload";
+import StudentAdministration from "@/components/StudentAdministration.vue";
 
-@Component
+@Component({
+  components: {
+    StudentAdministration,
+  },
+})
 export default class Admin extends Mixins(ModuleListUpload) {
   async importModules(): Promise<void> {
     this.listTitle = "Modulliste";
     this.importPath = "module";
-    await this.importList();
-  }
-
-  async importClassList(): Promise<void> {
-    this.listTitle = "Klassenliste";
-    this.importPath = "students";
-    await this.importList();
-  }
-
-  async importDispensations(): Promise<void> {
-    this.listTitle = "Dispensationsliste";
-    this.importPath = "students/dispensations";
     await this.importList();
   }
 
