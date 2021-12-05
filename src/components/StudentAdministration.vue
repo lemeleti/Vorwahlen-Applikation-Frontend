@@ -35,8 +35,13 @@
 import { Component, Vue, Mixins } from "vue-property-decorator";
 import Student from "@/models/student";
 import ModuleListUpload from "@/mixins/ExcelSheetUpload";
+import CreateUser from "@/components/admin/CreateUser.vue";
 
-@Component
+@Component({
+  components: {
+    CreateUser,
+  },
+})
 export default class StudentAdministration extends Mixins(ModuleListUpload) {
   dataIsLoading = true;
   students: Array<Student> = [];
@@ -78,15 +83,40 @@ export default class StudentAdministration extends Mixins(ModuleListUpload) {
   }
 
   async deleteSelectedStudents(): Promise<void> {
-    for (const student of this.checkedRows) {
-      (await Vue.axios.delete(`/students/${student.email}`)).data;
-      const studentIndex = this.students.indexOf(student);
-      this.students.splice(studentIndex, 1);
+    const userConfirmation = await Vue.swal({
+      title: "Wollen Sie die asugewählten Benutzer löschen?",
+      text: "Diese Aktion ist irreversibel",
+      showCancelButton: true,
+      cancelButtonText: "Abbrechen",
+      confirmButtonText: "Löschen",
+    });
+
+    if (userConfirmation.isConfirmed) {
+      for (const student of this.checkedRows) {
+        try {
+          (await Vue.axios.delete(`/students/${student.email}`)).data;
+        } catch (e) {
+          // todo display received error message
+          console.log(e);
+          return;
+        }
+        const studentIndex = this.students.indexOf(student);
+        this.students.splice(studentIndex, 1);
+      }
+      Vue.swal({
+        title: "Benutzer wurden gelöscht",
+        icon: "success",
+      });
     }
   }
 
   async addUser(): Promise<void> {
-    //
+    this.$buefy.modal.open({
+      parent: this,
+      component: CreateUser,
+      trapFocus: true,
+      canCancel: ["x", "escape"],
+    });
   }
 
   async importClassList(): Promise<void> {
