@@ -28,7 +28,7 @@
 <script lang="ts">
 import { Vue, Component, Mixins } from "vue-property-decorator";
 import ModuleListUpload from "@/mixins/ExcelSheetUpload";
-import StudentAdministration from "@/components/StudentAdministration.vue";
+import StudentAdministration from "@/components/admin/StudentAdministration.vue";
 
 @Component({
   components: {
