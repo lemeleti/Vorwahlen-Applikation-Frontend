@@ -9,7 +9,13 @@
         :debounce-search="1000"
         checkable
         :checked-rows.sync="checkedRows"
-      ></b-table>
+        paginated
+        per-page="15"
+      >
+        <template #bottom-left>
+          <b>Ausgewählt</b>: {{ checkedRows.lenght }}
+        </template>
+      </b-table>
     </div>
     <div class="buttons">
       <b-button @click="addUser" type="is-success">Erstellen</b-button>
@@ -35,11 +41,12 @@
 import { Component, Vue, Mixins } from "vue-property-decorator";
 import Student from "@/models/student";
 import ModuleListUpload from "@/mixins/ExcelSheetUpload";
-import CreateUser from "@/components/admin/CreateUser.vue";
+import CreateEditStudent from "@/components/admin/CreateEditStudent.vue";
+import { BModalConfig } from "buefy/types/components";
 
 @Component({
   components: {
-    CreateUser,
+    CreateEditStudent,
   },
 })
 export default class StudentAdministration extends Mixins(ModuleListUpload) {
@@ -75,7 +82,19 @@ export default class StudentAdministration extends Mixins(ModuleListUpload) {
       field: "tz",
       label: "Teilzeitstudent",
     },
+    {
+      field: "secondElection",
+      label: "Zweite Modulvorwahl",
+    },
   ];
+
+  modalOption: BModalConfig = {
+    parent: this,
+    component: CreateEditStudent,
+    trapFocus: true,
+    hasModalCard: true,
+    canCancel: ["x", "escape"],
+  };
 
   async created(): Promise<void> {
     this.students = (await Vue.axios.get("students")).data;
@@ -111,12 +130,8 @@ export default class StudentAdministration extends Mixins(ModuleListUpload) {
   }
 
   async addUser(): Promise<void> {
-    this.$buefy.modal.open({
-      parent: this,
-      component: CreateUser,
-      trapFocus: true,
-      canCancel: ["x", "escape"],
-    });
+    this.modalOption.props = { student: {}, createStudent: true };
+    this.$buefy.modal.open(this.modalOption);
   }
 
   async importClassList(): Promise<void> {
@@ -126,7 +141,11 @@ export default class StudentAdministration extends Mixins(ModuleListUpload) {
   }
 
   async editSelectedUsers(): Promise<void> {
-    //
+    this.modalOption.props = {
+      student: this.checkedRows[0],
+      createStudent: false,
+    };
+    this.$buefy.modal.open(this.modalOption);
   }
 
   async importDispensations(): Promise<void> {
