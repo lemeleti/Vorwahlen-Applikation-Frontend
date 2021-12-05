@@ -28,6 +28,9 @@ import {
   faSignInAlt,
   faFileDownload,
   faInfo,
+  faAngleLeft,
+  faAngleRight,
+  faExclamationCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 require("@/assets/main.scss");
@@ -50,7 +53,10 @@ library.add(
   faFileUpload,
   faSignInAlt,
   faFileDownload,
-  faInfo
+  faInfo,
+  faAngleLeft,
+  faAngleRight,
+  faExclamationCircle
 );
 
 Vue.component("vue-fontawesome", FontAwesomeIcon);
