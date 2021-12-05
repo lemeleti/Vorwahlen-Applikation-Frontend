@@ -5,7 +5,17 @@
     </header>
     <section class="modal-card-body">
       <b-field label="E-Mail">
-        <b-input type="email" v-model="student.email"></b-input>
+        <b-input
+          type="email"
+          v-model="student.email"
+          v-if="createStudent"
+        ></b-input>
+        <b-input
+          type="email"
+          :placeholder="student.email"
+          :disabled="createStudent"
+          v-else
+        ></b-input>
       </b-field>
 
       <b-field label="Vor- und Nachname">
