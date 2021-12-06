@@ -1,93 +1,54 @@
 <template>
-  <section>
-    <h1 class="title">Modulverwaltung</h1>
-    <div class="block">
-      <b-table
-        :data="modules"
-        :columns="columns"
-        :loading="dataIsLoading"
-        :debounce-search="1000"
-        checkable
-        :checked-rows.sync="checkedRows"
-        paginated
-        per-page="15"
-      >
-        <template #bottom-left>
-          <b>Ausgewählt</b>: {{ checkedRows.lenght }}
-        </template>
-      </b-table>
-    </div>
-    <div class="level">
-      <div class="level-left">
-        <div class="level-item">
-          <b-button
-            @click="addModule"
-            icon-left="plus"
-            label="Erstellen"
-            type="is-success"
-          />
-        </div>
-
-        <div class="level-item">
-          <b-button
-            label="Modulliste"
-            type="is-success"
-            icon-left="file-upload"
-            @click="this.importModules"
-          />
-        </div>
-
-        <div class="level-item">
-          <b-button
-            @click="editSelectedModule"
-            icon-left="edit"
-            type="is-info"
-            label="Editieren"
-          />
-        </div>
-
-        <div class="level-item">
-          <b-button
-            @click="deleteSelectedModules"
-            icon-left="trash"
-            type="is-danger"
-            label="Löschen"
-          />
-        </div>
+  <Administration
+    @add="addModule"
+    @edit="editModule"
+    @deleteSelected="deleteSelectedModules"
+    :columns.sync="moduleColumns"
+    :rows.sync="moduleRows"
+    :checkedRows.sync="checkedModuleRows"
+    :isDataLoading.sync="isModuleDataLoading"
+  >
+    <template #title>Studentenverwaltung</template>
+    <template #buttons-right>
+      <div class="level-item">
+        <b-button
+          label="Vorwahlen exportieren"
+          type="is-success"
+          icon-left="file-download"
+          @click="exportModuleElection"
+        />
       </div>
 
-      <div class="level-right">
-        <div class="level-item">
-          <b-button
-            label="Vorwahlen exportieren"
-            type="is-success"
-            icon-left="file-download"
-            @click="this.exportModuleElection"
-          />
-        </div>
+      <div class="level-item">
+        <b-button
+          label="Modulliste"
+          type="is-success"
+          icon-left="file-upload"
+          @click="importModules"
+        />
       </div>
-    </div>
-  </section>
+    </template>
+  </Administration>
 </template>
 
 <script lang="ts">
-import { Component, Mixins, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import CreateEditModule from "@/components/admin/CreateEditModule.vue";
-import ModuleListUpload from "@/mixins/ExcelSheetUpload";
+import Administration from "@/components/admin/Administration.vue";
 import Module from "@/models/module";
-import { BModalConfig } from "buefy/types/components";
 
 @Component({
   components: {
     CreateEditModule,
+    Administration,
   },
 })
-export default class ModuleAdministration extends Mixins(ModuleListUpload) {
-  dataIsLoading = true;
-  modules: Array<Module> = [];
-  checkedRows: Array<Module> = [];
+export default class ModuleAdministration extends Administration<Module> {
+  isModuleDataLoading = true;
+  moduleRows: Array<Module> = [];
+  checkedModuleRows: Array<Module> = [];
 
-  columns = [
+  moduleColumns = [
     {
       field: "moduleNo",
       label: "Modulkürzel",
@@ -122,17 +83,10 @@ export default class ModuleAdministration extends Mixins(ModuleListUpload) {
     },
   ];
 
-  modalOption: BModalConfig = {
-    parent: this,
-    component: CreateEditModule,
-    trapFocus: true,
-    hasModalCard: true,
-    canCancel: ["x", "escape"],
-  };
-
   async created(): Promise<void> {
-    this.modules = (await Vue.axios.get("module")).data;
-    this.dataIsLoading = false;
+    this.modalOption.component = CreateEditModule;
+    this.moduleRows = (await Vue.axios.get("module")).data;
+    this.isModuleDataLoading = false;
   }
 
   async addModule(): Promise<void> {
@@ -150,7 +104,7 @@ export default class ModuleAdministration extends Mixins(ModuleListUpload) {
     });
 
     if (userConfirmation.isConfirmed) {
-      for (const module of this.checkedRows) {
+      for (const module of this.checkedModuleRows) {
         try {
           (await Vue.axios.delete(`/module/${module.moduleNo}`)).data;
         } catch (e) {
@@ -158,8 +112,8 @@ export default class ModuleAdministration extends Mixins(ModuleListUpload) {
           console.log(e);
           return;
         }
-        const moduleIndex = this.modules.indexOf(module);
-        this.modules.splice(moduleIndex, 1);
+        const moduleIndex = this.moduleRows.indexOf(module);
+        this.moduleRows.splice(moduleIndex, 1);
       }
       Vue.swal({
         title: "Module wurden gelöscht",
@@ -168,9 +122,9 @@ export default class ModuleAdministration extends Mixins(ModuleListUpload) {
     }
   }
 
-  async editSelectedModule(): Promise<void> {
+  async editModule(): Promise<void> {
     this.modalOption.props = {
-      module: this.checkedRows[0],
+      module: this.checkedModuleRows[0],
       createModule: false,
     };
     this.$buefy.modal.open(this.modalOption);
