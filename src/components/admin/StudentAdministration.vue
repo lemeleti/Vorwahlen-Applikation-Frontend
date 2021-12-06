@@ -18,21 +18,37 @@
       </b-table>
     </div>
     <div class="buttons">
-      <b-button @click="addUser" type="is-success">Erstellen</b-button>
-      <b-button @click="importClassList" type="is-success"
-        >Importieren</b-button
-      >
-      <b-button @click="editSelectedUsers" type="is-info">Editieren</b-button>
       <b-button
-        label="Dispensationen importieren"
+        @click="addUser"
+        label="Erstellen"
+        icon-left="plus"
+        type="is-success"
+      />
+      <b-button
+        @click="importClassList"
+        icon-left="file-upload"
+        type="is-success"
+        label="Klassenliste"
+      />
+      <b-button
+        @click="editSelectedUsers"
+        label="Editieren"
+        type="is-info"
+        icon-left="edit"
+      />
+      <b-button
+        label="Dispensationsliste"
         type="is-info"
         icon-left="file-upload"
         @click="this.importDispensations"
       >
       </b-button>
-      <b-button @click="deleteSelectedStudents" type="is-danger"
-        >Löschen</b-button
-      >
+      <b-button
+        @click="deleteSelectedStudents"
+        label="Löschen"
+        type="is-danger"
+        icon-left="trash"
+      />
     </div>
   </section>
 </template>
@@ -103,7 +119,7 @@ export default class StudentAdministration extends Mixins(ModuleListUpload) {
 
   async deleteSelectedStudents(): Promise<void> {
     const userConfirmation = await Vue.swal({
-      title: "Wollen Sie die asugewählten Benutzer löschen?",
+      title: "Wollen Sie die ausgewählten Benutzer löschen?",
       text: "Diese Aktion ist irreversibel",
       showCancelButton: true,
       cancelButtonText: "Abbrechen",
