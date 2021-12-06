@@ -32,6 +32,9 @@ import {
   faAngleRight,
   faExclamationCircle,
   faTrash,
+  faPaperPlane,
+  faEye,
+  faEyeSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 require("@/assets/main.scss");
@@ -58,7 +61,10 @@ library.add(
   faAngleLeft,
   faAngleRight,
   faExclamationCircle,
-  faTrash
+  faTrash,
+  faPaperPlane,
+  faEye,
+  faEyeSlash
 );
 
 Vue.component("vue-fontawesome", FontAwesomeIcon);
