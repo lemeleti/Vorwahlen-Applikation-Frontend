@@ -10,8 +10,8 @@
     >
       Bitte führen Sie die Modulvorwahl für das fünfte Semester ebenfalls durch,
       auch wenn Sie in diesem Semester als Outgoing eingetragen sind. Ausserdem
-      müssen alle Studierende das Modul
-      <strong>"Intercultural Communication and Management"</strong> belegen.
+      müssen alle IP-Studierende das Modul
+      <b>"Intercultural Communication and Management"</b> belegen.
     </b-message>
     <ModuleElection v-if="userStore.isAuthenticated" />
     <hr />
