@@ -129,7 +129,10 @@ export default class StudentAdministration extends Administration<Student> {
 
   async addStudent(): Promise<void> {
     this.modalOption.component = CreateEditStudent;
-    this.modalOption.props = { student: {}, createStudent: true };
+    this.modalOption.props = {
+      student: { paDispensation: 0, wpmDispensation: 0 },
+      createStudent: true,
+    };
     this.$buefy.modal.open(this.modalOption);
   }
 
