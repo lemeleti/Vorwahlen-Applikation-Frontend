@@ -15,7 +15,7 @@
         per-page="15"
       >
         <template #bottom-left>
-          <b>Ausgewählt</b>: {{ syncedCheckedRows.lenght }}
+          <b>Ausgewählt</b>: {{ syncedCheckedRows.length }}
         </template>
       </b-table>
     </div>
