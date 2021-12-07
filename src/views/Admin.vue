@@ -3,18 +3,22 @@
     <StudentAdministration />
     <hr />
     <ModuleAdministration />
+    <hr />
+    <MailTemplateAdministration />
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import StudentAdministration from "@/components/admin/StudentAdministration.vue";
-import ModuleAdministration from "@/components/admin/ModuleAdministration.vue";
+import StudentAdministration from "@/views/StudentAdministration.vue";
+import ModuleAdministration from "@/views/ModuleAdministration.vue";
+import MailTemplateAdministration from "@/views/MailTemplateAdministration.vue";
 
 @Component({
   components: {
     StudentAdministration,
     ModuleAdministration,
+    MailTemplateAdministration,
   },
 })
 export default class Admin extends Vue {}
