@@ -35,6 +35,7 @@ import {
   faPaperPlane,
   faEye,
   faEyeSlash,
+  faMinus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 require("@/assets/main.scss");
@@ -64,7 +65,8 @@ library.add(
   faTrash,
   faPaperPlane,
   faEye,
-  faEyeSlash
+  faEyeSlash,
+  faMinus
 );
 
 Vue.component("vue-fontawesome", FontAwesomeIcon);
