@@ -130,13 +130,6 @@ export default class Header extends Vue {
       adminNeeded: false,
     },
     {
-      name: "Admin",
-      icon: "user",
-      text: "Admin",
-      authNeeded: true,
-      adminNeeded: true,
-    },
-    {
       name: "Settings",
       icon: "cogs",
       text: "Einstellungen",
