@@ -21,6 +21,24 @@ const routes: Array<RouteConfig> = [
     meta: { requiresAuthentication: true, requiresAdmin: true },
   },
   {
+    path: "/admin/students",
+    name: "StudentAdministration",
+    component: () => import("../views/StudentAdministration.vue"),
+    meta: { requiresAuthentication: true, requiresAdmin: true },
+  },
+  {
+    path: "/admin/modules",
+    name: "ModuleAdministration",
+    component: () => import("../views/ModuleAdministration.vue"),
+    meta: { requiresAuthentication: true, requiresAdmin: true },
+  },
+  {
+    path: "/admin/mail-templates",
+    name: "MailTemplateAdministration",
+    component: () => import("../views/MailTemplateAdministration.vue"),
+    meta: { requiresAuthentication: true, requiresAdmin: true },
+  },
+  {
     path: "/my-subjects",
     name: "Subjects",
     component: () => import("../views/MySubjects.vue"),
