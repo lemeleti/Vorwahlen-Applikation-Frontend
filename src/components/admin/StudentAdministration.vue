@@ -2,7 +2,7 @@
   <Administration
     @add="addStudent"
     @edit="editStudent"
-    @deleteSelected="deleteSelectedStudent"
+    @deleteSelected="deleteStudent"
     :columns.sync="studentColumns"
     :rows.sync="studentRows"
     :checkedRows.sync="checkedStudentRows"
@@ -99,31 +99,11 @@ export default class StudentAdministration extends Administration<Student> {
     this.studentRows = (await Vue.axios.get<Array<Student>>("students")).data;
   }
 
-  async deleteSelectedStudent(): Promise<void> {
-    const userConfirmation = await Vue.swal({
-      title: "Wollen Sie die ausgewählten Benutzer löschen?",
-      text: "Diese Aktion ist irreversibel",
-      showCancelButton: true,
-      cancelButtonText: "Abbrechen",
-      confirmButtonText: "Löschen",
-    });
-
-    if (userConfirmation.isConfirmed) {
-      for (const student of this.checkedStudentRows) {
-        try {
-          (await Vue.axios.delete(`/students/${student.email}`)).data;
-        } catch (e) {
-          // todo display received error message
-          console.log(e);
-          return;
-        }
-        const studentIndex = this.studentRows.indexOf(student);
-        this.studentRows.splice(studentIndex, 1);
-      }
-      Vue.swal({
-        title: "Benutzer wurden gelöscht",
-        icon: "success",
-      });
+  async deleteStudent(student: Student): Promise<void> {
+    try {
+      await Vue.axios.delete(`/students/${student.email}`);
+    } catch (e) {
+      console.log(e);
     }
   }
 

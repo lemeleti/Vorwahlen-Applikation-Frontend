@@ -85,8 +85,27 @@ export default class ModuleAdministration<T> extends Mixins(ModuleListUpload) {
     this.$emit("edit");
   }
 
-  deleteSelected(): void {
-    this.$emit("deleteSelected");
+  async deleteSelected(): Promise<void> {
+    const userConfirmation = await this.$swal({
+      title: "Wollen Sie die ausgewählten Einträge löschen?",
+      text: "Diese Aktion ist irreversibel",
+      showCancelButton: true,
+      cancelButtonText: "Abbrechen",
+      confirmButtonText: "Löschen",
+    });
+
+    if (userConfirmation.isConfirmed) {
+      for (const obj of this.syncedCheckedRows) {
+        this.$emit("deleteSelected", obj);
+      }
+      this.$buefy.notification.open({
+        message: "Einträge wurden erfolgreich gelöscht",
+        type: "is-success",
+        duration: 5000,
+        icon: "check",
+        hasIcon: true,
+      });
+    }
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <Administration
     @add="addModule"
     @edit="editModule"
-    @deleteSelected="deleteSelectedModules"
+    @deleteSelected="deleteModule"
     :columns.sync="moduleColumns"
     :rows.sync="moduleRows"
     :checkedRows.sync="checkedModuleRows"
@@ -94,31 +94,12 @@ export default class ModuleAdministration extends Administration<Module> {
     this.$buefy.modal.open(this.modalOption);
   }
 
-  async deleteSelectedModules(): Promise<void> {
-    const userConfirmation = await Vue.swal({
-      title: "Wollen Sie die asugewählten Module löschen?",
-      text: "Diese Aktion ist irreversibel",
-      showCancelButton: true,
-      cancelButtonText: "Abbrechen",
-      confirmButtonText: "Löschen",
-    });
-
-    if (userConfirmation.isConfirmed) {
-      for (const module of this.checkedModuleRows) {
-        try {
-          (await Vue.axios.delete(`/module/${module.moduleNo}`)).data;
-        } catch (e) {
-          // todo display received error message
-          console.log(e);
-          return;
-        }
-        const moduleIndex = this.moduleRows.indexOf(module);
-        this.moduleRows.splice(moduleIndex, 1);
-      }
-      Vue.swal({
-        title: "Module wurden gelöscht",
-        icon: "success",
-      });
+  async deleteModule(module: Module): Promise<void> {
+    try {
+      (await Vue.axios.delete(`/module/${module.moduleNo}`)).data;
+    } catch (e) {
+      // todo display received error message
+      console.log(e);
     }
   }
 
