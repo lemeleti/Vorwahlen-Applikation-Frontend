@@ -1,14 +1,21 @@
 <template>
-  <div class="modal-card" style="with: auto">
-    <header class="modal-card-head">
-      <p class="modal-card-title">{{ title }}</p>
-    </header>
-    <section class="modal-card-body">
+  <CreateEditModal
+    :createMode="createStudent"
+    :id="student.email"
+    :basePath="studentBasePath"
+    :obj.sync="student"
+    @add="addStudent"
+    @update="updateStudent"
+    @close="$emit('close')"
+  >
+    <template #title>{{ title }}</template>
+    <template #body>
       <b-field label="E-Mail">
         <b-input
           type="email"
           v-model="student.email"
           v-if="createStudent"
+          required
         ></b-input>
         <b-input
           type="email"
@@ -19,19 +26,31 @@
       </b-field>
 
       <b-field label="Vor- und Nachname">
-        <b-input v-model="student.name"></b-input>
+        <b-input v-model="student.name" required></b-input>
       </b-field>
 
       <b-field label="Credits PA-Dispensation">
-        <b-input v-model="student.paDispensation" type="number"></b-input>
+        <b-numberinput
+          v-model="student.paDispensation"
+          min="0"
+          max="6"
+          step="6"
+          type="is-info"
+        ></b-numberinput>
       </b-field>
 
       <b-field label="Credits WPM-Dispensation">
-        <b-input v-model="student.wpmDispensation" type="number"></b-input>
+        <b-numberinput
+          v-model="student.wpmDispensation"
+          min="0"
+          max="8"
+          step="4"
+          type="is-info"
+        ></b-numberinput>
       </b-field>
 
       <b-field label="Klasse">
-        <b-input v-model="student.class"></b-input>
+        <b-input v-model="student.class" required></b-input>
       </b-field>
 
       <div class="level">
@@ -55,62 +74,35 @@
           </div>
         </div>
       </div>
-    </section>
-    <footer class="modal-card-foot">
-      <b-button
-        type="is-success"
-        :label="createStudent ? 'Erstellen' : 'Aktualisieren'"
-        @click.native="createStudent ? addStudent() : updateStudent()"
-      />
-      <b-button label="Abbrechen" @click="$emit('close')" />
-    </footer>
-  </div>
+    </template>
+  </CreateEditModal>
 </template>
 
 <script lang="ts">
 import Student from "@/models/student";
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop } from "vue-property-decorator";
+import CreateEditModal from "./CreateEditModal.vue";
 
-@Component
-export default class CreateUser extends Vue {
+@Component({
+  components: {
+    CreateEditModal,
+  },
+})
+export default class CreateUser extends CreateEditModal<Student> {
   @Prop() student!: Partial<Student>;
   @Prop() createStudent!: boolean;
+  studentBasePath = "/students";
 
   get title(): string {
     return this.createStudent ? "Benutzer erstellen" : "Benutzer aktualisieren";
   }
 
-  async addStudent(): Promise<void> {
-    try {
-      (await Vue.axios.post("/students", this.student)).data;
-    } catch (e) {
-      console.error(e);
-      return;
-    }
+  addStudent(): void {
     this.sendNotification("Der Benutzer wurde erfolgreich erstellt");
-    this.$emit("close");
   }
 
-  async updateStudent(): Promise<void> {
-    try {
-      (await Vue.axios.put(`/students/${this.student.email}`, this.student))
-        .data;
-    } catch (e) {
-      console.error(e);
-      return;
-    }
+  updateStudent(): void {
     this.sendNotification("Der Benutzer wurde erfolgreich aktualisiert");
-    this.$emit("close");
-  }
-
-  sendNotification(message: string): void {
-    this.$buefy.notification.open({
-      type: "is-success",
-      hasIcon: true,
-      icon: "check",
-      message: message,
-      duration: 5000,
-    });
   }
 }
 </script>
