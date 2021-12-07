@@ -8,7 +8,7 @@
     :checkedRows.sync="checkedModuleRows"
     :isDataLoading.sync="isModuleDataLoading"
   >
-    <template #title>Studentenverwaltung</template>
+    <template #title>Modulverwaltung</template>
     <template #buttons-right>
       <div class="level-item">
         <b-button
