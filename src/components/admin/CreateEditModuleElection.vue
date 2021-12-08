@@ -29,7 +29,7 @@
 
       <b-field label="Ist die Modulvorwahl gültig?">
         <b-checkbox
-          v-model="moduleElection.isElectionValid"
+          v-model="moduleElection.electionValid"
           required
         ></b-checkbox>
       </b-field>

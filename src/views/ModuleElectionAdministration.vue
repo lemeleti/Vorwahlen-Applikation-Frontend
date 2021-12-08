@@ -42,7 +42,7 @@ export default class ModuleElectionAdministration extends Administration<ModuleE
       label: "Gewählte Module",
     },
     {
-      field: "isElectionValid",
+      field: "electionValid",
       label: "Wahlgültigkeit",
     },
   ];
