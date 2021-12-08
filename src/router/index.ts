@@ -39,6 +39,12 @@ const routes: Array<RouteConfig> = [
     meta: { requiresAuthentication: true, requiresAdmin: true },
   },
   {
+    path: "/admin/elections",
+    name: "ModuleElectionAdministration",
+    component: () => import("../views/ModuleElectionAdministration.vue"),
+    meta: { requiresAuthentication: true, requiresAdmin: true },
+  },
+  {
     path: "/my-subjects",
     name: "Subjects",
     component: () => import("../views/MySubjects.vue"),

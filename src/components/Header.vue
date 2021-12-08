@@ -44,6 +44,13 @@
             </b-dropdown-item>
 
             <b-dropdown-item aria-role="menuitem">
+              <router-link :to="{ name: 'ModuleElectionAdministration' }">
+                <b-icon icon="edit"></b-icon>
+                <span>Modulvorwahlen-Verwaltung</span>
+              </router-link>
+            </b-dropdown-item>
+
+            <b-dropdown-item aria-role="menuitem">
               <router-link :to="{ name: 'MailTemplateAdministration' }">
                 <b-icon icon="envelope"></b-icon>
                 <span>Mail-Template-Verwaltung</span>
