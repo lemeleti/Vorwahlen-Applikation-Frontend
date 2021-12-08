@@ -29,28 +29,28 @@
               </a>
             </template>
 
-            <b-dropdown-item aria-role="menuitem">
+            <b-dropdown-item aria-role="menuitem" has-link>
               <router-link :to="{ name: 'StudentAdministration' }">
                 <b-icon icon="user"></b-icon>
                 <span>Studentenverwaltung</span>
               </router-link>
             </b-dropdown-item>
 
-            <b-dropdown-item aria-role="menuitem">
+            <b-dropdown-item aria-role="menuitem" has-link>
               <router-link :to="{ name: 'ModuleAdministration' }">
                 <b-icon icon="file"></b-icon>
                 <span>Modulverwaltung</span>
               </router-link>
             </b-dropdown-item>
 
-            <b-dropdown-item aria-role="menuitem">
+            <b-dropdown-item aria-role="menuitem" has-link>
               <router-link :to="{ name: 'ModuleElectionAdministration' }">
                 <b-icon icon="edit"></b-icon>
                 <span>Modulvorwahlen-Verwaltung</span>
               </router-link>
             </b-dropdown-item>
 
-            <b-dropdown-item aria-role="menuitem">
+            <b-dropdown-item aria-role="menuitem" has-link>
               <router-link :to="{ name: 'MailTemplateAdministration' }">
                 <b-icon icon="envelope"></b-icon>
                 <span>Mail-Template-Verwaltung</span>
