@@ -27,15 +27,6 @@
           type="is-success"
         />
       </div>
-
-      <div class="level-item">
-        <b-button
-          @click="notifySelectedUsers"
-          icon-left="paper-plane"
-          label="Benachrichtigen"
-          type="is-info"
-        />
-      </div>
     </template>
   </Administration>
 </template>
@@ -45,13 +36,11 @@ import { Component, Vue } from "vue-property-decorator";
 import Student from "@/models/student";
 import CreateEditStudent from "@/components/admin/CreateEditStudent.vue";
 import Administration from "@/components/admin/Administration.vue";
-import StudentNotify from "@/components/admin/StudentNotify.vue";
 
 @Component({
   components: {
     CreateEditStudent,
     Administration,
-    StudentNotify,
   },
 })
 export default class StudentAdministration extends Administration<Student> {
@@ -134,15 +123,6 @@ export default class StudentAdministration extends Administration<Student> {
     this.listTitle = "Dispensationsliste";
     this.importPath = "students/dispensations";
     await this.importList();
-  }
-
-  notifySelectedUsers(): void {
-    const studentMailAddresses = this.checkedStudentRows.map(
-      (student: Student) => student.email
-    );
-    this.modalOption.component = StudentNotify;
-    this.modalOption.props = { studentNotification: { studentMailAddresses } };
-    this.$buefy.modal.open(this.modalOption);
   }
 }
 </script>

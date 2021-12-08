@@ -12,15 +12,6 @@
     <template #buttons-right>
       <div class="level-item">
         <b-button
-          label="Vorwahlen exportieren"
-          type="is-success"
-          icon-left="file-download"
-          @click="exportModuleElection"
-        />
-      </div>
-
-      <div class="level-item">
-        <b-button
           label="Modulliste"
           type="is-success"
           icon-left="file-upload"
@@ -115,14 +106,6 @@ export default class ModuleAdministration extends Administration<Module> {
     this.listTitle = "Modulliste";
     this.importPath = "module";
     await this.importList();
-  }
-
-  async exportModuleElection(): Promise<void> {
-    const data: Blob = (
-      await Vue.axios.get<Blob>("/election/export", { responseType: "blob" })
-    ).data;
-    const url: string = window.URL.createObjectURL(data);
-    window.open(url);
   }
 }
 </script>
