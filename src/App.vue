@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header :isAuthenticated="isAuthenticated" />
+    <Header />
     <!-- Content -->
     <div class="columns section">
       <div class="column main-content">
@@ -41,15 +41,54 @@ import ModuleStore from "./store/modules/ModuleStore";
 export default class App extends Vue {
   userStore = getModule(UserStore);
   moduleStore = getModule(ModuleStore);
-  isAuthenticated = false;
 
-  mounted(): void {
-    this.userStore.fetchUserData();
+  async mounted(): Promise<void> {
+    await this.userStore.fetchUserData();
+    if (this.userStore.isUserAuthenticated && this.userStore.isFirstTimeSetup) {
+      await this.setUpStudent();
+    }
   }
 
   created(): void {
     this.moduleStore.initModuleSelection();
     this.moduleStore.updateModules();
+  }
+
+  setUpStudent(): void {
+    Vue.swal({
+      title: "Benutzereinrichtung",
+      showCancelButton: false,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      confirmButtonText: "Einrichtung abschliessen",
+      allowEnterKey: false,
+      icon: "question",
+      input: "select",
+      inputOptions: {
+        isIp: "Ich belege das internationale Profil",
+        isNotIp: "Ich belege das internationale Profil nicht",
+      },
+      inputLabel: "Bitte wählen Sie aus, ob Sie das internationale Profil haben",
+      inputValidator: (value: string) => this.handleSetUpSelection(value),
+    });
+  }
+
+  async handleSetUpSelection(value: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      try {
+        const id = this.userStore.email;
+        const patchData = { firstTimeSetup: false, ip: false };
+        if (value === "isIp") {
+          this.userStore.setIp(true);
+          patchData.ip = true;
+          Vue.axios.patch(`/students/${id}`, patchData);
+        }
+        Vue.axios.patch(`/students/${id}`, patchData);
+        resolve("");
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
 }
 </script>
