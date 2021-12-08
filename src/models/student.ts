@@ -7,4 +7,7 @@ export default interface Student {
   tz: boolean;
   ip: boolean;
   class: string;
+  moduleElectionId: number;
+  firstTimeSetup: boolean;
+  canElect: boolean;
 }
