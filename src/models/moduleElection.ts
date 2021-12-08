@@ -1,5 +1,6 @@
 export default interface ModuleElection {
+  id: number;
+  studentEmail: string;
   electedModules: Array<string>;
-  overflowedElectedModules: Array<string>;
-  electionValid: boolean;
+  isElectionValid: boolean;
 }
