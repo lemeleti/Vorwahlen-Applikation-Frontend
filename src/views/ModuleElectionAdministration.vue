@@ -20,12 +20,30 @@
       </div>
 
       <div class="level-item">
-        <b-button
-          @click="notifySelectedUsers"
-          icon-left="paper-plane"
-          label="Benachrichtigen"
-          type="is-info"
-        />
+        <b-dropdown
+          :triggers="['hover']"
+          aria-role="list"
+          position="is-bottom-left"
+        >
+          <template #trigger>
+            <b-button
+              label="Template laden"
+              type="is-info"
+              icon-right="chevron-down"
+              icon-left="paper-plane"
+              @click="notifySelectedStudents"
+            />
+          </template>
+
+          <b-dropdown-item
+            aria-role="listitem"
+            v-for="(mailTemplate, index) of mailTemplates"
+            :key="index"
+            @click="loadMailTemplate(mailTemplate.id)"
+          >
+            {{ mailTemplate.description }}
+          </b-dropdown-item>
+        </b-dropdown>
       </div>
     </template>
   </Administration>
@@ -37,6 +55,8 @@ import CreateEditModuleElection from "@/components/admin/CreateEditModuleElectio
 import Administration from "@/components/admin/Administration.vue";
 import ModuleElection from "@/models/moduleElection";
 import StudentNotify from "@/components/admin/StudentNotify.vue";
+import MailTemplate from "@/models/mailTemplate";
+import StudentNotification from "@/models/studentNotification";
 
 @Component({
   components: {
@@ -49,6 +69,8 @@ export default class ModuleElectionAdministration extends Administration<ModuleE
   isModuleElectionDataLoading = true;
   moduleElectionRows: Array<ModuleElection> = [];
   checkedModuleElectionRows: Array<ModuleElection> = [];
+  mailTemplates: Array<MailTemplate> = [];
+  studentNotification: Partial<StudentNotification> = {};
   moduleElectionColumns = [
     {
       field: "id",
@@ -73,6 +95,9 @@ export default class ModuleElectionAdministration extends Administration<ModuleE
     this.modalOption.component = CreateEditModuleElection;
     this.moduleElectionRows = (
       await Vue.axios.get<Array<ModuleElection>>("election")
+    ).data;
+    this.mailTemplates = (
+      await Vue.axios.get<Array<MailTemplate>>("mailtemplates")
     ).data;
   }
 
@@ -115,6 +140,30 @@ export default class ModuleElectionAdministration extends Administration<ModuleE
     );
     this.modalOption.component = StudentNotify;
     this.modalOption.props = { studentNotification: { studentMailAddresses } };
+    this.$buefy.modal.open(this.modalOption);
+  }
+
+  loadMailTemplate(id: number): void {
+    const mailTemplate = this.mailTemplates.find(
+      (mailTemplate: MailTemplate) => mailTemplate.id === id
+    );
+    if (mailTemplate && this.studentNotification) {
+      this.studentNotification.subject = mailTemplate.subject;
+      this.studentNotification.message = mailTemplate.message;
+    }
+    this.notifySelectedStudents();
+  }
+
+  notifySelectedStudents(): void {
+    const studentMailAddresses = this.checkedModuleElectionRows.map(
+      (moduleElection: ModuleElection) => moduleElection.studentEmail
+    );
+    if (this.studentNotification) {
+      this.studentNotification.studentMailAddresses = studentMailAddresses;
+    }
+
+    this.modalOption.component = StudentNotify;
+    this.modalOption.props = { studentNotification: this.studentNotification };
     this.$buefy.modal.open(this.modalOption);
   }
 }

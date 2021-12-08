@@ -53,14 +53,16 @@
       </b-field>
     </section>
     <footer class="modal-card-foot">
-      <b-button
-        label="Senden"
-        icon-left="paper-plane"
-        type="is-info"
-        @click="sendNotification"
-      />
+      <div class="buttons">
+        <b-button
+          label="Senden"
+          icon-left="paper-plane"
+          type="is-info"
+          @click="sendNotification"
+        />
 
-      <b-button label="Abbrechen" @click="$emit('close')" />
+        <b-button label="Abbrechen" @click="$emit('close')" />
+      </div>
     </footer>
   </div>
 </template>
