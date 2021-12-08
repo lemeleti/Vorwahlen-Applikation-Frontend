@@ -1,13 +1,8 @@
 import ModuleCategory from "./moduleCategory";
-
-interface ExecutionSemester {
-  [index: string]: Array<number>;
-}
-
 export default interface Module {
   moduleNo: string;
   moduleTitle: string;
-  executionSemester: ExecutionSemester;
+  semester: number;
   category: ModuleCategory;
   language: string;
   credits: number;
