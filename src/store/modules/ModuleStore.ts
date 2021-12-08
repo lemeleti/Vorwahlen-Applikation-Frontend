@@ -67,7 +67,7 @@ export default class ModuleStore extends VuexModule {
   @Action
   async initModuleSelection(): Promise<void> {
     const electionData: ElectionTansfer = (
-      await Vue.axios.get<ElectionTansfer>("/election")
+      await Vue.axios.get<ElectionTansfer>("/election/structure")
     ).data;
 
     this.context.commit("setElectionData", electionData);
