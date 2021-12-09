@@ -68,7 +68,8 @@ export default class App extends Vue {
         isIp: "Ich belege das internationale Profil",
         isNotIp: "Ich belege das internationale Profil nicht",
       },
-      inputLabel: "Bitte wählen Sie aus, ob Sie das internationale Profil haben",
+      inputLabel:
+        "Bitte wählen Sie aus, ob Sie das internationale Profil haben",
       inputValidator: (value: string) => this.handleSetUpSelection(value),
     });
   }

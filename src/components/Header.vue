@@ -15,48 +15,6 @@
             <b-icon :icon="info.icon"></b-icon>
             <span>{{ info.text }}</span>
           </b-navbar-item>
-
-          <b-dropdown
-            position="is-bottom-left"
-            aria-role="menu"
-            append-to-body
-            v-if="userStore.isUserAuthenticated && userStore.isUserAdmin"
-          >
-            <template #trigger>
-              <a role="button" class="navbar-item">
-                <b-icon icon="chevron-down" size="is-small"></b-icon>
-                <span>Administration</span>
-              </a>
-            </template>
-
-            <b-dropdown-item aria-role="menuitem">
-              <router-link :to="{ name: 'StudentAdministration' }">
-                <b-icon icon="user"></b-icon>
-                <span>Studentenverwaltung</span>
-              </router-link>
-            </b-dropdown-item>
-
-            <b-dropdown-item aria-role="menuitem">
-              <router-link :to="{ name: 'ModuleAdministration' }">
-                <b-icon icon="file"></b-icon>
-                <span>Modulverwaltung</span>
-              </router-link>
-            </b-dropdown-item>
-
-            <b-dropdown-item aria-role="menuitem">
-              <router-link :to="{ name: 'ModuleElectionAdministration' }">
-                <b-icon icon="edit"></b-icon>
-                <span>Modulvorwahlen-Verwaltung</span>
-              </router-link>
-            </b-dropdown-item>
-
-            <b-dropdown-item aria-role="menuitem">
-              <router-link :to="{ name: 'MailTemplateAdministration' }">
-                <b-icon icon="envelope"></b-icon>
-                <span>Mail-Template-Verwaltung</span>
-              </router-link>
-            </b-dropdown-item>
-          </b-dropdown>
         </template>
 
         <template #end>
@@ -126,6 +84,13 @@ export default class Header extends Vue {
       name: "Subjects",
       icon: "edit",
       text: "Meine Wahl",
+      authNeeded: true,
+      adminNeeded: false,
+    },
+    {
+      name: "Admin",
+      icon: "user",
+      text: "Admin",
       authNeeded: true,
       adminNeeded: false,
     },

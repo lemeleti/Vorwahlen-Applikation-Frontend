@@ -38,6 +38,9 @@ import {
   faMinus,
   faEnvelope,
   faFile,
+  faVoteYea,
+  faInbox,
+  faFileAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 require("@/assets/main.scss");
@@ -70,7 +73,10 @@ library.add(
   faEyeSlash,
   faMinus,
   faEnvelope,
-  faFile
+  faFile,
+  faVoteYea,
+  faInbox,
+  faFileAlt
 );
 
 Vue.component("vue-fontawesome", FontAwesomeIcon);
