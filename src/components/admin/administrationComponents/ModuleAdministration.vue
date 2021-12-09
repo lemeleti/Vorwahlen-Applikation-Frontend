@@ -25,7 +25,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import CreateEditModule from "@/components/admin/CreateEditModule.vue";
-import Administration from "@/components/admin/Administration.vue";
+import Administration from "@/components/admin/administrationComponents/Administration.vue";
 import Module from "@/models/module";
 
 @Component({

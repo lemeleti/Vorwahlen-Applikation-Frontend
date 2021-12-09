@@ -21,10 +21,10 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import StudentAdministration from "@/views/StudentAdministration.vue";
-import ModuleAdministration from "@/views/ModuleAdministration.vue";
-import MailTemplateAdministration from "@/views/MailTemplateAdministration.vue";
-import ModuleElectionAdministration from "@/views/ModuleElectionAdministration.vue";
+import StudentAdministration from "@/components/admin/administrationComponents/StudentAdministration.vue";
+import ModuleAdministration from "@/components/admin/administrationComponents/ModuleAdministration.vue";
+import MailTemplateAdministration from "@/components/admin/administrationComponents/MailTemplateAdministration.vue";
+import ModuleElectionAdministration from "@/components/admin/administrationComponents/ModuleElectionAdministration.vue";
 
 @Component({
   components: {

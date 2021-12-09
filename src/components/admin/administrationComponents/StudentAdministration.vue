@@ -35,7 +35,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import Student from "@/models/student";
 import CreateEditStudent from "@/components/admin/CreateEditStudent.vue";
-import Administration from "@/components/admin/Administration.vue";
+import Administration from "@/components/admin/administrationComponents/Administration.vue";
 
 @Component({
   components: {

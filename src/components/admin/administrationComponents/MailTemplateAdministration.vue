@@ -16,7 +16,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import MailTemplate from "@/models/mailTemplate";
 import CreateEditMailTemplate from "@/components/admin/CreateEditMailTemplate.vue";
-import Administration from "@/components/admin/Administration.vue";
+import Administration from "@/components/admin/administrationComponents/Administration.vue";
 
 @Component({
   components: {
