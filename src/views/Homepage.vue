@@ -26,12 +26,16 @@
           :key="moduleIndex"
           :color="moduleStore.getColorForCategory(module.category)"
           :moduleNo="module.moduleNo"
+          @moreInfo="showAdditionalSubjectInfo(module)"
         >
           <template #title>{{ module.moduleTitle }}</template>
         </Module>
       </template>
     </TileBox>
-    <SubjectInfoModal :title="modalTitle" :isModalActive.sync="isModalActive" />
+    <SubjectInfoModal
+      :module="selectedModule"
+      :isModalActive.sync="isModalActive"
+    />
   </div>
 </template>
 
@@ -64,7 +68,7 @@ interface ElectionCategoryMap {
   },
 })
 export default class Homepage extends Vue {
-  modalTitle = "";
+  selectedModule: Module | null = null;
   isModalActive = false;
   moduleStore: ModuleStore = getModule(ModuleStore);
   userStore: UserStore = getModule(UserStore);
@@ -117,8 +121,8 @@ export default class Homepage extends Vue {
     this.moduleStore.setStompClient(stomp);
   }
 
-  showAdditionalSubjectInfo(title: string): void {
-    this.modalTitle = title;
+  showAdditionalSubjectInfo(module: Module): void {
+    this.selectedModule = module;
     this.isModalActive = !this.isModalActive;
   }
 

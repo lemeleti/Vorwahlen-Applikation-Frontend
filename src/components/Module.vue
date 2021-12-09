@@ -18,7 +18,7 @@
         type="is-info"
         id="moduleInfo"
         class="is-clickable"
-        @click.native="forwardToEventoWeb()"
+        @click.native="$emit('moreInfo')"
       ></b-icon>
     </div>
   </div>
@@ -41,11 +41,6 @@ export default class Module extends Vue {
 
   set moduleSelected(selected: boolean) {
     this.moduleStore.updateElection(this.moduleNo);
-  }
-
-  forwardToEventoWeb(): void {
-    //todo replace with evento url
-    window.open("https://www.google.com", "_blank");
   }
 }
 </script>
