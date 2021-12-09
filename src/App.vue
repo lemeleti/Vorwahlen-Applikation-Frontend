@@ -24,8 +24,8 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
-import Header from "@/components/Header.vue";
-import Footer from "@/components/Footer.vue";
+import Header from "@/components/site/Header.vue";
+import Footer from "@/components/site/Footer.vue";
 import RightMenu from "@/components/RightMenu.vue";
 import UserStore from "@/store/modules/UserStore";
 import "vue-class-component/hooks";
