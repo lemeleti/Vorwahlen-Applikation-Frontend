@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import { Component, Prop } from "vue-property-decorator";
-import CreateEditModal from "@/components/admin/CreateEditModal.vue";
+import CreateEditModal from "@/components/admin/createAddModals/CreateEditModal.vue";
 import ModuleElection from "@/models/moduleElection";
 import { getModule } from "vuex-module-decorators";
 import ModuleStore from "@/store/modules/ModuleStore";

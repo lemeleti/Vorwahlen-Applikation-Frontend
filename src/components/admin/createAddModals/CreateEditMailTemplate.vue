@@ -32,7 +32,7 @@
 <script lang="ts">
 import MailTemplate from "@/models/mailTemplate";
 import { Component, Prop } from "vue-property-decorator";
-import CreateEditModal from "@/components/admin/CreateEditModal.vue";
+import CreateEditModal from "@/components/admin/createAddModals/CreateEditModal.vue";
 
 @Component({
   components: {

@@ -51,7 +51,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import CreateEditModuleElection from "@/components/admin/CreateEditModuleElection.vue";
+import CreateEditModuleElection from "@/components/admin/createAddModals/CreateEditModuleElection.vue";
 import Administration from "@/components/admin/administrationComponents/Administration.vue";
 import ModuleElection from "@/models/moduleElection";
 import StudentNotify from "@/components/admin/StudentNotify.vue";

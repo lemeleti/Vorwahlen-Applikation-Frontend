@@ -15,7 +15,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import MailTemplate from "@/models/mailTemplate";
-import CreateEditMailTemplate from "@/components/admin/CreateEditMailTemplate.vue";
+import CreateEditMailTemplate from "@/components/admin/createAddModals/CreateEditMailTemplate.vue";
 import Administration from "@/components/admin/administrationComponents/Administration.vue";
 
 @Component({
