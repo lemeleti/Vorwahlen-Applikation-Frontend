@@ -45,7 +45,7 @@ export default class App extends Vue {
   async mounted(): Promise<void> {
     await this.userStore.fetchUserData();
     if (this.userStore.isUserAuthenticated && this.userStore.isFirstTimeSetup) {
-      await this.setUpStudent();
+      this.setUpStudent();
     }
   }
 
