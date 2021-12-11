@@ -53,7 +53,7 @@ export default class ModuleStore extends VuexModule {
   @MutationAction
   async updateModules(): Promise<ModuleWrapper> {
     const moduleArr: Array<IModule> = (
-      await Vue.axios.get<Array<IModule>>("module")
+      await Vue.axios.get<Array<IModule>>("modules")
     ).data;
     localStorage.setItem("modules", JSON.stringify(moduleArr));
     return { moduleArr };
@@ -67,7 +67,7 @@ export default class ModuleStore extends VuexModule {
   @Action
   async initModuleSelection(): Promise<void> {
     const electionData: ElectionTansfer = (
-      await Vue.axios.get<ElectionTansfer>("/election/structure")
+      await Vue.axios.get<ElectionTansfer>("/elections/structure")
     ).data;
 
     this.context.commit("setElectionData", electionData);

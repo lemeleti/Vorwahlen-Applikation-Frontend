@@ -50,7 +50,7 @@ export default class UserStore extends VuexModule {
     try {
       const isAuthenticated = (await Vue.axios.get<boolean>("/session/is-authenticated")).data;
       if (isAuthenticated) {
-        this.context.commit("setUser", (await Vue.axios.get<User>("/session/info")).data);
+        this.context.commit("setUser", (await Vue.axios.get<User>("/session")).data);
         this.context.commit("setStudent", (await Vue.axios.get<Student>(`/students/${this.context.getters.email}`)).data);
         this.context.commit("setIsAuthenticated", true);
         this.context.commit("setIsStoreInitialized", true);
