@@ -92,7 +92,7 @@ export default class Header extends Vue {
       icon: "user",
       text: "Admin",
       authNeeded: true,
-      adminNeeded: false,
+      adminNeeded: true,
     },
     {
       name: "Statistiken",
