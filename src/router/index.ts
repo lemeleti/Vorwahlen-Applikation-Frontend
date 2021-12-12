@@ -24,12 +24,13 @@ const routes: Array<RouteConfig> = [
     path: "/my-subjects",
     name: "Subjects",
     component: () => import("../views/MySubjects.vue"),
-    meta: { requiresAuthentication: true },
+    meta: { requiresAuthentication: true, requiresStudent: true },
   },
   {
     path: "/settings",
     name: "Settings",
     component: () => import("../views/Settings.vue"),
+    meta: { requiresAuthentication: true, requiresStudent: true },
   },
   {
     path: "/statistics",
@@ -62,6 +63,8 @@ router.beforeEach(async (to, _from, next) => {
   if (to.matched.some((record) => 
   record.meta.requiresAdmin && record.meta.requiresAuthentication)) {
     await routeIfUserIsAdmin(next);
+  } else if (to.matched.some((record) => record.meta.requiresAuthentication && record.meta.requiresStudent)) {
+    await routeIfUserisStudent(next);
   } else if (to.matched.some((record) => record.meta.requiresAuthentication)) {
     await routeIfUserIsLoggedIn(next);
   } else {
@@ -73,6 +76,15 @@ async function routeIfUserIsAdmin(next: NavigationGuardNext<Vue>) {
   const isAuthenticated = await isUserAuthenticated();
   const isAdmin = (await Vue.axios.get<boolean>("session/is-admin")).data;
   if (isAuthenticated && isAdmin) {
+    next();
+  } else {
+    next({ name: "Home" });
+  }
+}
+
+async function routeIfUserisStudent(next: NavigationGuardNext<Vue>) {
+  const isAuthenticated = await isUserAuthenticated();
+  if (isAuthenticated && userStore.isStudent) {
     next();
   } else {
     next({ name: "Home" });
