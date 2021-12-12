@@ -67,6 +67,7 @@ interface NavbarItemInfo {
   text: string;
   authNeeded: boolean;
   adminNeeded: boolean;
+  studentNeeded?: boolean;
 }
 
 @Component
@@ -86,6 +87,7 @@ export default class Header extends Vue {
       text: "Meine Wahl",
       authNeeded: true,
       adminNeeded: false,
+      studentNeeded: true,
     },
     {
       name: "Admin",
@@ -107,6 +109,7 @@ export default class Header extends Vue {
       text: "Einstellungen",
       authNeeded: true,
       adminNeeded: false,
+      studentNeeded: true,
     },
   ];
 
@@ -129,7 +132,9 @@ export default class Header extends Vue {
     this.routerInfo.forEach((link) => {
       if (link.adminNeeded && this.userStore.isUserAdmin) {
         allowedRoutes.push(link);
-      } else if (!link.adminNeeded) {
+      } else if (link.studentNeeded && this.userStore.isStudent) {
+        allowedRoutes.push(link);
+      } else if (!link.adminNeeded && !link.studentNeeded) {
         allowedRoutes.push(link);
       }
     });
