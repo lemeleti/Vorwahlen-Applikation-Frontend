@@ -20,7 +20,7 @@ interface ModuleWrapper {
 
 @Module({ store, dynamic: true, name: "moduleStore" })
 export default class ModuleStore extends VuexModule {
-  moduleArr: Array<IModule> = getModulesFromStorage();
+  moduleArr: Array<IModule> = [];
   electedModules: Array<ElectionStructureElement> = [];
   overflowedElectedModules: Array<ElectionStructureElement> = [];
   isElectionValid = false;
@@ -151,13 +151,4 @@ export default class ModuleStore extends VuexModule {
       return isElected;
     };
   }
-}
-
-function getModulesFromStorage(): Array<IModule> {
-  const savedModules = localStorage.getItem("modules");
-  let module: Array<IModule> = [];
-  if (savedModules) {
-    module = <Array<IModule>>JSON.parse(savedModules);
-  }
-  return module;
 }
