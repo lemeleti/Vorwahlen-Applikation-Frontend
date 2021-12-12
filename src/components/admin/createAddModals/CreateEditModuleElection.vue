@@ -96,6 +96,7 @@ export default class CreateEditModuleElection extends CreateEditModal {
     this.moduleElection.electedModules = this.electedModules.map(
       (module: Module) => module.moduleNo
     );
+    this.$moduleElectionApi.create(this.moduleElection as ModuleElection);
     this.sendNotification("Die Modulvorwahl wurde erfolgreich erstellt");
   }
 
@@ -103,7 +104,13 @@ export default class CreateEditModuleElection extends CreateEditModal {
     this.moduleElection.electedModules = this.electedModules.map(
       (module: Module) => module.moduleNo
     );
-    this.sendNotification("Die Modulvorwahl wurde erfolgreich aktualisiert");
+    if (this.moduleElection.id) {
+      this.$moduleElectionApi.update(
+        this.moduleElection as ModuleElection,
+        this.moduleElection.id.toString()
+      );
+      this.sendNotification("Die Modulvorwahl wurde erfolgreich aktualisiert");
+    }
   }
 }
 </script>
