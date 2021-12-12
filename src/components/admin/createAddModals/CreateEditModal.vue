@@ -16,7 +16,8 @@
         :label="createMode ? 'Erstellen' : 'Aktualisieren'"
         @click.native="
           createMode ? $emit('add') : $emit('update');
-          $emit('close')"
+          $emit('close');
+        "
       />
       <b-button label="Abbrechen" @click="$emit('close')" />
     </footer>
