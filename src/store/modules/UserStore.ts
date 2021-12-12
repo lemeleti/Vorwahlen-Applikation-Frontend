@@ -51,12 +51,14 @@ export default class UserStore extends VuexModule {
       const isAuthenticated = (await Vue.axios.get<boolean>("/session/is-authenticated")).data;
       if (isAuthenticated) {
         this.context.commit("setUser", (await Vue.axios.get<User>("/session")).data);
-        this.context.commit("setStudent", (await Vue.axios.get<Student>(`/students/${this.context.getters.email}`)).data);
         this.context.commit("setIsAuthenticated", true);
         this.context.commit("setIsStoreInitialized", true);
+        if (this.isUserExistent) {
+          this.context.commit("setStudent", (await Vue.axios.get<Student>(`/students/${this.context.getters.email}`)).data);
+        }
       }
     } catch (e) {
-      console.error(e);
+      console.log(e);
     }
   }
 
@@ -70,6 +72,14 @@ export default class UserStore extends VuexModule {
 
   get isUserAdmin(): boolean {
     return this.user.role === "ADMIN";
+  }
+
+  get isUserExistent(): boolean {
+    return this.user.exists;
+  }
+
+  get isStudent(): boolean {
+    return this.user.exists;
   }
 
   get isUserInitialized(): boolean {
