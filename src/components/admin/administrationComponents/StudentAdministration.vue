@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import Student from "@/models/student";
 import CreateEditStudent from "@/components/admin/createAddModals/CreateEditStudent.vue";
 import Administration from "@/components/admin/administrationComponents/Administration.vue";
@@ -85,15 +85,11 @@ export default class StudentAdministration extends Administration<Student> {
   async created(): Promise<void> {
     this.isStudentDataLoading = false;
     this.modalOption.component = CreateEditStudent;
-    this.studentRows = (await Vue.axios.get<Array<Student>>("students")).data;
+    this.studentRows = await this.$studentApi.getAll();
   }
 
   async deleteStudent(student: Student): Promise<void> {
-    try {
-      await Vue.axios.delete(`/students/${student.email}`);
-    } catch (e) {
-      console.log(e);
-    }
+    await this.$studentApi.deleteById(student.email);
   }
 
   async addStudent(): Promise<void> {
@@ -121,7 +117,7 @@ export default class StudentAdministration extends Administration<Student> {
 
   async importDispensations(): Promise<void> {
     this.listTitle = "Dispensationsliste";
-    this.importPath = "students/dispensations";
+    this.importPath = `${this.$studentApi.basePath}`;
     await this.importList();
   }
 }

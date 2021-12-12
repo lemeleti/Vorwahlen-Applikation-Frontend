@@ -1,9 +1,6 @@
 <template>
   <CreateEditModal
     :createMode="createModuleElection"
-    :id="moduleElection.id"
-    :basePath="moduleElectionBasePath"
-    :obj.sync="moduleElection"
     @add="addModuleElection"
     @update="updateModuleElection"
     @close="$emit('close')"
@@ -50,10 +47,9 @@ import Module from "@/models/module";
     CreateEditModal,
   },
 })
-export default class CreateEditModuleElection extends CreateEditModal<ModuleElection> {
+export default class CreateEditModuleElection extends CreateEditModal {
   @Prop() moduleElection!: Partial<ModuleElection>;
   @Prop() createModuleElection!: boolean;
-  moduleElectionBasePath = "/election";
   moduleStore: ModuleStore = getModule(ModuleStore);
   filteredModules: Array<Module> = [];
 

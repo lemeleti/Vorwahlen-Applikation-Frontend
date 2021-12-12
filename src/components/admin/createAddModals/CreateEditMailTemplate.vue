@@ -1,9 +1,6 @@
 <template>
   <CreateEditModal
     :createMode="createMailTemplate"
-    :id="mailTemplate.id"
-    :basePath="mailTemplateBasePath"
-    :obj.sync="mailTemplate"
     @add="addMailTemplate"
     @update="updateMailTemplate"
     @close="$emit('close')"
@@ -39,10 +36,9 @@ import CreateEditModal from "@/components/admin/createAddModals/CreateEditModal.
     CreateEditModal,
   },
 })
-export default class CreateEditMailTemplate extends CreateEditModal<MailTemplate> {
+export default class CreateEditMailTemplate extends CreateEditModal {
   @Prop() mailTemplate!: Partial<MailTemplate>;
   @Prop() createMailTemplate!: boolean;
-  mailTemplateBasePath = "/mailtemplates";
 
   get title(): string {
     return this.createMailTemplate
@@ -50,12 +46,19 @@ export default class CreateEditMailTemplate extends CreateEditModal<MailTemplate
       : "Mail-Template aktualisieren";
   }
 
-  addMailTemplate(): void {
+  async addMailTemplate(): Promise<void> {
+    this.$mailTemplateApi.create(this.mailTemplate as MailTemplate);
     this.sendNotification("Das Mail-Template wurde erfolgreich erstellt");
   }
 
-  updateMailTemplate(): void {
-    this.sendNotification("Das Mail-Template wurde erfolgreich aktualisiert");
+  async updateMailTemplate(): Promise<void> {
+    if (this.mailTemplate.id) {
+      this.$mailTemplateApi.update(
+        this.mailTemplate as MailTemplate,
+        this.mailTemplate.id.toString()
+      );
+      this.sendNotification("Das Mail-Template wurde erfolgreich aktualisiert");
+    }
   }
 }
 </script>

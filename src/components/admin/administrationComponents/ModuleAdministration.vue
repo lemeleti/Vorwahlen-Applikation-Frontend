@@ -18,12 +18,21 @@
           @click="importModules"
         />
       </div>
+
+      <div class="level-item">
+        <b-button
+          label="Scrape"
+          type="is-info"
+          icon-left="file-upload"
+          @click="$moduleApi.scrapeModuleData"
+        />
+      </div>
     </template>
   </Administration>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import CreateEditModule from "@/components/admin/createAddModals/CreateEditModule.vue";
 import Administration from "@/components/admin/administrationComponents/Administration.vue";
 import Module from "@/models/module";
@@ -76,7 +85,7 @@ export default class ModuleAdministration extends Administration<Module> {
 
   async created(): Promise<void> {
     this.modalOption.component = CreateEditModule;
-    this.moduleRows = (await Vue.axios.get("module")).data;
+    this.moduleRows = await this.$moduleApi.getAll();
     this.isModuleDataLoading = false;
   }
 
@@ -86,12 +95,7 @@ export default class ModuleAdministration extends Administration<Module> {
   }
 
   async deleteModule(module: Module): Promise<void> {
-    try {
-      (await Vue.axios.delete(`/module/${module.moduleNo}`)).data;
-    } catch (e) {
-      // todo display received error message
-      console.log(e);
-    }
+    await this.$moduleApi.deleteById(module.moduleNo);
   }
 
   async editModule(): Promise<void> {
@@ -104,7 +108,7 @@ export default class ModuleAdministration extends Administration<Module> {
 
   async importModules(): Promise<void> {
     this.listTitle = "Modulliste";
-    this.importPath = "module";
+    this.importPath = this.$moduleApi.basePath;
     await this.importList();
   }
 }

@@ -1,9 +1,6 @@
 <template>
   <CreateEditModal
     :createMode="createStudent"
-    :id="student.email"
-    :basePath="studentBasePath"
-    :obj.sync="student"
     @add="addStudent"
     @update="updateStudent"
     @close="$emit('close')"
@@ -88,21 +85,24 @@ import CreateEditModal from "./CreateEditModal.vue";
     CreateEditModal,
   },
 })
-export default class CreateUser extends CreateEditModal<Student> {
+export default class CreateUser extends CreateEditModal {
   @Prop() student!: Partial<Student>;
   @Prop() createStudent!: boolean;
-  studentBasePath = "/students";
 
   get title(): string {
     return this.createStudent ? "Benutzer erstellen" : "Benutzer aktualisieren";
   }
 
   addStudent(): void {
+    this.$studentApi.create(this.student as Student);
     this.sendNotification("Der Benutzer wurde erfolgreich erstellt");
   }
 
   updateStudent(): void {
-    this.sendNotification("Der Benutzer wurde erfolgreich aktualisiert");
+    if (this.student.email) {
+      this.$studentApi.update(this.student as Student, this.student.email);
+      this.sendNotification("Der Benutzer wurde erfolgreich aktualisiert");
+    }
   }
 }
 </script>

@@ -1,9 +1,6 @@
 <template>
   <CreateEditModal
     :createMode="createModule"
-    :id="module.moduleNo"
-    :basePath="moduleBasePath"
-    :obj.sync="module"
     @add="addModule"
     @update="updateModule"
     @close="$emit('close')"
@@ -23,21 +20,24 @@ import CreateEditModal from "@/components/admin/createAddModals/CreateEditModal.
     CreateEditModal,
   },
 })
-export default class CreateEditModule extends CreateEditModal<Module> {
+export default class CreateEditModule extends CreateEditModal {
   @Prop() module!: Partial<Module>;
   @Prop() createModule!: boolean;
-  moduleBasePath = "/module";
 
   get title(): string {
     return this.createModule ? "Modul erstellen" : "Modul aktualisieren";
   }
 
   addModule(): void {
+    this.$moduleApi.create(this.module as Module);
     this.sendNotification("Das Modul wurde erfolgreich erstellt");
   }
 
   updateModule(): void {
-    this.sendNotification("Das Modul wurde erfolgreich aktualisiert");
+    if (this.module.moduleNo) {
+      this.$moduleApi.update(this.module as Module, this.module.moduleNo);
+      this.sendNotification("Das Modul wurde erfolgreich aktualisiert");
+    }
   }
 }
 </script>

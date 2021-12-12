@@ -14,7 +14,9 @@
       <b-button
         type="is-success"
         :label="createMode ? 'Erstellen' : 'Aktualisieren'"
-        @click.native="createMode ? add() : update()"
+        @click.native="
+          createMode ? $emit('add') : $emit('update');
+          $emit('close')"
       />
       <b-button label="Abbrechen" @click="$emit('close')" />
     </footer>
@@ -22,34 +24,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, PropSync, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component
-export default class CreateEditModal<T> extends Vue {
+export default class CreateEditModal extends Vue {
   @Prop() createMode!: boolean;
-  @Prop() basePath!: string;
-  @PropSync("id") syncedId!: string;
-  @PropSync("obj") syncedObj!: Partial<T>;
-
-  async add(): Promise<void> {
-    try {
-      await Vue.axios.post(this.basePath, this.syncedObj);
-    } catch (e) {
-      console.log(e);
-    }
-    this.$emit("close");
-    this.$emit("add");
-  }
-
-  async update(): Promise<void> {
-    try {
-      await Vue.axios.put(`${this.basePath}/${this.syncedId}`, this.syncedObj);
-    } catch (e) {
-      console.log(e);
-    }
-    this.$emit("close");
-    this.$emit("update");
-  }
 
   sendNotification(message: string): void {
     this.$buefy.notification.open({

@@ -15,7 +15,7 @@
           label="Exportieren"
           type="is-info"
           icon-left="file-download"
-          @click="exportModuleElection"
+          @click="$moduleElectionApi.getModuleExport"
         />
       </div>
 
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import CreateEditModuleElection from "@/components/admin/createAddModals/CreateEditModuleElection.vue";
 import Administration from "@/components/admin/administrationComponents/Administration.vue";
 import ModuleElection from "@/models/moduleElection";
@@ -93,20 +93,12 @@ export default class ModuleElectionAdministration extends Administration<ModuleE
   async created(): Promise<void> {
     this.isModuleElectionDataLoading = false;
     this.modalOption.component = CreateEditModuleElection;
-    this.moduleElectionRows = (
-      await Vue.axios.get<Array<ModuleElection>>("election")
-    ).data;
-    this.mailTemplates = (
-      await Vue.axios.get<Array<MailTemplate>>("mailtemplates")
-    ).data;
+    this.moduleElectionRows = await this.$moduleElectionApi.getAll();
+    this.mailTemplates = await this.$mailTemplateApi.getAll();
   }
 
   async deleteModuleElection(moduleElection: ModuleElection): Promise<void> {
-    try {
-      await Vue.axios.delete(`/election/${moduleElection.id}`);
-    } catch (e) {
-      console.log(e);
-    }
+    await this.$moduleElectionApi.deleteById(moduleElection.id.toString());
   }
 
   async addModuleElection(): Promise<void> {
@@ -124,14 +116,6 @@ export default class ModuleElectionAdministration extends Administration<ModuleE
       createModuleElection: false,
     };
     this.$buefy.modal.open(this.modalOption);
-  }
-
-  async exportModuleElection(): Promise<void> {
-    const data: Blob = (
-      await Vue.axios.get<Blob>("/election/export", { responseType: "blob" })
-    ).data;
-    const url: string = window.URL.createObjectURL(data);
-    window.open(url);
   }
 
   notifySelectedUsers(): void {

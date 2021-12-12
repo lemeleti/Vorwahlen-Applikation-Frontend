@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import MailTemplate from "@/models/mailTemplate";
 import CreateEditMailTemplate from "@/components/admin/createAddModals/CreateEditMailTemplate.vue";
 import Administration from "@/components/admin/administrationComponents/Administration.vue";
@@ -46,17 +46,11 @@ export default class MailTemplateAdministration extends Administration<MailTempl
   async created(): Promise<void> {
     this.isMailTemplateDataLoading = false;
     this.modalOption.component = CreateEditMailTemplate;
-    this.mailTemplateRows = (
-      await Vue.axios.get<Array<MailTemplate>>("mailtemplates")
-    ).data;
+    this.mailTemplateRows = await this.$mailTemplateApi.getAll();
   }
 
   async deleteMailTemplate(mailTemplate: MailTemplate): Promise<void> {
-    try {
-      await Vue.axios.delete(`/mailtemplates/${mailTemplate.id}`);
-    } catch (e) {
-      console.log(e);
-    }
+    await this.$mailTemplateApi.deleteById(mailTemplate.id.toString());
   }
 
   async addMailTemplate(): Promise<void> {
