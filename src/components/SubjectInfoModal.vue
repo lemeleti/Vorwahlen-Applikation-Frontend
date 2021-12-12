@@ -51,11 +51,9 @@ export default class SubjectInfoModal extends Vue {
   async updated(): Promise<void> {
     try {
       if (this.module) {
-        this.eventoData = (
-          await Vue.axios.get<EventoData>(
-            `/module/${this.module.moduleNo}/eventodata`
-          )
-        ).data;
+        this.eventoData = await this.$moduleApi.getEventoDataById(
+          this.module.moduleNo
+        );
       }
     } catch (e) {
       console.log(e);
