@@ -39,9 +39,11 @@
     <div
       class="box notification election-status is-radiusless"
       :class="getElectionStatusColor()"
-      v-if="userStore.isUserAuthenticated"
+      v-if="userStore.isStudent"
     >
-      {{ getElectionStatus() }}
+      <p v-for="(reason, index) of getElectionStatus()" :key="index">
+        {{ reason }}
+      </p>
     </div>
   </div>
 </template>
@@ -54,6 +56,8 @@ import UserStore from "@/store/modules/UserStore";
 import ModuleStore from "@/store/modules/ModuleStore";
 import TileBox from "@/components/TileBox.vue";
 import ElectionStructureElement from "@/models/electionStructureElement";
+import ElectionStatus from "@/models/electionStatus";
+import ElectionStatusElement from "@/models/electionStatusElement";
 
 interface ModuleTile {
   moduleName: string;
@@ -110,12 +114,22 @@ export default class ModuleElection extends Vue {
     };
   }
 
-  private getElectionStatus(): string {
-    let text = "Ihre Auswahl ist im Moment nicht gültig.";
-    if (this.moduleStore.isElectionValid) {
-      text = "Ihre Auswahl ist gültig.";
+  private getElectionStatus(): Array<string> {
+    const electionStatus: ElectionStatus = this.moduleStore.electionStatus;
+    const reasons: Array<string> = [];
+    if (electionStatus) {
+      for (const [_key, value] of Object.entries(electionStatus)) {
+        const validation = value as ElectionStatusElement;
+        if (validation.reasons) {
+          reasons.push(...validation.reasons);
+        }
+      }
     }
-    return text;
+
+    if (reasons.length === 0 && this.moduleStore.isElectionValid) {
+      reasons.push("Ihre Wahl ist im Moment gültig");
+    }
+    return reasons;
   }
 
   private getElectionStatusColor(): string {

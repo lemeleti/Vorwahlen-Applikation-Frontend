@@ -13,6 +13,7 @@ import Stomp from "stompjs";
 import ElectionStructureElement from "@/models/electionStructureElement";
 import ElectionTansfer from "@/models/electionTransfer";
 import ModuleCategory from "@/models/moduleCategory";
+import ElectionStatus from "@/models/electionStatus";
 interface ModuleWrapper {
   moduleArr: Array<IModule>;
 }
@@ -23,6 +24,7 @@ export default class ModuleStore extends VuexModule {
   electedModules: Array<ElectionStructureElement> = [];
   overflowedElectedModules: Array<ElectionStructureElement> = [];
   isElectionValid = false;
+  electionStatus: ElectionStatus = <ElectionStatus>{};
   client: Stomp.Client | null = null;
 
   @Mutation
@@ -43,6 +45,7 @@ export default class ModuleStore extends VuexModule {
     this.overflowedElectedModules =
       electionData.electionStructure.overflowedModules;
     this.isElectionValid = electionData.electionValid;
+    this.electionStatus = electionData.electionStatusDTO;
   }
 
   @Mutation
@@ -65,8 +68,8 @@ export default class ModuleStore extends VuexModule {
   }
 
   @Action
-  async initModuleSelection(): Promise<void> {
-    if (this.context.rootGetters.isStudent) {
+  async initModuleSelection(isStudent: boolean): Promise<void> {
+    if (isStudent) {
       const electionData: ElectionTansfer = (
         await Vue.axios.get<ElectionTansfer>("/elections/structure")
       ).data;
