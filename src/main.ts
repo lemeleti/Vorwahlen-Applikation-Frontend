@@ -41,6 +41,7 @@ import {
   faVoteYea,
   faInbox,
   faFileAlt,
+  faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import ModuleApi from "./mixins/ModuleApi";
@@ -80,7 +81,8 @@ library.add(
   faFile,
   faVoteYea,
   faInbox,
-  faFileAlt
+  faFileAlt,
+  faChevronRight
 );
 
 Vue.component("vue-fontawesome", FontAwesomeIcon);
