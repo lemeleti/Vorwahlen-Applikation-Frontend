@@ -66,7 +66,7 @@ export default class ModuleStore extends VuexModule {
 
   @Action
   async initModuleSelection(): Promise<void> {
-    if (this.context.getters.isStudent) {
+    if (this.context.rootGetters.isStudent) {
       const electionData: ElectionTansfer = (
         await Vue.axios.get<ElectionTansfer>("/elections/structure")
       ).data;
