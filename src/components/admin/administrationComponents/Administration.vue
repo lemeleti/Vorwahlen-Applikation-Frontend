@@ -70,6 +70,15 @@ export default class ModuleAdministration<T> extends Mixins(ModuleListUpload) {
   @PropSync("checkedRows") syncedCheckedRows!: Array<T>;
   @PropSync("isDataLoading") syncedIsDataLoading!: boolean;
 
+  created(): void {
+    if (this.syncedColumns) {
+      this.syncedColumns = this.syncedColumns.map((obj) => ({
+        ...obj,
+        searchable: true,
+      }));
+    }
+  }
+
   modalOption: BModalConfig = {
     parent: this,
     trapFocus: true,
