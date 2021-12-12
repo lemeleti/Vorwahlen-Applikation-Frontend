@@ -2,18 +2,20 @@
   <div>
     <h1 class="title">Administration</h1>
     <b-tabs type="is-boxed" v-model="activeTab">
-      <b-tab-item label="Seitentexte" icon="file-alt"> </b-tab-item>
+      <b-tab-item label="Seitentexte" icon="file-alt">
+        <SiteText v-if="activeTab == 0" />
+      </b-tab-item>
       <b-tab-item label="Studentenverwaltung" icon="user">
-        <StudentAdministration />
+        <StudentAdministration v-if="activeTab == 1" />
       </b-tab-item>
       <b-tab-item label="Modulverwaltung" icon="square">
-        <ModuleAdministration />
+        <ModuleAdministration v-if="activeTab == 2" />
       </b-tab-item>
       <b-tab-item label="Wahlverwaltung" icon="vote-yea">
-        <ModuleElectionAdministration />
+        <ModuleElectionAdministration v-if="activeTab == 3" />
       </b-tab-item>
       <b-tab-item label="Mail-Template-Verwaltung" icon="inbox">
-        <MailTemplateAdministration />
+        <MailTemplateAdministration v-if="activeTab == 4" />
       </b-tab-item>
     </b-tabs>
   </div>
