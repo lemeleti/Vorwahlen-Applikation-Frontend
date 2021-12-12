@@ -18,13 +18,33 @@
       <hr />
       <TileBox
         v-for="(description, category, index) in getElectionCategoryMap()"
-        :key="index"
+        :key="category"
       >
-        <template #title>{{ description }}</template>
-        <template #content>
+        <template #title>
+          <div class="level">
+            <div class="level-left">
+              <div class="level-item">
+                {{ description }}
+              </div>
+            </div>
+
+            <div class="level-right">
+              <div class="level-item">
+                <b-button
+                  :label="openCategories[index] ? 'Ausblenden' : 'Einblenden'"
+                  :icon-left="openCategories[index] ? 'chevron-down' : 'chevron-right'"
+                  type="is-ghost"
+                  @click.native="toggleCategory(index)"
+                />
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <template #content v-if="openCategories[index]">
           <Module
-            v-for="(module, moduleIndex) of getModulesByCategory(category)"
-            :key="moduleIndex"
+            v-for="module of getModulesByCategory(category)"
+            :key="module.moduleNo"
             :color="moduleStore.getColorForCategory(module.category)"
             :moduleNo="module.moduleNo"
             @moreInfo="showAdditionalSubjectInfo(module)"
@@ -74,12 +94,18 @@ export default class Homepage extends Vue {
   isModalActive = false;
   moduleStore: ModuleStore = getModule(ModuleStore);
   userStore: UserStore = getModule(UserStore);
+  openCategories = [true, true, true, true];
 
   mounted(): void {
     if (!this.moduleStore.isClientConnected) {
       this.createConnection();
     }
   }
+
+  toggleCategory(index: number): void {
+    this.$set(this.openCategories, index, !this.openCategories[index]);
+  }
+
 
   getElectionCategoryMap(): ElectionCategoryMap {
     const electionCategoryMap: ElectionCategoryMap = {};
