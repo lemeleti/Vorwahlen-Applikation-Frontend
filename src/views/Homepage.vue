@@ -1,41 +1,43 @@
 <template>
   <div id="content">
-    <b-message
-      title="Hinweis für alle Studierende mit dem Internationalen Profil"
-      type="is-info"
-      has-icon
-      icon="info"
-      aria-close-label="Close message"
-      v-if="userStore.isUserIP"
-    >
-      Bitte führen Sie die Modulvorwahl für das fünfte Semester ebenfalls durch,
-      auch wenn Sie in diesem Semester als Outgoing eingetragen sind. Ausserdem
-      müssen alle IP-Studierende das Modul
-      <b>"Intercultural Communication and Management"</b> belegen.
-    </b-message>
-    <ModuleElection v-if="userStore.isAuthenticated" />
-    <hr />
-    <TileBox
-      v-for="(description, category, index) in getElectionCategoryMap()"
-      :key="index"
-    >
-      <template #title>{{ description }}</template>
-      <template #content>
-        <Module
-          v-for="(module, moduleIndex) of getModulesByCategory(category)"
-          :key="moduleIndex"
-          :color="moduleStore.getColorForCategory(module.category)"
-          :moduleNo="module.moduleNo"
-          @moreInfo="showAdditionalSubjectInfo(module)"
-        >
-          <template #title>{{ module.moduleTitle }}</template>
-        </Module>
-      </template>
-    </TileBox>
-    <SubjectInfoModal
-      :module="selectedModule"
-      :isModalActive.sync="isModalActive"
-    />
+    <div v-if="userStore.isUserAuthenticated && userStore.isStudent">
+      <b-message
+        title="Hinweis für alle Studierende mit dem Internationalen Profil"
+        type="is-info"
+        has-icon
+        icon="info"
+        aria-close-label="Close message"
+        v-if="userStore.isUserIP"
+      >
+        Bitte führen Sie die Modulvorwahl für das fünfte Semester ebenfalls
+        durch, auch wenn Sie in diesem Semester als Outgoing eingetragen sind.
+        Ausserdem müssen alle IP-Studierende das Modul
+        <b>"Intercultural Communication and Management"</b> belegen.
+      </b-message>
+      <ModuleElection v-if="userStore.isAuthenticated" />
+      <hr />
+      <TileBox
+        v-for="(description, category, index) in getElectionCategoryMap()"
+        :key="index"
+      >
+        <template #title>{{ description }}</template>
+        <template #content>
+          <Module
+            v-for="(module, moduleIndex) of getModulesByCategory(category)"
+            :key="moduleIndex"
+            :color="moduleStore.getColorForCategory(module.category)"
+            :moduleNo="module.moduleNo"
+            @moreInfo="showAdditionalSubjectInfo(module)"
+          >
+            <template #title>{{ module.moduleTitle }}</template>
+          </Module>
+        </template>
+      </TileBox>
+      <SubjectInfoModal
+        :module="selectedModule"
+        :isModalActive.sync="isModalActive"
+      />
+    </div>
   </div>
 </template>
 
