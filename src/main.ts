@@ -43,6 +43,10 @@ import {
   faFileAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import ModuleApi from "./mixins/ModuleApi";
+import ModuleElectionApi from "./mixins/ModuleElectionApi";
+import MailTemplateApi from "./mixins/MailTemplateApi";
+import StudentApi from "./mixins/StudentApi";
 require("@/assets/main.scss");
 
 library.add(
@@ -90,6 +94,10 @@ axios.defaults.baseURL = "/api";
 
 Vue.use(VueAxios, axios);
 Vue.use(VueSweetalert2);
+Vue.mixin(ModuleApi);
+Vue.mixin(ModuleElectionApi);
+Vue.mixin(MailTemplateApi);
+Vue.mixin(StudentApi);
 
 new Vue({
   router,
