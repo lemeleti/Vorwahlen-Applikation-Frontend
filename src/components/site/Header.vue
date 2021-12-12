@@ -142,7 +142,7 @@ export default class Header extends Vue {
 
   async logout(): Promise<void> {
     this.userStore.removeUserData();
-    await Vue.axios.get("/session/destroy");
+    await Vue.axios.delete("/session");
     this.$router.push({ name: "Logout" });
   }
 }
