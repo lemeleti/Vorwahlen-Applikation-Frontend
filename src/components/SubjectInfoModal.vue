@@ -9,6 +9,16 @@
       </div>
       <p class="subtitle">Detailierte Übersicht</p>
       <div class="content">
+        <div class="level">
+          <div class="level-left"></div>
+          <div class="level-right">
+            <div class="level-item">
+              <a :href="$moduleApi.eventoUrl(module.moduleId)" target="_blank">
+                Direkt im Eventoweb ansehen
+              </a>
+            </div>
+          </div>
+        </div>
         <div v-for="(value, key, index) of eventoData" :key="index">
           <div class="columns">
             <div class="column">

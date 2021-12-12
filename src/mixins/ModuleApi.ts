@@ -19,4 +19,10 @@ export default class ModuleApi extends Api<Module> {
       await Vue.axios.get<EventoData>(`${this.basePath}/${id}/eventodata`)
     ).data;
   }
+
+  get eventoUrl() {
+    return (moduleId: number): string => {
+      return `https://eventoweb.zhaw.ch/Evt_Pages/Brn_ModulDetailAZ.aspx?IDAnlass=${moduleId}&IdLanguage=1&date=662249088000000000`;
+    };
+  }
 }
