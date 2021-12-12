@@ -105,7 +105,7 @@ export default class Header extends Vue {
       name: "Settings",
       icon: "cogs",
       text: "Einstellungen",
-      authNeeded: false,
+      authNeeded: true,
       adminNeeded: false,
     },
   ];
