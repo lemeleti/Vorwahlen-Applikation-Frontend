@@ -76,7 +76,7 @@ export default class ModuleElection extends Vue {
 
   semesters: Array<number> = [2, 1];
 
-  private getTilesForSemester(semester: number): Array<ModuleTile> {
+  getTilesForSemester(semester: number): Array<ModuleTile> {
     const tiles: Array<ModuleTile> = [];
     semester += this.getSemesterOffset();
 
@@ -90,7 +90,7 @@ export default class ModuleElection extends Vue {
     return tiles;
   }
 
-  private getTileForOverflowedModules(): Array<ModuleTile> {
+  getTileForOverflowedModules(): Array<ModuleTile> {
     const tiles: Array<ModuleTile> = [];
     if (this.moduleStore.getOverflowedModules) {
       this.moduleStore.getOverflowedModules
@@ -100,7 +100,7 @@ export default class ModuleElection extends Vue {
     return tiles;
   }
 
-  private getSemesterOffset(): number {
+  getSemesterOffset(): number {
     const student = this.userStore.student;
     let offset = 4;
     if (student && student.tz && student.secondElection) {
@@ -109,7 +109,7 @@ export default class ModuleElection extends Vue {
     return offset;
   }
 
-  private electionStructureElementToTile(
+  electionStructureElementToTile(
     element: ElectionStructureElement
   ): ModuleTile {
     return {
@@ -119,7 +119,7 @@ export default class ModuleElection extends Vue {
     };
   }
 
-  private getElectionStatus(): Array<string> {
+  getElectionStatus(): Array<string> {
     const electionStatus: ElectionStatus = this.moduleStore.electionStatus;
     const reasons: Array<string> = [];
     if (electionStatus) {
@@ -137,7 +137,7 @@ export default class ModuleElection extends Vue {
     return reasons;
   }
 
-  private getElectionStatusColor(): string {
+  getElectionStatusColor(): string {
     let color = "is-warning";
     if (this.moduleStore.isElectionValid) {
       color = "is-success";
