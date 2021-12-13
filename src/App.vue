@@ -45,7 +45,7 @@ export default class App extends Vue {
 
   async mounted(): Promise<void> {
     await this.userStore.initUserStore();
-    this.moduleStore.initModuleSelection(this.userStore.isStudent);
+    this.moduleStore.initModuleSelection();
     this.moduleStore.updateModules();
     const student = this.userStore.student;
     if (this.userStore.isAuthenticated && student && student.firstTimeSetup) {

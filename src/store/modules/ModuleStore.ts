@@ -6,6 +6,7 @@ import {
   Mutation,
   MutationAction,
   Action,
+  getModule,
 } from "vuex-module-decorators";
 import IModule from "@/models/module";
 import store from "@/store";
@@ -15,6 +16,8 @@ import ElectionTansfer from "@/models/electionTransfer";
 import ModuleCategory from "@/models/moduleCategory";
 import ElectionStatus from "@/models/electionStatus";
 import SockJS from "sockjs-client";
+import ModuleElectionApi from "@/mixins/ModuleElectionApi";
+import UserStore from "./UserStore";
 interface ModuleWrapper {
   moduleArr: Array<IModule>;
 }
@@ -79,12 +82,13 @@ export default class ModuleStore extends VuexModule {
   }
 
   @Action
-  async initModuleSelection(isStudent: boolean): Promise<void> {
-    if (isStudent) {
-      const electionData: ElectionTansfer = (
-        await Vue.axios.get<ElectionTansfer>("/elections/structure")
-      ).data;
-
+  async initModuleSelection(): Promise<void> {
+    const userStore = getModule(UserStore);
+    if (userStore.isStudent && userStore.student) {
+      const api = new ModuleElectionApi().$moduleElectionApi;
+      const electionData: ElectionTansfer = await api.getElectionStructure(
+        userStore.student.email
+      );
       this.context.commit("setElectionData", electionData);
     }
   }
