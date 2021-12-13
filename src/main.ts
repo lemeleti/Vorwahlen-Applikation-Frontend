@@ -6,6 +6,7 @@ import Buefy from "buefy";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import "buefy/dist/buefy.css";
+import "vue-class-component/hooks";
 import VueSweetalert2 from "vue-sweetalert2";
 import "@sweetalert2/theme-bulma";
 import { library } from "@fortawesome/fontawesome-svg-core";
