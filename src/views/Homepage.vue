@@ -1,20 +1,23 @@
 <template>
   <div id="content">
-    <div v-if="userStore.isUserAuthenticated && userStore.isStudent">
+    <div>
+      <span v-html="getHeaderSiteText()"></span>
+    </div>
+    <div v-if="userStore.isAuthenticated && student">
       <b-message
         title="Hinweis für alle Studierende mit dem Internationalen Profil"
         type="is-info"
         has-icon
         icon="info"
         aria-close-label="Close message"
-        v-if="userStore.isUserIP"
+        v-if="student.ip"
       >
         Bitte führen Sie die Modulvorwahl für das fünfte Semester ebenfalls
         durch, auch wenn Sie in diesem Semester als Outgoing eingetragen sind.
         Ausserdem müssen alle IP-Studierende das Modul
         <b>"Intercultural Communication and Management"</b> belegen.
       </b-message>
-      <ModuleElection v-if="userStore.isAuthenticated" />
+      <ModuleElection />
       <hr />
       <TileBox
         v-for="(description, category, index) in getElectionCategoryMap()"
@@ -32,7 +35,9 @@
               <div class="level-item">
                 <b-button
                   :label="openCategories[index] ? 'Ausblenden' : 'Einblenden'"
-                  :icon-left="openCategories[index] ? 'chevron-down' : 'chevron-right'"
+                  :icon-left="
+                    openCategories[index] ? 'chevron-down' : 'chevron-right'
+                  "
                   type="is-ghost"
                   @click.native="toggleCategory(index)"
                 />
@@ -76,6 +81,7 @@ import ElectionTansfer from "@/models/electionTransfer";
 import Module from "@/components/Module.vue";
 import IModule from "@/models/module";
 import ModuleCategory from "@/models/moduleCategory";
+import Student from "@/models/student";
 
 interface ElectionCategoryMap {
   [index: string]: string;
@@ -102,10 +108,28 @@ export default class Homepage extends Vue {
     }
   }
 
+  get student(): Student | null {
+    return this.userStore.student;
+  }
+
   toggleCategory(index: number): void {
     this.$set(this.openCategories, index, !this.openCategories[index]);
   }
 
+  getHeaderSiteText(): string {
+    let text = "";
+    const student = this.userStore.student;
+    if (student) {
+      if (student.tz && student.secondElection) {
+        text = "";
+      } else if (student.tz) {
+        text = "";
+      } else {
+        text = "";
+      }
+    }
+    return text;
+  }
 
   getElectionCategoryMap(): ElectionCategoryMap {
     const electionCategoryMap: ElectionCategoryMap = {};

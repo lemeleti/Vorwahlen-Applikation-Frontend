@@ -1,17 +1,41 @@
 /* eslint-disable prettier/prettier */
-import Vue from "vue";
 
-import { Module, VuexModule, Action, Mutation } from "vuex-module-decorators";
+import { Module, VuexModule, Mutation, MutationAction } from "vuex-module-decorators";
 import User from "@/models/user";
 import store from "@/store";
 import Student from "@/models/student";
+import StudentApi from "@/mixins/StudentApi";
+import SessionApi from "@/mixins/SessionApi";
+import _ from "lodash";
+
+interface StoreState {
+  user: User | null;
+  student: Student | null;
+  isAuthenticated: boolean;
+  isStoreInitialized: boolean;
+}
 
 @Module({ store, dynamic: true, name: "userStore" })
 export default class UserStore extends VuexModule {
-  private user: User = <User>{};
-  private student: Student = <Student>{};
-  private isAuthenticated = false;
-  private isStoreInitialized = false;
+  user: User | null = null;
+  student: Student | null = null;
+  isAuthenticated = false;
+  isStoreInitialized = false;
+
+  get isUserAdmin(): boolean {
+    return _.get(this.user, "role", "USER") === "ADMIN";
+  }
+
+  get isStudent(): boolean {
+    return _.get(this.user, "exists", false);
+  }
+
+  @Mutation
+  setIp(ip: boolean): void {
+    if (this.student) {
+      this.student.ip = ip;
+    }
+  }
 
   @Mutation
   removeUserData(): void {
@@ -20,85 +44,19 @@ export default class UserStore extends VuexModule {
     this.isStoreInitialized = false;
   }
 
-  @Mutation
-  setIp(ip: boolean): void {
-    this.student.ip = ip;
-  }
-
-  @Mutation
-  setIsAuthenticated(isAuthenticated: boolean): void {
-    this.isAuthenticated = isAuthenticated;
-  }
-
-  @Mutation
-  setIsStoreInitialized(isStoreInitialized: boolean): void {
-    this.isStoreInitialized = isStoreInitialized;
-  }
-
-  @Mutation
-  setStudent(student: Student): void {
-    this.student = student;
-  }
-
-  @Mutation
-  setUser(user: User): void {
-    this.user = user;
-  }
-
-  @Action
-  async fetchUserData(): Promise<void> {
-    try {
-      const isAuthenticated = (await Vue.axios.get<boolean>("/session/is-authenticated")).data;
-      if (isAuthenticated) {
-        this.context.commit("setUser", (await Vue.axios.get<User>("/session")).data);
-        this.context.commit("setIsAuthenticated", true);
-        this.context.commit("setIsStoreInitialized", true);
-        if (this.isUserExistent) {
-          this.context.commit("setStudent", (await Vue.axios.get<Student>(`/students/${this.context.getters.email}`)).data);
-        }
-      }
-    } catch (e) {
-      console.log(e);
+  @MutationAction
+  async initUserStore(): Promise<StoreState> {
+    const studentApi = new StudentApi().$studentApi;
+    const sessionApi = new SessionApi().$sessionApi;
+    const isAuthenticated = await sessionApi.isAuthenticated();
+    const isStoreInitialized = true;
+    const user: User | null = await sessionApi.get();
+    let student: Student | null = null;
+    
+    if (user && user.exists) {
+      student = await studentApi.getById(user.mail);
     }
-  }
-
-  get email(): string {
-    return this.user.mail;
-  }
-
-  get isUserAuthenticated(): boolean {
-    return this.isAuthenticated;
-  }
-
-  get isUserAdmin(): boolean {
-    return this.user.role === "ADMIN";
-  }
-
-  get isUserExistent(): boolean {
-    return this.user.exists;
-  }
-
-  get isStudent(): boolean {
-    return this.user.exists;
-  }
-
-  get isUserInitialized(): boolean {
-    return this.isStoreInitialized;
-  }
-
-  get isUserIP(): boolean {
-    return this.student.ip;
-  }
-
-  get isUserTZ(): boolean {
-    return this.student.tz;
-  }
-
-  get isSecondElection(): boolean {
-    return this.student.secondElection;
-  }
-
-  get isFirstTimeSetup(): boolean {
-    return this.student.firstTimeSetup;
+    
+    return { isAuthenticated, isStoreInitialized, student, user }
   }
 }

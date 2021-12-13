@@ -30,6 +30,7 @@ import RightMenu from "@/components/RightMenu.vue";
 import UserStore from "@/store/modules/UserStore";
 import "vue-class-component/hooks";
 import ModuleStore from "./store/modules/ModuleStore";
+import StudentSetup from "./models/studentSetup";
 
 @Component({
   components: {
@@ -43,10 +44,11 @@ export default class App extends Vue {
   moduleStore = getModule(ModuleStore);
 
   async mounted(): Promise<void> {
-    await this.userStore.fetchUserData();
+    await this.userStore.initUserStore();
     this.moduleStore.initModuleSelection(this.userStore.isStudent);
     this.moduleStore.updateModules();
-    if (this.userStore.isUserAuthenticated && this.userStore.isFirstTimeSetup) {
+    const student = this.userStore.student;
+    if (this.userStore.isAuthenticated && student && student.firstTimeSetup) {
       this.setUpStudent();
     }
   }
@@ -73,18 +75,17 @@ export default class App extends Vue {
 
   async handleSetUpSelection(value: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      try {
-        const id = this.userStore.email;
-        const patchData = { firstTimeSetup: false, ip: false };
+      const student = this.userStore.student;
+      if (student) {
+        const studentSetup: StudentSetup = { firstTimeSetup: false, ip: false };
         if (value === "isIp") {
-          this.userStore.setIp(true);
-          patchData.ip = true;
-          Vue.axios.patch(`/students/${id}`, patchData);
+          studentSetup.ip = true;
+          this.userStore.setIp(studentSetup.ip);
         }
-        Vue.axios.patch(`/students/${id}`, patchData);
+        this.$studentApi.updateStudentSetup(studentSetup);
         resolve("");
-      } catch (e) {
-        reject(e);
+      } else {
+        reject();
       }
     });
   }

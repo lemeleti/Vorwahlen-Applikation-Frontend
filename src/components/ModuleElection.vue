@@ -101,7 +101,12 @@ export default class ModuleElection extends Vue {
   }
 
   private getSemesterOffset(): number {
-    return this.userStore.isUserTZ && this.userStore.isSecondElection ? 6 : 4;
+    const student = this.userStore.student;
+    let offset = 4;
+    if (student && student.tz && student.secondElection) {
+      offset = 6;
+    }
+    return offset;
   }
 
   private electionStructureElementToTile(
