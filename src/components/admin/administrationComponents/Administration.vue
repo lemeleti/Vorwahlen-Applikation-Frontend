@@ -36,6 +36,7 @@
             icon-left="edit"
             type="is-info"
             label="Editieren"
+            :disabled="syncedCheckedRows.length == 0"
           />
         </div>
 
@@ -45,6 +46,7 @@
             icon-left="trash"
             type="is-danger"
             label="Löschen"
+            :disabled="syncedCheckedRows.length == 0"
           />
         </div>
 
