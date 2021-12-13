@@ -30,15 +30,5 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 @Component
 export default class CreateEditModal extends Vue {
   @Prop() createMode!: boolean;
-
-  sendNotification(message: string): void {
-    this.$buefy.notification.open({
-      type: "is-success",
-      hasIcon: true,
-      icon: "check",
-      message: message,
-      duration: 5000,
-    });
-  }
 }
 </script>

@@ -94,14 +94,19 @@ export default class CreateUser extends CreateEditModal {
   }
 
   addStudent(): void {
-    this.$studentApi.create(this.student as Student);
-    this.sendNotification("Der Benutzer wurde erfolgreich erstellt");
+    this.$studentApi.create(
+      this.student as Student,
+      "Der Benutzer wurde erfolgreich erstellt"
+    );
   }
 
   updateStudent(): void {
     if (this.student.email) {
-      this.$studentApi.update(this.student as Student, this.student.email);
-      this.sendNotification("Der Benutzer wurde erfolgreich aktualisiert");
+      this.$studentApi.update(
+        this.student as Student,
+        this.student.email,
+        "Der Benutzer wurde erfolgreich aktualisiert"
+      );
     }
   }
 }

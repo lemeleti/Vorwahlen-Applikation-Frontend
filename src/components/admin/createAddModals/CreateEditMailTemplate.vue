@@ -47,17 +47,19 @@ export default class CreateEditMailTemplate extends CreateEditModal {
   }
 
   async addMailTemplate(): Promise<void> {
-    this.$mailTemplateApi.create(this.mailTemplate as MailTemplate);
-    this.sendNotification("Das Mail-Template wurde erfolgreich erstellt");
+    this.$mailTemplateApi.create(
+      this.mailTemplate as MailTemplate,
+      "Das Mail-Template wurde erfolgreich erstellt"
+    );
   }
 
   async updateMailTemplate(): Promise<void> {
     if (this.mailTemplate.id) {
       this.$mailTemplateApi.update(
         this.mailTemplate as MailTemplate,
-        this.mailTemplate.id.toString()
+        this.mailTemplate.id.toString(),
+        "Das Mail-Template wurde erfolgreich aktualisiert"
       );
-      this.sendNotification("Das Mail-Template wurde erfolgreich aktualisiert");
     }
   }
 }

@@ -29,14 +29,19 @@ export default class CreateEditModule extends CreateEditModal {
   }
 
   addModule(): void {
-    this.$moduleApi.create(this.module as Module);
-    this.sendNotification("Das Modul wurde erfolgreich erstellt");
+    this.$moduleApi.create(
+      this.module as Module,
+      "Das Modul wurde erfolgreich erstellt"
+    );
   }
 
   updateModule(): void {
     if (this.module.moduleNo) {
-      this.$moduleApi.update(this.module as Module, this.module.moduleNo);
-      this.sendNotification("Das Modul wurde erfolgreich aktualisiert");
+      this.$moduleApi.update(
+        this.module as Module,
+        this.module.moduleNo,
+        "Das Modul wurde erfolgreich aktualisiert"
+      );
     }
   }
 }

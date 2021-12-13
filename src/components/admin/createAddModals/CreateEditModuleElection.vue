@@ -92,12 +92,18 @@ export default class CreateEditModuleElection extends CreateEditModal {
     );
   }
 
-  addModuleElection(): void {
+  async addModuleElection(): Promise<void> {
     this.moduleElection.electedModules = this.electedModules.map(
       (module: Module) => module.moduleNo
     );
-    this.$moduleElectionApi.create(this.moduleElection as ModuleElection);
-    this.sendNotification("Die Modulvorwahl wurde erfolgreich erstellt");
+    try {
+      await this.$moduleElectionApi.create(
+        this.moduleElection as ModuleElection,
+        "Die Modulvorwahl wurde erfolgreich erstellt"
+      );
+    } catch (e) {
+      /* */
+    }
   }
 
   updateModuleElection(): void {
@@ -107,9 +113,9 @@ export default class CreateEditModuleElection extends CreateEditModal {
     if (this.moduleElection.id) {
       this.$moduleElectionApi.update(
         this.moduleElection as ModuleElection,
-        this.moduleElection.id.toString()
+        this.moduleElection.id.toString(),
+        "Die Modulvorwahl wurde erfolgreich aktualisiert"
       );
-      this.sendNotification("Die Modulvorwahl wurde erfolgreich aktualisiert");
     }
   }
 }
