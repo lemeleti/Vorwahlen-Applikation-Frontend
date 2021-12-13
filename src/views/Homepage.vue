@@ -74,9 +74,7 @@ import ModuleElection from "@/components/ModuleElection.vue";
 import TileBox from "@/components/TileBox.vue";
 import ModuleStore from "@/store/modules/ModuleStore";
 import "vue-class-component/hooks";
-import Stomp from "stompjs";
 import UserStore from "@/store/modules/UserStore";
-import ElectionTansfer from "@/models/electionTransfer";
 import Module from "@/components/Module.vue";
 import IModule from "@/models/module";
 import ModuleCategory from "@/models/moduleCategory";
@@ -103,7 +101,7 @@ export default class Homepage extends Vue {
 
   mounted(): void {
     if (!this.moduleStore.isClientConnected) {
-      this.moduleStore.createConnection(this.updateElectionInformation);
+      this.moduleStore.createConnection();
     }
   }
 
@@ -163,25 +161,6 @@ export default class Homepage extends Vue {
   showAdditionalSubjectInfo(module: Module): void {
     this.selectedModule = module;
     this.isModalActive = !this.isModalActive;
-  }
-
-  updateElectionInformation(message: Stomp.Message): void {
-    if (!this.moduleStore.isClientConnected) {
-      this.moduleStore.createConnection(this.updateElectionInformation);
-    }
-
-    if (message.body && message.body !== null) {
-      const electionData: ElectionTansfer = JSON.parse(message.body);
-      this.moduleStore.setElectionData(electionData);
-      this.$buefy.notification.open({
-        hasIcon: true,
-        type: "is-success",
-        ariaCloseLabel: "Benachrichtigung schliessen",
-        message: "Ihre Modulvorwahl wurde erfolgreich gespeichert",
-        icon: "check",
-      });
-      message.ack();
-    }
   }
 }
 </script>

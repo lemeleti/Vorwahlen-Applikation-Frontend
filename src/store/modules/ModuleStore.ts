@@ -18,8 +18,13 @@ import ElectionStatus from "@/models/electionStatus";
 import SockJS from "sockjs-client";
 import ModuleElectionApi from "@/mixins/ModuleElectionApi";
 import UserStore from "./UserStore";
+import { NotificationProgrammatic as Notification } from "buefy";
 interface ModuleWrapper {
   moduleArr: Array<IModule>;
+}
+
+interface HeaderMessage {
+  message: string;
 }
 
 @Module({ store, dynamic: true, name: "moduleStore" })
@@ -36,10 +41,18 @@ export default class ModuleStore extends VuexModule {
     this.moduleArr.push(...arr);
   }
 
-  @Action
-  async updateElection(moduleNo: string): Promise<void> {
+  @Mutation
+  updateElection(moduleNo: string): void {
     if (this.client && this.client.connected) {
       this.client.send("/app/save", {}, moduleNo);
+    } else {
+      Notification.open({
+        message:
+          "Es besteht keine Verbindung zum Backend, die Wahl wird nicht gespeichert",
+        type: "is-warning",
+        hasIcon: true,
+        indefinite: true,
+      });
     }
   }
 
@@ -58,13 +71,57 @@ export default class ModuleStore extends VuexModule {
   }
 
   @Mutation
-  createConnection(callback: (message: Stomp.Message) => void): void {
+  createConnection(): void {
     const socket: WebSocket = new SockJS("/api/stomp-ws-endpoint");
     const stomp: Stomp.Client = Stomp.over(socket);
-    stomp.connect({}, () => {
-      stomp.subscribe("/user/queue/electionSaveStatus", callback);
-    });
+    stomp.connect(
+      {},
+      () => {
+        stomp.subscribe(
+          "/user/queue/electionSaveStatus",
+          (message: Stomp.Message) =>
+            this.context.commit("updateElectionInformation", message)
+        );
+      },
+      (error: Stomp.Frame | string) => {
+        let message = "Es ist etwas schiefgelaufen";
+        let showError = false;
+        if (error instanceof Stomp.Frame && error.headers) {
+          message = ((error as Stomp.Frame).headers as HeaderMessage).message;
+          showError = true;
+        }
+        Notification.open({
+          hasIcon: true,
+          type: "is-warning",
+          message: message,
+          active: showError,
+        });
+        if (this.client) {
+          this.client.disconnect(() => null);
+        }
+      }
+    );
     this.client = stomp;
+  }
+
+  @Mutation
+  updateElectionInformation(message: Stomp.Message): void {
+    if (this.isClientConnected) {
+      this.createConnection();
+    }
+
+    if (message.body && message.body !== null) {
+      const electionData: ElectionTansfer = JSON.parse(message.body);
+      this.setElectionData(electionData);
+      Notification.open({
+        hasIcon: true,
+        type: "is-success",
+        ariaCloseLabel: "Benachrichtigung schliessen",
+        message: "Ihre Modulvorwahl wurde erfolgreich gespeichert",
+        icon: "check",
+      });
+      message.ack();
+    }
   }
 
   @MutationAction
