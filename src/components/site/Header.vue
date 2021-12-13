@@ -25,7 +25,7 @@
             <b-icon icon="search"></b-icon>
           </b-navbar-item>
           <b-navbar-item
-            v-if="!userStore.isUserAuthenticated"
+            v-if="!userStore.isAuthenticated"
             tag="router-link"
             :to="{ name: 'Login' }"
           >
@@ -33,7 +33,7 @@
             <span>Login</span>
           </b-navbar-item>
           <b-navbar-item
-            v-if="userStore.isUserAuthenticated"
+            v-if="userStore.isAuthenticated"
             tag="a"
             href="#"
             @click="logout"
