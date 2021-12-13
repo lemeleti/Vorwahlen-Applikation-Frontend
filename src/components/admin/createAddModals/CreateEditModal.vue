@@ -37,13 +37,17 @@ export default class CreateEditModal<T> extends Vue {
 
   add(): void {
     const obj: T = this.createEditObject as T;
-    this.addCalback(obj, "Der Benutzer wurde erfolgreich erstellt");
+    this.addCalback(obj, "Der Eintrag wurde erfolgreich erstellt");
     this.$emit("addToRow", obj);
   }
 
   edit(): void {
     const obj: T = this.createEditObject as T;
-    this.editCalback(obj, this.id, "Der Benutzer wurde erfolgreich aktualisiert");
+    this.editCalback(
+      obj,
+      this.id,
+      "Der Eintrag wurde erfolgreich aktualisiert"
+    );
     this.$emit("editInRow", obj);
   }
 }
