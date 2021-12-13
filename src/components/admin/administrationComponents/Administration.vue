@@ -61,7 +61,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Mixins, PropSync } from "vue-property-decorator";
+import _Vue from "vue";
+import { Component, Mixins, Prop, PropSync } from "vue-property-decorator";
 import ModuleListUpload from "@/mixins/ExcelSheetUpload";
 import { BModalConfig } from "buefy/types/components";
 
@@ -71,6 +72,8 @@ export default class ModuleAdministration<T> extends Mixins(ModuleListUpload) {
   @PropSync("columns") syncedColumns!: Array<T>;
   @PropSync("checkedRows") syncedCheckedRows!: Array<T>;
   @PropSync("isDataLoading") syncedIsDataLoading!: boolean;
+  @Prop() modal!: typeof _Vue;
+  @Prop() id!: string;
 
   created(): void {
     if (this.syncedColumns) {
@@ -86,14 +89,41 @@ export default class ModuleAdministration<T> extends Mixins(ModuleListUpload) {
     trapFocus: true,
     hasModalCard: true,
     canCancel: ["x", "escape"],
+    component: this.modal,
+    events: {
+      addToRow: this.addObjectToRows,
+      editInRow: this.updateObjectInRows,
+    },
   };
 
   add(): void {
-    this.$emit("add");
+    this.modalOption.props = {
+      student: { paDispensation: 0, wpmDispensation: 0 },
+      createStudent: true,
+    };
   }
 
   edit(): void {
-    this.$emit("edit");
+    this.modalOption.props = {
+      student: this.syncedCheckedRows[0],
+      createStudent: false,
+    };
+    this.$buefy.modal.open(this.modalOption);
+  }
+
+  addObjectToRows(obj: T): void {
+    this.syncedRows.push(obj);
+  }
+
+  updateObjectInRows(obj: T): void {
+    const key = this.id as keyof typeof obj;
+    const oldObj = this.syncedRows.find(
+      (rowObj: T) => rowObj[key] === obj[key]);
+
+    if (oldObj) {
+      const oldObjIndex = this.syncedRows.indexOf(oldObj);
+      this.syncedRows[oldObjIndex] = obj;
+    }
   }
 
   async deleteSelected(): Promise<void> {
