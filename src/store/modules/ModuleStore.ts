@@ -70,7 +70,7 @@ export default class ModuleStore extends VuexModule {
     this.client = client;
   }
 
-  @Mutation
+  @Action
   createConnection(): void {
     const socket: WebSocket = new SockJS("/api/stomp-ws-endpoint");
     const stomp: Stomp.Client = Stomp.over(socket);
@@ -79,40 +79,39 @@ export default class ModuleStore extends VuexModule {
       () => {
         stomp.subscribe(
           "/user/queue/electionSaveStatus",
-          (message: Stomp.Message) =>
-            this.context.commit("updateElectionInformation", message)
+          (message: Stomp.Message) => this.updateElectionInformation(message)
         );
       },
-      (error: Stomp.Frame | string) => {
-        let message = "Es ist etwas schiefgelaufen";
-        let showError = false;
-        if (error instanceof Stomp.Frame && error.headers) {
-          message = ((error as Stomp.Frame).headers as HeaderMessage).message;
-          showError = true;
-        }
-        Notification.open({
-          hasIcon: true,
-          type: "is-warning",
-          message: message,
-          active: showError,
-        });
-        if (this.client) {
-          this.client.disconnect(() => null);
-        }
-      }
+      (error: Stomp.Frame | string) => this.handleWebsocketError(error)
     );
-    this.client = stomp;
+    this.context.commit("setStompClient", stomp);
   }
 
-  @Mutation
-  updateElectionInformation(message: Stomp.Message): void {
-    if (this.isClientConnected) {
-      this.createConnection();
+  @Action
+  handleWebsocketError(error: Stomp.Frame | string): void {
+    let message = "Es ist etwas schiefgelaufen";
+    let showError = false;
+    if (error instanceof Stomp.Frame && error.headers) {
+      message = ((error as Stomp.Frame).headers as HeaderMessage).message;
+      showError = true;
     }
+    Notification.open({
+      hasIcon: true,
+      type: "is-warning",
+      message: message,
+      active: showError,
+    });
 
+    if (this.client) {
+      this.client.disconnect(() => null);
+    }
+  }
+
+  @Action
+  updateElectionInformation(message: Stomp.Message): void {
     if (message.body && message.body !== null) {
       const electionData: ElectionTansfer = JSON.parse(message.body);
-      this.setElectionData(electionData);
+      this.context.commit("setElectionData", electionData);
       Notification.open({
         hasIcon: true,
         type: "is-success",
