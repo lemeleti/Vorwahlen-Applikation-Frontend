@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import ErrorResponse from "@/models/errorResponse";
 import { AxiosError } from "axios";
 import { NotificationProgrammatic as Notification } from "buefy";
@@ -17,7 +19,8 @@ export default function ErrorHandler() {
       } catch (e) {
         const err = e as AxiosError;
         if (err && err.response) {
-          let message = "Beim Abfragen einer Ressource ist ein Fehler aufgetreten.";
+          let message =
+            "Beim Abfragen einer Ressource ist ein Fehler aufgetreten.";
           const errorResponse: ErrorResponse = err.response.data;
           if (errorResponse && errorResponse.message != null) {
             message = errorResponse.message;
