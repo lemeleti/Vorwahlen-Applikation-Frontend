@@ -30,15 +30,10 @@
 </template>
 
 <script lang="ts">
+import ValidationSetting from "@/models/validationSetting";
 import UserStore from "@/store/modules/UserStore";
 import { Vue, Component } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
-
-interface ValidationSetting {
-  isRepetent: boolean;
-  hadAlreadyElectedTwoConsecutiveModules: boolean;
-  isSkipConsecutiveModuleCheck: boolean;
-}
 
 @Component
 export default class Settings extends Vue {
@@ -58,10 +53,7 @@ export default class Settings extends Vue {
   };
 
   async updateSettingSelection(): Promise<void> {
-    await Vue.axios.patch(
-      `class/${this.userStore.email}`,
-      this.validationSetting
-    );
+    // todo implement
   }
 }
 </script>
