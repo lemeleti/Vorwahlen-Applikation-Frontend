@@ -1,8 +1,12 @@
 <template>
   <CreateEditModal
     :createMode="createStudent"
-    @add="addStudent"
-    @update="updateStudent"
+    :addCalback="$studentApi.create"
+    :editCalback="$studentApi.update"
+    :createEditObject="student"
+    :id="student.email"
+    @addToRow="(student) => $emit('addToRow', student)"
+    @editInRow="(student) => $emit('editInRow', student)"
     @close="$emit('close')"
   >
     <template #title>{{ title }}</template>
@@ -85,29 +89,12 @@ import CreateEditModal from "./CreateEditModal.vue";
     CreateEditModal,
   },
 })
-export default class CreateUser extends CreateEditModal {
+export default class CreateUser extends CreateEditModal<Student> {
   @Prop() student!: Partial<Student>;
   @Prop() createStudent!: boolean;
 
   get title(): string {
     return this.createStudent ? "Benutzer erstellen" : "Benutzer aktualisieren";
-  }
-
-  addStudent(): void {
-    this.$studentApi.create(
-      this.student as Student,
-      "Der Benutzer wurde erfolgreich erstellt"
-    );
-  }
-
-  updateStudent(): void {
-    if (this.student.email) {
-      this.$studentApi.update(
-        this.student as Student,
-        this.student.email,
-        "Der Benutzer wurde erfolgreich aktualisiert"
-      );
-    }
   }
 }
 </script>
