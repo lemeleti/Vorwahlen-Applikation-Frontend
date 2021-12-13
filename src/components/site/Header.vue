@@ -115,7 +115,7 @@ export default class Header extends Vue {
 
   get getRouterLinks(): Array<NavbarItemInfo> {
     const allowedRoutes = new Array<NavbarItemInfo>();
-    if (this.userStore.isUserAuthenticated) {
+    if (this.userStore.isAuthenticated) {
       this.setRoutesIfAuthenticated(allowedRoutes);
     } else {
       this.routerInfo.forEach((link) => {
