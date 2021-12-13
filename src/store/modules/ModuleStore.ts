@@ -14,6 +14,7 @@ import ElectionStructureElement from "@/models/electionStructureElement";
 import ElectionTansfer from "@/models/electionTransfer";
 import ModuleCategory from "@/models/moduleCategory";
 import ElectionStatus from "@/models/electionStatus";
+import SockJS from "sockjs-client";
 interface ModuleWrapper {
   moduleArr: Array<IModule>;
 }
@@ -51,6 +52,16 @@ export default class ModuleStore extends VuexModule {
   @Mutation
   setStompClient(client: Stomp.Client): void {
     this.client = client;
+  }
+
+  @Mutation
+  createConnection(callback: (message: Stomp.Message) => void): void {
+    const socket: WebSocket = new SockJS("/api/stomp-ws-endpoint");
+    const stomp: Stomp.Client = Stomp.over(socket);
+    stomp.connect({}, () => {
+      stomp.subscribe("/user/queue/electionSaveStatus", callback);
+    });
+    this.client = stomp;
   }
 
   @MutationAction

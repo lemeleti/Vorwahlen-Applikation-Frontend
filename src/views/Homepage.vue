@@ -75,7 +75,6 @@ import TileBox from "@/components/TileBox.vue";
 import ModuleStore from "@/store/modules/ModuleStore";
 import "vue-class-component/hooks";
 import Stomp from "stompjs";
-import SockJS from "sockjs-client";
 import UserStore from "@/store/modules/UserStore";
 import ElectionTansfer from "@/models/electionTransfer";
 import Module from "@/components/Module.vue";
@@ -104,7 +103,7 @@ export default class Homepage extends Vue {
 
   mounted(): void {
     if (!this.moduleStore.isClientConnected) {
-      this.createConnection();
+      this.moduleStore.createConnection(this.updateElectionInformation);
     }
   }
 
@@ -161,34 +160,28 @@ export default class Homepage extends Vue {
     return modules;
   }
 
-  createConnection(): void {
-    const socket: WebSocket = new SockJS("/api/stomp-ws-endpoint");
-    const stomp: Stomp.Client = Stomp.over(socket);
-    stomp.connect({}, () => {
-      stomp.subscribe(
-        "/user/queue/electionSaveStatus",
-        this.updateElectionInformation
-      );
-    });
-    this.moduleStore.setStompClient(stomp);
-  }
-
   showAdditionalSubjectInfo(module: Module): void {
     this.selectedModule = module;
     this.isModalActive = !this.isModalActive;
   }
 
   updateElectionInformation(message: Stomp.Message): void {
-    const electionData: ElectionTansfer = JSON.parse(message.body);
-    this.moduleStore.setElectionData(electionData);
-    this.$buefy.notification.open({
-      hasIcon: true,
-      type: "is-success",
-      ariaCloseLabel: "Benachrichtigung schliessen",
-      message: "Ihre Modulvorwahl wurde erfolgreich gespeichert",
-      icon: "check",
-      iconPack: "fa",
-    });
+    if (!this.moduleStore.isClientConnected) {
+      this.moduleStore.createConnection(this.updateElectionInformation);
+    }
+
+    if (message.body && message.body !== null) {
+      const electionData: ElectionTansfer = JSON.parse(message.body);
+      this.moduleStore.setElectionData(electionData);
+      this.$buefy.notification.open({
+        hasIcon: true,
+        type: "is-success",
+        ariaCloseLabel: "Benachrichtigung schliessen",
+        message: "Ihre Modulvorwahl wurde erfolgreich gespeichert",
+        icon: "check",
+      });
+      message.ack();
+    }
   }
 }
 </script>
