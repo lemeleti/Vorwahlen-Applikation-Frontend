@@ -123,7 +123,7 @@ export default class ModuleElection extends Vue {
     const electionStatus: ElectionStatus = this.moduleStore.electionStatus;
     const reasons: Array<string> = [];
     if (electionStatus) {
-      for (const [_key, value] of Object.entries(electionStatus)) {
+      for (const value of Object.values(electionStatus)) {
         const validation = value as ElectionStatusElement;
         if (validation.reasons) {
           reasons.push(...validation.reasons);
