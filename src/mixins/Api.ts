@@ -22,8 +22,9 @@ export default class Api<T> extends Vue {
   }
 
   @ErrorHandler()
-  async deleteById(id: string): Promise<void> {
+  async deleteById(id: string, message?: string): Promise<void> {
     await Vue.axios.delete(`${this.basePath}/${id}`);
+    if (message) this.sendNotification(message);
   }
 
   @ErrorHandler()
@@ -32,12 +33,24 @@ export default class Api<T> extends Vue {
   }
 
   @ErrorHandler()
-  async create(obj: T): Promise<void> {
+  async create(obj: T, message?: string): Promise<void> {
     await this.axios.post(this.basePath, obj);
+    if (message) this.sendNotification(message);
   }
 
   @ErrorHandler()
-  async update(obj: T, id: string): Promise<void> {
+  async update(obj: T, id: string, message?: string): Promise<void> {
     await this.axios.put(`${this.basePath}/${id}`, obj);
+    if (message) this.sendNotification(message);
+  }
+
+  sendNotification(message: string): void {
+    this.$buefy.notification.open({
+      type: "is-success",
+      hasIcon: true,
+      icon: "check",
+      message: message,
+      duration: 5000,
+    });
   }
 }
