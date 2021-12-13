@@ -20,4 +20,9 @@ export default class SessionApi extends Api<User> {
     return (await Vue.axios.get<boolean>(`${this.basePath}/is-authenticated`))
       .data;
   }
+
+  @ErrorHandler()
+  async isAdmin(): Promise<boolean> {
+    return (await this.axios.get<boolean>(`${this.basePath}/is-admin`)).data;
+  }
 }

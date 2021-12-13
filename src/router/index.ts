@@ -4,8 +4,10 @@ import VueRouter, { NavigationGuardNext, RouteConfig } from "vue-router";
 import { getModule } from "vuex-module-decorators";
 import Home from "../views/Homepage.vue";
 import UserStore from "@/store/modules/UserStore";
+import SessionApi from "@/mixins/SessionApi";
 
 const userStore = getModule(UserStore);
+const sessionApi = new SessionApi().$sessionApi;
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
@@ -74,7 +76,7 @@ router.beforeEach(async (to, _from, next) => {
 
 async function routeIfUserIsAdmin(next: NavigationGuardNext<Vue>) {
   const isAuthenticated = await isUserAuthenticated();
-  const isAdmin = (await Vue.axios.get<boolean>("session/is-admin")).data;
+  const isAdmin = await sessionApi.isAdmin();
   if (isAuthenticated && isAdmin) {
     next();
   } else {
@@ -100,10 +102,7 @@ async function routeIfUserIsLoggedIn(next: NavigationGuardNext<Vue>) {
 }
 
 async function isUserAuthenticated(): Promise<boolean> {
-  return (
-    userStore.isStoreInitialized ||
-    (await Vue.axios.get<boolean>("session/is-authenticated")).data
-  );
+  return (userStore.isStoreInitialized || await sessionApi.isAuthenticated());
 }
 
 export default router;
