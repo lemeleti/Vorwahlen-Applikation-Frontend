@@ -2,6 +2,7 @@
   <Administration
     @deleteSelected="deleteMailTemplate"
     :modal="modalComponent"
+    :partialObject="initValues"
     id="id"
     :columns.sync="mailTemplateColumns"
     :rows.sync="mailTemplateRows"
@@ -43,6 +44,7 @@ export default class MailTemplateAdministration extends Administration<MailTempl
       label: "Betreff",
     },
   ];
+  initValues: Partial<MailTemplate> = { id: 0 };
 
   get modalComponent(): typeof _Vue {
     return CreateEditMailTemplate;
@@ -50,29 +52,11 @@ export default class MailTemplateAdministration extends Administration<MailTempl
 
   async created(): Promise<void> {
     this.isMailTemplateDataLoading = false;
-    this.modalOption.component = CreateEditMailTemplate;
     this.mailTemplateRows = await this.$mailTemplateApi.getAll();
   }
 
   async deleteMailTemplate(mailTemplate: MailTemplate): Promise<void> {
     await this.$mailTemplateApi.deleteById(mailTemplate.id.toString());
-  }
-
-  async addMailTemplate(): Promise<void> {
-    this.modalOption.component = CreateEditMailTemplate;
-    this.modalOption.props = {
-      mailTemplate: {},
-      createMailTemplate: true,
-    };
-    this.$buefy.modal.open(this.modalOption);
-  }
-
-  async editMailTemplate(): Promise<void> {
-    this.modalOption.props = {
-      mailTemplate: this.checkedMailTemplateRows[0],
-      createMailTemplate: false,
-    };
-    this.$buefy.modal.open(this.modalOption);
   }
 }
 </script>

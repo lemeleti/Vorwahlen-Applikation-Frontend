@@ -2,6 +2,7 @@
   <Administration
     @deleteSelected="deleteStudent"
     :modal="modalComponent"
+    :partialObject="initValues"
     id="email"
     :columns.sync="studentColumns"
     :rows.sync="studentRows"
@@ -82,6 +83,7 @@ export default class StudentAdministration extends Administration<Student> {
       label: "Zweite Modulvorwahl",
     },
   ];
+  initValues: Partial<Student> = { wpmDispensation: 0, paDispensation: 0 };
 
   get modalComponent(): typeof _Vue {
     return CreateEditStudent;
@@ -89,7 +91,6 @@ export default class StudentAdministration extends Administration<Student> {
 
   async created(): Promise<void> {
     this.isStudentDataLoading = false;
-    this.modalOption.component = CreateEditStudent;
     this.studentRows = await this.$studentApi.getAll();
   }
 

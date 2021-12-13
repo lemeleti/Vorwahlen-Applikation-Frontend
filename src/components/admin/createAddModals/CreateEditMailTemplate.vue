@@ -1,9 +1,9 @@
 <template>
   <CreateEditModal
-    :createMode="createObject"
+    :createObject="createObject"
+    :partialObject="partialObject"
     :addCalback="$mailTemplateApi.create"
     :editCalback="$mailTemplateApi.update"
-    :createEditObject="partialObject"
     :id="partialObject.id"
     @addToRow="(mailTemplate) => $emit('addToRow', mailTemplate)"
     @editInRow="(mailTemplate) => $emit('editInRow', mailTemplate)"

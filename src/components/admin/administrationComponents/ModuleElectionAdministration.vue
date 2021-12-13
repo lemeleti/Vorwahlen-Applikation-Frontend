@@ -1,7 +1,8 @@
 <template>
   <Administration
-    @add="addModuleElection"
+    @deleteSelected="deleteModuleElection"
     :modal="modalComponent"
+    :partialObject="initValues"
     id="id"
     :columns.sync="moduleElectionColumns"
     :rows.sync="moduleElectionRows"
@@ -90,6 +91,7 @@ export default class ModuleElectionAdministration extends Administration<ModuleE
       label: "Wahlgültigkeit",
     },
   ];
+  initValues: Partial<ModuleElection> = { id: 0 };
 
   get modalComponent(): typeof _Vue {
     return CreateEditModuleElection;
@@ -97,30 +99,12 @@ export default class ModuleElectionAdministration extends Administration<ModuleE
 
   async created(): Promise<void> {
     this.isModuleElectionDataLoading = false;
-    this.modalOption.component = CreateEditModuleElection;
     this.moduleElectionRows = await this.$moduleElectionApi.getAll();
     this.mailTemplates = await this.$mailTemplateApi.getAll();
   }
 
   async deleteModuleElection(moduleElection: ModuleElection): Promise<void> {
     await this.$moduleElectionApi.deleteById(moduleElection.id.toString());
-  }
-
-  async addModuleElection(): Promise<void> {
-    this.modalOption.component = CreateEditModuleElection;
-    this.modalOption.props = {
-      moduleElection: {},
-      createModuleElection: true,
-    };
-    this.$buefy.modal.open(this.modalOption);
-  }
-
-  async editModuleElections(): Promise<void> {
-    this.modalOption.props = {
-      moduleElection: this.checkedModuleElectionRows[0],
-      createModuleElection: false,
-    };
-    this.$buefy.modal.open(this.modalOption);
   }
 
   notifySelectedUsers(): void {

@@ -61,10 +61,10 @@
 </template>
 
 <script lang="ts">
-import _Vue from "vue";
 import { Component, Mixins, Prop, PropSync } from "vue-property-decorator";
 import ModuleListUpload from "@/mixins/ExcelSheetUpload";
 import { BModalConfig } from "buefy/types/components";
+import Api from "@/mixins/Api";
 
 @Component
 export default class ModuleAdministration<T> extends Mixins(ModuleListUpload) {
@@ -72,8 +72,9 @@ export default class ModuleAdministration<T> extends Mixins(ModuleListUpload) {
   @PropSync("columns") syncedColumns!: Array<T>;
   @PropSync("checkedRows") syncedCheckedRows!: Array<T>;
   @PropSync("isDataLoading") syncedIsDataLoading!: boolean;
-  @Prop() modal!: typeof _Vue;
+  @Prop() modal!: typeof Api;
   @Prop() id!: string;
+  @Prop() partialObject!: Partial<T>;
 
   created(): void {
     if (this.syncedColumns) {
@@ -94,21 +95,20 @@ export default class ModuleAdministration<T> extends Mixins(ModuleListUpload) {
       addToRow: this.addObjectToRows,
       editInRow: this.updateObjectInRows,
     },
+    props: {
+      partialObject: null,
+    },
   };
 
   add(): void {
-    this.modalOption.props = {
-      partialObject: {},
-      createObject: true,
-    };
+    this.modalOption.props.createObject = true;
+    this.modalOption.props.partialObject = this.partialObject;
     this.$buefy.modal.open(this.modalOption);
   }
 
   edit(): void {
-    this.modalOption.props = {
-      partialObject: this.syncedCheckedRows[0],
-      createObject: false,
-    };
+    this.modalOption.props.createObject = false;
+    this.modalOption.props.partialObject = this.syncedCheckedRows[0];
     this.$buefy.modal.open(this.modalOption);
   }
 

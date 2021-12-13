@@ -29,8 +29,8 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component
 export default class CreateEditModal<T> extends Vue {
-  @Prop({ default: false }) createObject!: boolean;
-  @Prop({ default: {} }) partialObject!: Partial<T>;
+  @Prop(Boolean) createObject!: boolean;
+  @Prop() partialObject!: Partial<T>;
   @Prop() addCalback!: (obj: T, message?: string) => Promise<void>;
   @Prop() editCalback!: (obj: T, id: string, message?: string) => Promise<void>;
   @Prop() id!: string;

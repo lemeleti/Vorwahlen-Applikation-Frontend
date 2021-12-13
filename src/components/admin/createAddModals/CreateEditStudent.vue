@@ -1,10 +1,10 @@
 <template>
   <CreateEditModal
-    :createMode="createObject"
     :addCalback="$studentApi.create"
     :editCalback="$studentApi.update"
-    :createEditObject="partialObject"
     :id="partialObject.email"
+    :createObject="createObject"
+    :partialObject="partialObject"
     @addToRow="(student) => $emit('addToRow', student)"
     @editInRow="(student) => $emit('editInRow', student)"
     @close="$emit('close')"
