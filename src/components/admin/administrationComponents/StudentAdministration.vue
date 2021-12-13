@@ -1,8 +1,8 @@
 <template>
   <Administration
-    @add="addStudent"
-    @edit="editStudent"
     @deleteSelected="deleteStudent"
+    :modal.sync="modalComponent"
+    id="email"
     :columns.sync="studentColumns"
     :rows.sync="studentRows"
     :checkedRows.sync="checkedStudentRows"
@@ -32,6 +32,7 @@
 </template>
 
 <script lang="ts">
+import _Vue from "vue";
 import { Component } from "vue-property-decorator";
 import Student from "@/models/student";
 import CreateEditStudent from "@/components/admin/createAddModals/CreateEditStudent.vue";
@@ -82,6 +83,10 @@ export default class StudentAdministration extends Administration<Student> {
     },
   ];
 
+  get modalComponent(): typeof _Vue {
+    return CreateEditStudent;
+  }
+
   async created(): Promise<void> {
     this.isStudentDataLoading = false;
     this.modalOption.component = CreateEditStudent;
@@ -90,29 +95,14 @@ export default class StudentAdministration extends Administration<Student> {
 
   async deleteStudent(student: Student): Promise<void> {
     await this.$studentApi.deleteById(student.email);
-  }
-
-  async addStudent(): Promise<void> {
-    this.modalOption.component = CreateEditStudent;
-    this.modalOption.props = {
-      student: { paDispensation: 0, wpmDispensation: 0 },
-      createStudent: true,
-    };
-    this.$buefy.modal.open(this.modalOption);
+    const studentIndex = this.studentRows.indexOf(student);
+    this.studentRows.splice(studentIndex, 1);
   }
 
   async importClassList(): Promise<void> {
     this.listTitle = "Klassenliste";
     this.importPath = `${this.$studentApi.basePath}`;
     await this.importList();
-  }
-
-  async editStudent(): Promise<void> {
-    this.modalOption.props = {
-      student: this.checkedStudentRows[0],
-      createStudent: false,
-    };
-    this.$buefy.modal.open(this.modalOption);
   }
 
   async importDispensations(): Promise<void> {
