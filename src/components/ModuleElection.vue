@@ -39,7 +39,7 @@
     <div
       class="box notification election-status is-radiusless"
       :class="getElectionStatusColor()"
-      v-if="userStore.isStudent"
+      v-if="userStore.isStudent && moduleStore.isClientConnected"
     >
       <p v-for="(reason, index) of getElectionStatus()" :key="index">
         {{ reason }}
