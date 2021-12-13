@@ -1,10 +1,10 @@
 <template>
   <CreateEditModal
-    :createMode="createStudent"
+    :createMode="createObject"
     :addCalback="$studentApi.create"
     :editCalback="$studentApi.update"
-    :createEditObject="student"
-    :id="student.email"
+    :createEditObject="partialObject"
+    :id="partialObject.email"
     @addToRow="(student) => $emit('addToRow', student)"
     @editInRow="(student) => $emit('editInRow', student)"
     @close="$emit('close')"
@@ -14,25 +14,25 @@
       <b-field label="E-Mail">
         <b-input
           type="email"
-          v-model="student.email"
-          v-if="createStudent"
+          v-model="partialObject.email"
+          v-if="createObject"
           required
         ></b-input>
         <b-input
           type="email"
-          :placeholder="student.email"
-          :disabled="createStudent"
+          :placeholder="partialObject.email"
+          :disabled="createObject"
           v-else
         ></b-input>
       </b-field>
 
       <b-field label="Vor- und Nachname">
-        <b-input v-model="student.name" required></b-input>
+        <b-input v-model="partialObject.name" required></b-input>
       </b-field>
 
       <b-field label="Credits PA-Dispensation">
         <b-numberinput
-          v-model="student.paDispensation"
+          v-model="partialObject.paDispensation"
           min="0"
           max="6"
           step="6"
@@ -42,7 +42,7 @@
 
       <b-field label="Credits WPM-Dispensation">
         <b-numberinput
-          v-model="student.wpmDispensation"
+          v-model="partialObject.wpmDispensation"
           min="0"
           max="8"
           step="4"
@@ -51,26 +51,26 @@
       </b-field>
 
       <b-field label="Klasse">
-        <b-input v-model="student.class" required></b-input>
+        <b-input v-model="partialObject.class" required></b-input>
       </b-field>
 
       <div class="level">
         <div class="level-left">
           <div class="level-item">
             <b-field label="Zweite Modulwahl">
-              <b-checkbox v-model="student.secondElection"></b-checkbox>
+              <b-checkbox v-model="partialObject.secondElection"></b-checkbox>
             </b-field>
           </div>
 
           <div class="level-item">
             <b-field label="Teilzeitstudent">
-              <b-checkbox v-model="student.tz"></b-checkbox>
+              <b-checkbox v-model="partialObject.tz"></b-checkbox>
             </b-field>
           </div>
 
           <div class="level-item">
             <b-field label="Internationales Profil">
-              <b-checkbox v-model="student.ip"></b-checkbox>
+              <b-checkbox v-model="partialObject.ip"></b-checkbox>
             </b-field>
           </div>
         </div>
@@ -81,7 +81,7 @@
 
 <script lang="ts">
 import Student from "@/models/student";
-import { Component, Prop } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import CreateEditModal from "./CreateEditModal.vue";
 
 @Component({
@@ -90,11 +90,8 @@ import CreateEditModal from "./CreateEditModal.vue";
   },
 })
 export default class CreateUser extends CreateEditModal<Student> {
-  @Prop() student!: Partial<Student>;
-  @Prop() createStudent!: boolean;
-
   get title(): string {
-    return this.createStudent ? "Benutzer erstellen" : "Benutzer aktualisieren";
+    return this.createObject ? "Benutzer erstellen" : "Benutzer aktualisieren";
   }
 }
 </script>

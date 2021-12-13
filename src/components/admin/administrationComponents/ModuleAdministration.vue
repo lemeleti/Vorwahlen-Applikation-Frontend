@@ -1,8 +1,8 @@
 <template>
   <Administration
-    @add="addModule"
-    @edit="editModule"
     @deleteSelected="deleteModule"
+    :modal="modalComponent"
+    id="moduleNo"
     :columns.sync="moduleColumns"
     :rows.sync="moduleRows"
     :checkedRows.sync="checkedModuleRows"
@@ -32,6 +32,7 @@
 </template>
 
 <script lang="ts">
+import _Vue from "vue";
 import { Component } from "vue-property-decorator";
 import CreateEditModule from "@/components/admin/createAddModals/CreateEditModule.vue";
 import Administration from "@/components/admin/administrationComponents/Administration.vue";
@@ -83,27 +84,18 @@ export default class ModuleAdministration extends Administration<Module> {
     },
   ];
 
+  get modalComponent(): typeof _Vue {
+    return CreateEditModule;
+  }
+
   async created(): Promise<void> {
     this.modalOption.component = CreateEditModule;
     this.moduleRows = await this.$moduleApi.getAll();
     this.isModuleDataLoading = false;
   }
 
-  async addModule(): Promise<void> {
-    this.modalOption.props = { module: {}, createModule: true };
-    this.$buefy.modal.open(this.modalOption);
-  }
-
   async deleteModule(module: Module): Promise<void> {
     await this.$moduleApi.deleteById(module.moduleNo);
-  }
-
-  async editModule(): Promise<void> {
-    this.modalOption.props = {
-      module: this.checkedModuleRows[0],
-      createModule: false,
-    };
-    this.$buefy.modal.open(this.modalOption);
   }
 
   async importModules(): Promise<void> {

@@ -98,15 +98,16 @@ export default class ModuleAdministration<T> extends Mixins(ModuleListUpload) {
 
   add(): void {
     this.modalOption.props = {
-      student: { paDispensation: 0, wpmDispensation: 0 },
-      createStudent: true,
+      partialObject: {},
+      createObject: true,
     };
+    this.$buefy.modal.open(this.modalOption);
   }
 
   edit(): void {
     this.modalOption.props = {
-      student: this.syncedCheckedRows[0],
-      createStudent: false,
+      partialObject: this.syncedCheckedRows[0],
+      createObject: false,
     };
     this.$buefy.modal.open(this.modalOption);
   }

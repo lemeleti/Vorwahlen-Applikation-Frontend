@@ -1,14 +1,18 @@
 <template>
   <CreateEditModal
-    :createMode="createModuleElection"
-    @add="addModuleElection"
-    @update="updateModuleElection"
+    :createMode="createObject"
+    :addCalback="$moduleElectionApi.create"
+    :editCalback="$moduleElectionApi.update"
+    :createEditObject="partialObject"
+    :id="partialObject.id"
+    @addToRow="(moduleElection) => $emit('addToRow', moduleElection)"
+    @editInRow="(moduleElection) => $emit('editInRow', moduleElection)"
     @close="$emit('close')"
   >
     <template #title>{{ title }}</template>
     <template #body>
       <b-field label="Studenten Mail-Adresse">
-        <b-input v-model="moduleElection.studentEmail" required></b-input>
+        <b-input v-model="partialObject.studentEmail" required></b-input>
       </b-field>
 
       <b-field label="Gewählte Module">
@@ -25,17 +29,14 @@
       </b-field>
 
       <b-field label="Ist die Modulvorwahl gültig?">
-        <b-checkbox
-          v-model="moduleElection.electionValid"
-          required
-        ></b-checkbox>
+        <b-checkbox v-model="partialObject.electionValid" required></b-checkbox>
       </b-field>
     </template>
   </CreateEditModal>
 </template>
 
 <script lang="ts">
-import { Component, Prop } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import CreateEditModal from "@/components/admin/createAddModals/CreateEditModal.vue";
 import ModuleElection from "@/models/moduleElection";
 import { getModule } from "vuex-module-decorators";
@@ -47,22 +48,20 @@ import Module from "@/models/module";
     CreateEditModal,
   },
 })
-export default class CreateEditModuleElection extends CreateEditModal {
-  @Prop() moduleElection!: Partial<ModuleElection>;
-  @Prop() createModuleElection!: boolean;
+export default class CreateEditModuleElection extends CreateEditModal<ModuleElection> {
   moduleStore: ModuleStore = getModule(ModuleStore);
   filteredModules: Array<Module> = [];
 
   get title(): string {
-    return this.createModuleElection
+    return this.createObject
       ? "Modulvorwahl erstellen"
       : "Modulvorwahl aktualisieren";
   }
 
   get electedModules(): Array<Module> {
     const electedModules: Array<Module> = [];
-    if (this.moduleElection.electedModules) {
-      this.moduleElection.electedModules.forEach((moduleNo: string) => {
+    if (this.partialObject.electedModules) {
+      this.partialObject.electedModules.forEach((moduleNo: string) => {
         const module = this.moduleStore.getModules.find(
           (m) => m.moduleNo === moduleNo
         );
@@ -75,8 +74,8 @@ export default class CreateEditModuleElection extends CreateEditModal {
   }
 
   set electedModules(modules: Array<Module>) {
-    if (this.moduleElection.electedModules) {
-      this.moduleElection.electedModules = modules.map(
+    if (this.partialObject.electedModules) {
+      this.partialObject.electedModules = modules.map(
         (module: Module) => module.moduleNo
       );
     }
@@ -90,33 +89,6 @@ export default class CreateEditModuleElection extends CreateEditModal {
         );
       }
     );
-  }
-
-  async addModuleElection(): Promise<void> {
-    this.moduleElection.electedModules = this.electedModules.map(
-      (module: Module) => module.moduleNo
-    );
-    try {
-      await this.$moduleElectionApi.create(
-        this.moduleElection as ModuleElection,
-        "Die Modulvorwahl wurde erfolgreich erstellt"
-      );
-    } catch (e) {
-      /* */
-    }
-  }
-
-  updateModuleElection(): void {
-    this.moduleElection.electedModules = this.electedModules.map(
-      (module: Module) => module.moduleNo
-    );
-    if (this.moduleElection.id) {
-      this.$moduleElectionApi.update(
-        this.moduleElection as ModuleElection,
-        this.moduleElection.id.toString(),
-        "Die Modulvorwahl wurde erfolgreich aktualisiert"
-      );
-    }
   }
 }
 </script>

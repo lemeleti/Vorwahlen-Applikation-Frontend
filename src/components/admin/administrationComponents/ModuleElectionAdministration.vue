@@ -1,8 +1,8 @@
 <template>
   <Administration
     @add="addModuleElection"
-    @edit="editModuleElections"
-    @deleteSelected="deleteModuleElection"
+    :modal="modalComponent"
+    id="id"
     :columns.sync="moduleElectionColumns"
     :rows.sync="moduleElectionRows"
     :checkedRows.sync="checkedModuleElectionRows"
@@ -50,6 +50,7 @@
 </template>
 
 <script lang="ts">
+import _Vue from "vue";
 import { Component } from "vue-property-decorator";
 import CreateEditModuleElection from "@/components/admin/createAddModals/CreateEditModuleElection.vue";
 import Administration from "@/components/admin/administrationComponents/Administration.vue";
@@ -89,6 +90,10 @@ export default class ModuleElectionAdministration extends Administration<ModuleE
       label: "Wahlgültigkeit",
     },
   ];
+
+  get modalComponent(): typeof _Vue {
+    return CreateEditModuleElection;
+  }
 
   async created(): Promise<void> {
     this.isModuleElectionDataLoading = false;

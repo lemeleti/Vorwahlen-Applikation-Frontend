@@ -1,8 +1,8 @@
 <template>
   <Administration
-    @add="addMailTemplate"
-    @edit="editMailTemplate"
     @deleteSelected="deleteMailTemplate"
+    :modal="modalComponent"
+    id="id"
     :columns.sync="mailTemplateColumns"
     :rows.sync="mailTemplateRows"
     :checkedRows.sync="checkedMailTemplateRows"
@@ -13,6 +13,7 @@
 </template>
 
 <script lang="ts">
+import _Vue from "vue";
 import { Component } from "vue-property-decorator";
 import MailTemplate from "@/models/mailTemplate";
 import CreateEditMailTemplate from "@/components/admin/createAddModals/CreateEditMailTemplate.vue";
@@ -42,6 +43,10 @@ export default class MailTemplateAdministration extends Administration<MailTempl
       label: "Betreff",
     },
   ];
+
+  get modalComponent(): typeof _Vue {
+    return CreateEditMailTemplate;
+  }
 
   async created(): Promise<void> {
     this.isMailTemplateDataLoading = false;

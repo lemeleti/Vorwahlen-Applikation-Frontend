@@ -1,8 +1,12 @@
 <template>
   <CreateEditModal
-    :createMode="createModule"
-    @add="addModule"
-    @update="updateModule"
+    :createMode="createObject"
+    :addCalback="$moduleApi.create"
+    :editCalback="$moduleApi.update"
+    :createEditObject="partialObject"
+    :id="partialObject.moduleNo"
+    @addToRow="(module) => $emit('addToRow', module)"
+    @editInRow="(module) => $emit('editInRow', module)"
     @close="$emit('close')"
   >
     <template #title>{{ title }}</template>
@@ -12,7 +16,7 @@
 
 <script lang="ts">
 import Module from "@/models/module";
-import { Component, Prop } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import CreateEditModal from "@/components/admin/createAddModals/CreateEditModal.vue";
 
 @Component({
@@ -20,29 +24,9 @@ import CreateEditModal from "@/components/admin/createAddModals/CreateEditModal.
     CreateEditModal,
   },
 })
-export default class CreateEditModule extends CreateEditModal {
-  @Prop() module!: Partial<Module>;
-  @Prop() createModule!: boolean;
-
+export default class CreateEditModule extends CreateEditModal<Module> {
   get title(): string {
-    return this.createModule ? "Modul erstellen" : "Modul aktualisieren";
-  }
-
-  addModule(): void {
-    this.$moduleApi.create(
-      this.module as Module,
-      "Das Modul wurde erfolgreich erstellt"
-    );
-  }
-
-  updateModule(): void {
-    if (this.module.moduleNo) {
-      this.$moduleApi.update(
-        this.module as Module,
-        this.module.moduleNo,
-        "Das Modul wurde erfolgreich aktualisiert"
-      );
-    }
+    return this.createObject ? "Modul erstellen" : "Modul aktualisieren";
   }
 }
 </script>

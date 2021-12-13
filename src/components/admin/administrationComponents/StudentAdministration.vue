@@ -1,7 +1,7 @@
 <template>
   <Administration
     @deleteSelected="deleteStudent"
-    :modal.sync="modalComponent"
+    :modal="modalComponent"
     id="email"
     :columns.sync="studentColumns"
     :rows.sync="studentRows"

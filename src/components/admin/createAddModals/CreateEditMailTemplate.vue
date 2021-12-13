@@ -1,24 +1,28 @@
 <template>
   <CreateEditModal
-    :createMode="createMailTemplate"
-    @add="addMailTemplate"
-    @update="updateMailTemplate"
+    :createMode="createObject"
+    :addCalback="$mailTemplateApi.create"
+    :editCalback="$mailTemplateApi.update"
+    :createEditObject="partialObject"
+    :id="partialObject.id"
+    @addToRow="(mailTemplate) => $emit('addToRow', mailTemplate)"
+    @editInRow="(mailTemplate) => $emit('editInRow', mailTemplate)"
     @close="$emit('close')"
   >
     <template #title>{{ title }}</template>
     <template #body>
       <b-field label="Beschreibung">
-        <b-input v-model="mailTemplate.description" required></b-input>
+        <b-input v-model="partialObject.description" required></b-input>
       </b-field>
 
       <b-field label="Betreff">
-        <b-input v-model="mailTemplate.subject" required></b-input>
+        <b-input v-model="partialObject.subject" required></b-input>
       </b-field>
 
       <b-field label="Nachricht">
         <b-input
           type="textarea"
-          v-model="mailTemplate.message"
+          v-model="partialObject.message"
           required
         ></b-input>
       </b-field>
@@ -28,7 +32,7 @@
 
 <script lang="ts">
 import MailTemplate from "@/models/mailTemplate";
-import { Component, Prop } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import CreateEditModal from "@/components/admin/createAddModals/CreateEditModal.vue";
 
 @Component({
@@ -36,31 +40,11 @@ import CreateEditModal from "@/components/admin/createAddModals/CreateEditModal.
     CreateEditModal,
   },
 })
-export default class CreateEditMailTemplate extends CreateEditModal {
-  @Prop() mailTemplate!: Partial<MailTemplate>;
-  @Prop() createMailTemplate!: boolean;
-
+export default class CreateEditMailTemplate extends CreateEditModal<MailTemplate> {
   get title(): string {
-    return this.createMailTemplate
+    return this.createObject
       ? "Mail-Template erstellen"
       : "Mail-Template aktualisieren";
-  }
-
-  async addMailTemplate(): Promise<void> {
-    this.$mailTemplateApi.create(
-      this.mailTemplate as MailTemplate,
-      "Das Mail-Template wurde erfolgreich erstellt"
-    );
-  }
-
-  async updateMailTemplate(): Promise<void> {
-    if (this.mailTemplate.id) {
-      this.$mailTemplateApi.update(
-        this.mailTemplate as MailTemplate,
-        this.mailTemplate.id.toString(),
-        "Das Mail-Template wurde erfolgreich aktualisiert"
-      );
-    }
   }
 }
 </script>
