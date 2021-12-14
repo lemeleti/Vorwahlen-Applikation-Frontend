@@ -14,10 +14,7 @@
       <b-button
         type="is-success"
         :label="createObject ? 'Erstellen' : 'Aktualisieren'"
-        @click.native="
-          createObject ? add() : edit();
-          $emit('close');
-        "
+        @click.native="createObject ? add() : edit()"
       />
       <b-button label="Abbrechen" @click="$emit('close')" />
     </footer>
@@ -25,22 +22,27 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Emit, Prop, Vue } from "vue-property-decorator";
 
 @Component
 export default class CreateEditModal<T> extends Vue {
   @Prop(Boolean) createObject!: boolean;
   @Prop() partialObject!: Partial<T>;
-  @Prop() addCalback!: (obj: T, message?: string) => Promise<void>;
+  @Prop() addCalback!: (obj: T, message?: string) => Promise<T>;
   @Prop() editCalback!: (obj: T, id: string, message?: string) => Promise<void>;
   @Prop() id!: string;
 
   add(): void {
     const obj: T = this.partialObject as T;
-    this.addCalback(obj, "Der Eintrag wurde erfolgreich erstellt");
-    this.$emit("addToRow", obj);
+    this.addCalback(obj, "Der Eintrag wurde erfolgreich erstellt")
+      .then((createdObj) => {
+        this.$emit("addToRow", createdObj);
+        this.$emit("close");
+      })
+      .catch(() => null);
   }
 
+  @Emit("close")
   edit(): void {
     const obj: T = this.partialObject as T;
     this.editCalback(
