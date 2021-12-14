@@ -99,8 +99,8 @@ export default class Homepage extends Vue {
   userStore: UserStore = getModule(UserStore);
   openCategories = [true, true, true, true];
 
-  mounted(): void {
-    if (!this.moduleStore.isClientConnected) {
+  updated(): void {
+    if (!this.moduleStore.isClientConnected && this.userStore.isAuthenticated) {
       this.moduleStore.createConnection();
     }
   }
