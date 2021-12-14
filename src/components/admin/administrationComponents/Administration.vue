@@ -11,6 +11,7 @@
         :debounce-search="1000"
         checkable
         :checked-rows.sync="syncedCheckedRows"
+        sort-icon="chevron-up"
         paginated
         :per-page="entriesPerPage"
       >
@@ -107,6 +108,7 @@ export default class ModuleAdministration<T> extends Mixins(ModuleListUpload) {
       this.syncedColumns = this.syncedColumns.map((obj) => ({
         ...obj,
         searchable: true,
+        sortable: true,
       }));
     }
   }
