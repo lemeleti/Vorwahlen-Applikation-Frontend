@@ -36,6 +36,7 @@ export default function ErrorHandler() {
             indefinite: true,
           });
         }
+        return Promise.reject(e);
       }
       return returnVal;
     };
