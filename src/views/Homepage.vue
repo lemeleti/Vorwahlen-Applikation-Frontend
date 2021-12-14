@@ -153,7 +153,11 @@ export default class Homepage extends Vue {
         texts = await api.getAnonymousPageText();
       }
     } catch (e) {
-      console.log(e);
+      const error = {
+        text: "<h1 class='title'>Es konnten keine Daten aus dem Backend empfangen werden</h1>",
+        textNumber: 0,
+      };
+      texts.push(error as PageText);
       // already treated by error handler
     }
     const header = texts.find((text) => text.textNumber === 0);
