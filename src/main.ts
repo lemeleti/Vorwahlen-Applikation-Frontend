@@ -51,6 +51,7 @@ import ModuleApi from "./mixins/ModuleApi";
 import ModuleElectionApi from "./mixins/ModuleElectionApi";
 import MailTemplateApi from "./mixins/MailTemplateApi";
 import StudentApi from "./mixins/StudentApi";
+import PageTextApi from "./mixins/PageTextApi";
 require("@/assets/main.scss");
 
 library.add(
@@ -105,6 +106,7 @@ Vue.mixin(ModuleApi);
 Vue.mixin(ModuleElectionApi);
 Vue.mixin(MailTemplateApi);
 Vue.mixin(StudentApi);
+Vue.mixin(PageTextApi);
 
 new Vue({
   router,
