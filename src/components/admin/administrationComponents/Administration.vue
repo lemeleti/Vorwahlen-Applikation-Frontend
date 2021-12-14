@@ -17,6 +17,10 @@
         <template #bottom-left>
           <b>Ausgewählt</b>: {{ syncedCheckedRows.length }}
         </template>
+
+        <template #empty>
+          <div class="has-text-centered">Keine Einträge vorhanden</div>
+        </template>
       </b-table>
     </div>
     <div class="level">
@@ -147,6 +151,14 @@ export default class ModuleAdministration<T> extends Mixins(ModuleListUpload) {
         icon: "check",
         hasIcon: true,
       });
+      this.removeSubsetFromTable(this.syncedCheckedRows);
+    }
+  }
+
+  removeSubsetFromTable(rows: T[]): void {
+    for (const row of rows) {
+      const indexOf = this.syncedRows.indexOf(row);
+      this.syncedRows.splice(indexOf, 1);
     }
   }
 }
