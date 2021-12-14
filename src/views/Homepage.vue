@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
 import SubjectInfoModal from "@/components/SubjectInfoModal.vue";
 import ModuleElection from "@/components/ModuleElection.vue";
@@ -99,14 +99,16 @@ export default class Homepage extends Vue {
   userStore: UserStore = getModule(UserStore);
   openCategories = [true, true, true, true];
 
-  updated(): void {
-    if (!this.moduleStore.isClientConnected && this.userStore.isAuthenticated) {
-      this.moduleStore.createConnection();
     }
   }
 
   get student(): Student | null {
     return this.userStore.student;
+  @Watch("userStore.isStudent")
+  onStudentLogin(): void {
+    if (this.userStore.isStudent && !this.moduleStore.isClientConnected) {
+      this.moduleStore.createConnection();
+    }
   }
 
   toggleCategory(index: number): void {
