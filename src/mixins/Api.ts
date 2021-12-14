@@ -33,9 +33,10 @@ export default class Api<T> extends Vue {
   }
 
   @ErrorHandler()
-  async create(obj: T, message?: string): Promise<void> {
-    await this.axios.post(this.basePath, obj);
+  async create(obj: T, message?: string): Promise<T> {
+    const data = (await this.axios.post<T>(this.basePath, obj)).data;
     if (message) this.sendNotification(message);
+    return data;
   }
 
   @ErrorHandler()
