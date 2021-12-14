@@ -1,9 +1,10 @@
 <template>
   <div id="content">
-    <div>
-      <span v-html="getHeaderSiteText()"></span>
+    <div class="block">
+      <span v-html="headerText"></span>
+      <hr />
     </div>
-    <div v-if="userStore.isAuthenticated && student">
+    <div v-if="userStore.isAuthenticated && student" class="block">
       <b-message
         title="Hinweis für alle Studierende mit dem Internationalen Profil"
         type="is-info"
@@ -63,6 +64,10 @@
         :isModalActive.sync="isModalActive"
       />
     </div>
+    <div class="block">
+      <hr />
+      <span v-html="footerText"></span>
+    </div>
   </div>
 </template>
 
@@ -79,6 +84,7 @@ import Module from "@/components/Module.vue";
 import IModule from "@/models/module";
 import ModuleCategory from "@/models/moduleCategory";
 import Student from "@/models/student";
+import PageText from "@/models/pageText";
 
 interface ElectionCategoryMap {
   [index: string]: string;
@@ -98,12 +104,24 @@ export default class Homepage extends Vue {
   moduleStore: ModuleStore = getModule(ModuleStore);
   userStore: UserStore = getModule(UserStore);
   openCategories = [true, true, true, true];
+  headerText = "";
+  footerText = "";
 
-    }
+  beforeMount(): void {
+    this.setSiteTexts();
   }
 
   get student(): Student | null {
     return this.userStore.student;
+  }
+
+  @Watch("userStore.isStoreInitialized")
+  async onUserStoreInitialization(): Promise<void> {
+    if (this.userStore.isStoreInitialized) {
+      await this.setSiteTexts();
+    }
+  }
+
   @Watch("userStore.isStudent")
   onStudentLogin(): void {
     if (this.userStore.isStudent && !this.moduleStore.isClientConnected) {
@@ -115,19 +133,33 @@ export default class Homepage extends Vue {
     this.$set(this.openCategories, index, !this.openCategories[index]);
   }
 
-  getHeaderSiteText(): string {
-    let text = "";
-    const student = this.userStore.student;
-    if (student) {
-      if (student.tz && student.secondElection) {
-        text = "";
-      } else if (student.tz) {
-        text = "";
-      } else {
-        text = "";
+  async setSiteTexts(): Promise<void> {
+    let texts: Array<PageText> = [];
+    const api = this.$pageTextApi;
+    try {
+      if (this.userStore.isAuthenticated && this.userStore.student) {
+        const student = this.userStore.student;
+        if (student.tz && student.secondElection) {
+          texts = await api.getPartTimeSecondElectionText();
+        } else if (student.tz) {
+          texts = await api.getPartTimeFirstElection();
+        } else {
+          texts = await api.getFullTimePageText();
+        }
+      } else if (
+        (this.userStore.isAuthenticated && !this.userStore.isStudent) ||
+        !this.userStore.isAuthenticated
+      ) {
+        texts = await api.getAnonymousPageText();
       }
+    } catch (e) {
+      console.log(e);
+      // already treated by error handler
     }
-    return text;
+    const header = texts.find((text) => text.textNumber === 0);
+    const footer = texts.find((text) => text.textNumber === 1);
+    if (header) this.headerText = header.text;
+    if (footer) this.footerText = footer.text;
   }
 
   getElectionCategoryMap(): ElectionCategoryMap {
