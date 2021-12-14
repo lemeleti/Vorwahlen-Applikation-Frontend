@@ -62,6 +62,8 @@ import TileBox from "@/components/TileBox.vue";
 import ElectionStructureElement from "@/models/electionStructureElement";
 import ElectionStatus from "@/models/electionStatus";
 import ElectionStatusElement from "@/models/electionStatusElement";
+import _ from "lodash";
+import ModuleCategory from "@/models/moduleCategory";
 
 interface ModuleTile {
   moduleName: string;
@@ -85,8 +87,20 @@ export default class ModuleElection extends Vue {
     semester += this.getSemesterOffset();
 
     if (this.moduleStore.getElectedModules) {
+      const sortOrder = [
+        ModuleCategory.CONTEXT_MODULE,
+        ModuleCategory.PROJECT_MODULE,
+        ModuleCategory.BACHELOR_MODULE,
+        ModuleCategory.CONTEXT_MODULE,
+        ModuleCategory.SUBJECT_MODULE,
+        ModuleCategory.INTERDISCIPLINARY_MODULE,
+      ];
       this.moduleStore.getElectedModules
         .filter((element) => element.semester === semester)
+        .sort(
+          (el1, el2) =>
+            sortOrder.indexOf(el1.category) - sortOrder.indexOf(el2.category)
+        )
         .map((element) => this.electionStructureElementToTile(element))
         .forEach((tile) => tiles.push(tile));
     }
