@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Emit, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component
 export default class CreateEditModal<T> extends Vue {
@@ -42,15 +42,14 @@ export default class CreateEditModal<T> extends Vue {
       .catch(() => null);
   }
 
-  @Emit("close")
   edit(): void {
     const obj: T = this.partialObject as T;
-    this.editCalback(
-      obj,
-      this.id,
-      "Der Eintrag wurde erfolgreich aktualisiert"
-    );
-    this.$emit("editInRow", obj);
+    this.editCalback(obj, this.id, "Der Eintrag wurde erfolgreich aktualisiert")
+      .then(() => {
+        this.$emit("editInRow", obj);
+        this.$emit("close");
+      })
+      .catch(() => null);
   }
 }
 </script>

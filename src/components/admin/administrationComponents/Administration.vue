@@ -91,6 +91,7 @@ import { Component, Mixins, Prop, PropSync } from "vue-property-decorator";
 import ModuleListUpload from "@/mixins/ExcelSheetUpload";
 import { BModalConfig } from "buefy/types/components";
 import Api from "@/mixins/Api";
+import _ from "lodash";
 
 @Component
 export default class ModuleAdministration<T> extends Mixins(ModuleListUpload) {
@@ -136,7 +137,7 @@ export default class ModuleAdministration<T> extends Mixins(ModuleListUpload) {
 
   edit(): void {
     this.modalOption.props.createObject = false;
-    this.modalOption.props.partialObject = this.syncedCheckedRows[0];
+    this.modalOption.props.partialObject = _.clone(this.syncedCheckedRows[0]);
     this.$buefy.modal.open(this.modalOption);
   }
 
@@ -147,11 +148,12 @@ export default class ModuleAdministration<T> extends Mixins(ModuleListUpload) {
   updateObjectInRows(obj: T): void {
     const key = this.id as keyof typeof obj;
     const oldObj = this.syncedRows.find(
-      (rowObj: T) => rowObj[key] === obj[key]);
+      (rowObj: T) => rowObj[key] === obj[key]
+    );
 
     if (oldObj) {
       const oldObjIndex = this.syncedRows.indexOf(oldObj);
-      this.syncedRows[oldObjIndex] = obj;
+      this.$set(this.syncedRows, oldObjIndex, obj);
     }
   }
 
