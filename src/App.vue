@@ -53,6 +53,10 @@ export default class App extends Vue {
     }
   }
 
+  destroyed(): void {
+    this.moduleStore.closeStompConnection();
+  }
+
   setUpStudent(): void {
     Vue.swal({
       title: "Benutzereinrichtung",

@@ -102,9 +102,7 @@ export default class ModuleStore extends VuexModule {
       active: showError,
     });
 
-    if (this.client) {
-      this.client.disconnect(() => null);
-    }
+    this.context.commit("closeStompConnection");
   }
 
   @Action
@@ -120,6 +118,13 @@ export default class ModuleStore extends VuexModule {
         icon: "check",
       });
       message.ack();
+    }
+  }
+
+  @Mutation
+  closeStompConnection(): void {
+    if (this.client) {
+      this.client.disconnect(() => null);
     }
   }
 
