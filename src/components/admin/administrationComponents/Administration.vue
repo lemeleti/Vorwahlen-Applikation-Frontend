@@ -94,7 +94,7 @@ import Api from "@/mixins/Api";
 import _ from "lodash";
 
 @Component
-export default class ModuleAdministration<T> extends Mixins(ModuleListUpload) {
+export default class Administration<T> extends Mixins(ModuleListUpload) {
   @PropSync("rows") syncedRows!: Array<T>;
   @PropSync("columns") syncedColumns!: Array<T>;
   @PropSync("checkedRows") syncedCheckedRows!: Array<T>;
