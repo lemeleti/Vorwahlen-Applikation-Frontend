@@ -44,6 +44,7 @@ import {
   faFileAlt,
   faChevronRight,
   faExclamationTriangle,
+  faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import ModuleApi from "./mixins/ModuleApi";
@@ -85,7 +86,8 @@ library.add(
   faInbox,
   faFileAlt,
   faChevronRight,
-  faExclamationTriangle
+  faExclamationTriangle,
+  faChevronUp
 );
 
 Vue.component("vue-fontawesome", FontAwesomeIcon);
