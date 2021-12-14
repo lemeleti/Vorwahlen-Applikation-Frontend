@@ -3,7 +3,7 @@
     <h1 class="title">Administration</h1>
     <b-tabs type="is-boxed" v-model="activeTab">
       <b-tab-item label="Seitentexte" icon="file-alt">
-        <SiteText v-if="activeTab == 0" />
+        <PageText v-if="activeTab == 0" />
       </b-tab-item>
       <b-tab-item label="Studentenverwaltung" icon="user">
         <StudentAdministration v-if="activeTab == 1" />
