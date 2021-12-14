@@ -27,6 +27,7 @@ import StudentAdministration from "@/components/admin/administrationComponents/S
 import ModuleAdministration from "@/components/admin/administrationComponents/ModuleAdministration.vue";
 import MailTemplateAdministration from "@/components/admin/administrationComponents/MailTemplateAdministration.vue";
 import ModuleElectionAdministration from "@/components/admin/administrationComponents/ModuleElectionAdministration.vue";
+import PageText from "@/components/admin/PageText.vue";
 
 @Component({
   components: {
@@ -34,6 +35,7 @@ import ModuleElectionAdministration from "@/components/admin/administrationCompo
     ModuleAdministration,
     MailTemplateAdministration,
     ModuleElectionAdministration,
+    PageText,
   },
 })
 export default class Admin extends Vue {
