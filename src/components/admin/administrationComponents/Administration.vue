@@ -12,10 +12,22 @@
         checkable
         :checked-rows.sync="syncedCheckedRows"
         paginated
-        per-page="15"
+        :per-page="entriesPerPage"
       >
         <template #bottom-left>
-          <b>Ausgewählt</b>: {{ syncedCheckedRows.length }}
+          <div class="level">
+            <div class="level-item">
+              <b-button
+                label="Alle abwählen"
+                @click="syncedCheckedRows = []"
+                type="is-info"
+              />
+            </div>
+
+            <div class="level-item">
+              <b>Ausgewählt</b>: {{ syncedCheckedRows.length }}
+            </div>
+          </div>
         </template>
 
         <template #empty>
@@ -58,6 +70,15 @@
       </div>
 
       <div class="level-right">
+        <div class="level-item">
+          <b-select v-model="entriesPerPage">
+            <option value="5">5 pro Seite</option>
+            <option value="15">15 pro Seite</option>
+            <option value="30">30 pro Seite</option>
+            <option value="50">50 pro Seite</option>
+            <option value="100">100 pro Seite</option>
+          </b-select>
+        </div>
         <slot name="buttons-right"></slot>
       </div>
     </div>
@@ -79,6 +100,7 @@ export default class ModuleAdministration<T> extends Mixins(ModuleListUpload) {
   @Prop() modal!: typeof Api;
   @Prop() id!: string;
   @Prop() partialObject!: Partial<T>;
+  entriesPerPage = 15;
 
   created(): void {
     if (this.syncedColumns) {
