@@ -50,7 +50,7 @@ export default class UserStore extends VuexModule {
     const sessionApi = new SessionApi().$sessionApi;
     const isAuthenticated = await sessionApi.isAuthenticated();
     const isStoreInitialized = true;
-    const user: User | null = await sessionApi.get();
+    const user: User | null = isAuthenticated ? await sessionApi.get() : null;
     let student: Student | null = null;
     
     if (user && user.exists) {
