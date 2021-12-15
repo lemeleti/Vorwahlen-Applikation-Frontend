@@ -13,8 +13,13 @@ export default class StudentApi extends Api<Student> {
   }
 
   @ErrorHandler()
-  async updateStudentSetup(setup: StudentSetup): Promise<void> {
-    await this.axios.patch(this.basePath, setup);
+  async updateStudentSetup(
+    id: string,
+    setup: StudentSetup,
+    message?: string
+  ): Promise<void> {
+    await this.axios.patch(`${this.basePath}/${id}`, setup);
+    if (message) this.sendNotification(message);
   }
 
   @ErrorHandler()

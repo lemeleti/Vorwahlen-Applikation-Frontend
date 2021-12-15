@@ -25,7 +25,8 @@ import Footer from "@/components/site/Footer.vue";
 import UserStore from "@/store/modules/UserStore";
 import "vue-class-component/hooks";
 import ModuleStore from "./store/modules/ModuleStore";
-import StudentSetup from "./models/studentSetup";
+import SettingsModal from "@/components/SettingsModal.vue";
+import Student from "./models/student";
 
 @Component({
   components: {
@@ -43,7 +44,7 @@ export default class App extends Vue {
     this.moduleStore.updateModules();
     const student = this.userStore.student;
     if (this.userStore.isAuthenticated && student && student.firstTimeSetup) {
-      this.setUpStudent();
+      this.setUpStudent(student);
     }
   }
 
@@ -51,40 +52,13 @@ export default class App extends Vue {
     this.moduleStore.closeStompConnection();
   }
 
-  setUpStudent(): void {
-    Vue.swal({
-      title: "Benutzereinrichtung",
-      showCancelButton: false,
-      allowEscapeKey: false,
-      allowOutsideClick: false,
-      confirmButtonText: "Einrichtung abschliessen",
-      allowEnterKey: false,
-      icon: "question",
-      input: "select",
-      inputOptions: {
-        isIp: "Ich belege das internationale Profil",
-        isNotIp: "Ich belege das internationale Profil nicht",
-      },
-      inputLabel:
-        "Bitte wählen Sie aus, ob Sie das internationale Profil haben",
-      inputValidator: (value: string) => this.handleSetUpSelection(value),
-    });
-  }
-
-  async handleSetUpSelection(value: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const student = this.userStore.student;
-      if (student) {
-        const studentSetup: StudentSetup = { firstTimeSetup: false, ip: false };
-        if (value === "isIp") {
-          studentSetup.ip = true;
-          this.userStore.setIp(studentSetup.ip);
-        }
-        this.$studentApi.updateStudentSetup(studentSetup);
-        resolve("");
-      } else {
-        reject();
-      }
+  setUpStudent(student: Student): void {
+    this.$buefy.modal.open({
+      component: SettingsModal,
+      parent: this,
+      hasModalCard: true,
+      canCancel: false,
+      props: { student },
     });
   }
 }
