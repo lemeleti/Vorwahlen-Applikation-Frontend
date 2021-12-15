@@ -50,6 +50,14 @@
         ></b-numberinput>
       </b-field>
 
+      <b-field label="Modulwahl ID (Optional)">
+        <b-numberinput
+          v-model="partialObject.moduleElectionId"
+          min="0"
+          type="is-info"
+        ></b-numberinput>
+      </b-field>
+
       <b-field label="Klasse">
         <b-input v-model="partialObject.class" required></b-input>
       </b-field>
@@ -73,7 +81,19 @@
               <b-checkbox v-model="partialObject.ip"></b-checkbox>
             </b-field>
           </div>
-        </div>
+
+          <div class="level-item">
+            <b-field label="Darf wählen">
+              <b-checkbox v-model="partialObject.canElect"></b-checkbox>
+            </b-field>
+          </div>
+
+          <div class="level-item">
+            <b-field label="First Time Setup">
+              <b-checkbox v-model="partialObject.firstTimeSetup"></b-checkbox>
+            </b-field>
+          </div>
+      </div>
       </div>
     </template>
   </CreateEditModal>

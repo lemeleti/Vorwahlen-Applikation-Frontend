@@ -85,7 +85,12 @@ export default class StudentAdministration extends Administration<Student> {
       label: "Zweite Modulvorwahl",
     },
   ];
-  initValues: Partial<Student> = { wpmDispensation: 0, paDispensation: 0 };
+  initValues: Partial<Student> = {
+    wpmDispensation: 0,
+    paDispensation: 0,
+    canElect: true,
+    firstTimeSetup: true,
+  };
 
   get modalComponent(): typeof _Vue {
     return CreateEditStudent;
