@@ -12,10 +12,6 @@
           </div>
         </main>
       </div>
-
-      <div class="right-sidemenu" v-if="this.$route.name === 'Home'">
-        <RightMenu />
-      </div>
     </div>
     <Footer />
   </div>
@@ -26,7 +22,6 @@ import { Vue, Component } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
 import Header from "@/components/site/Header.vue";
 import Footer from "@/components/site/Footer.vue";
-import RightMenu from "@/components/RightMenu.vue";
 import UserStore from "@/store/modules/UserStore";
 import "vue-class-component/hooks";
 import ModuleStore from "./store/modules/ModuleStore";
@@ -36,7 +31,6 @@ import StudentSetup from "./models/studentSetup";
   components: {
     Header,
     Footer,
-    RightMenu,
   },
 })
 export default class App extends Vue {
