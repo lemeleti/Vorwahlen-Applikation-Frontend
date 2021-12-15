@@ -9,7 +9,7 @@
       >
         <div class="columns">
           <div class="column is-one-third">
-            {{ description[0] }}
+            <span>{{ description[0] }}</span>
             <b-tooltip :label="description[1]" type="is-info" multilined>
               <b-icon icon="question-circle" type="is-info" />
             </b-tooltip>
@@ -27,12 +27,32 @@
           </div>
         </div>
         <hr />
+        <div class="columns" v-if="userStore.student">
+          <div class="column is-one-third">
+            <span>IP</span>
+            <b-tooltip
+              label="Belegen Sie das internationale Profil"
+              type="is-info"
+              multilined
+            >
+              <b-icon icon="question-circle" type="is-info" />
+            </b-tooltip>
+          </div>
+
+          <div class="column is-two-thirds">
+            <b-field>
+              <b-checkbox v-model="ip" type="is-info"></b-checkbox>
+            </b-field>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import Student from "@/models/student";
+import StudentSetup from "@/models/studentSetup";
 import ValidationSetting from "@/models/validationSetting";
 import UserStore from "@/store/modules/UserStore";
 import { Vue, Component } from "vue-property-decorator";
@@ -46,6 +66,7 @@ interface SettingsDescription {
 export default class Settings extends Vue {
   userStore: UserStore = getModule(UserStore);
   validationSetting: ValidationSetting | null = null;
+  message = "Die Einstellungen wurden übernommen";
 
   async created(): Promise<void> {
     if (this.userStore.student) {
@@ -56,6 +77,22 @@ export default class Settings extends Vue {
       } catch (e) {
         // hadled by error handler
       }
+    }
+  }
+
+  get ip(): boolean {
+    const student = this.userStore.student;
+    if (student) {
+      return student.ip;
+    }
+    return false;
+  }
+
+  set ip(isIp: boolean) {
+    const student = this.userStore.student;
+    if (student) {
+      const studentData: StudentSetup = { ip: isIp };
+      this.updateStudentData(student, studentData);
     }
   }
 
@@ -96,11 +133,27 @@ export default class Settings extends Vue {
         await this.$studentApi.updateValidationSetting(
           student.email,
           this.validationSetting,
-          "Die Einstellungen wurden erfolgreich aktualisiert."
+          this.message
         );
       } catch (e) {
         // hadled by error handler
       }
+    }
+  }
+
+  async updateStudentData(
+    student: Student,
+    studentData: StudentSetup
+  ): Promise<void> {
+    try {
+      await this.$studentApi.updateStudentSetup(
+        student.email,
+        studentData,
+        this.message
+      );
+      this.userStore.setIp(studentData.ip);
+    } catch (e) {
+      // handled by error handler
     }
   }
 }
