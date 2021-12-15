@@ -19,7 +19,9 @@ export default class StudentApi extends Api<Student> {
 
   @ErrorHandler()
   async getValidationSetting(id: string): Promise<ValidationSetting> {
-    return (await this.axios.get<ValidationSetting>(`${this.basePath}/${id}/settings`)).data;
+    return (
+      await this.axios.get<ValidationSetting>(`${this.basePath}/${id}/settings`)
+    ).data;
   }
 
   @ErrorHandler()
