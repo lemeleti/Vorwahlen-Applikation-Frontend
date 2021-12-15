@@ -128,7 +128,11 @@ export default class Homepage extends Vue {
 
   @Watch("userStore.isStudent")
   onStudentLogin(): void {
-    if (this.userStore.isStudent && !this.moduleStore.isClientConnected) {
+    if (
+      this.userStore.student &&
+      this.userStore.student.canElect &&
+      !this.moduleStore.isClientConnected
+    ) {
       this.moduleStore.createConnection();
     }
   }
