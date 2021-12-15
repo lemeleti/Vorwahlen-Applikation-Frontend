@@ -1,6 +1,7 @@
 import ErrorHandler from "@/decorators/ErrorHandler";
 import Student from "@/models/student";
 import StudentSetup from "@/models/studentSetup";
+import ValidationSetting from "@/models/validationSetting";
 import { Component } from "vue-property-decorator";
 import Api from "./Api";
 
@@ -14,5 +15,20 @@ export default class StudentApi extends Api<Student> {
   @ErrorHandler()
   async updateStudentSetup(setup: StudentSetup): Promise<void> {
     await this.axios.patch(this.basePath, setup);
+  }
+
+  @ErrorHandler()
+  async getValidationSetting(id: string): Promise<ValidationSetting> {
+    return (await this.axios.get<ValidationSetting>(`${this.basePath}/${id}/settings`)).data;
+  }
+
+  @ErrorHandler()
+  async updateValidationSetting(
+    id: string,
+    setting: ValidationSetting,
+    message?: string
+  ): Promise<void> {
+    await this.axios.put(`${this.basePath}/${id}/settings`, setting);
+    if (message) this.sendNotification(message);
   }
 }
