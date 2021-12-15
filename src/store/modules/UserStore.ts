@@ -30,6 +30,10 @@ export default class UserStore extends VuexModule {
     return _.get(this.user, "exists", false);
   }
 
+  get isPartTimeSecondElection(): boolean {
+    return _.get(this.student, "tz", false) && _.get(this.student, "secondElection", false);
+  }
+
   @Mutation
   setIp(ip: boolean): void {
     if (this.student) {
