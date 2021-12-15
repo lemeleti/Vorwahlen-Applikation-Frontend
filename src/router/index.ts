@@ -38,6 +38,7 @@ const routes: Array<RouteConfig> = [
     path: "/statistics",
     name: "Statistiken",
     component: () => import("../views/Statistics.vue"),
+    meta: { requiresAuthentication: true, requiresAdmin: true }, // hide until ready
   },
   {
     path: "/Shibboleth.sso/Login?target=https%3A%2F%2Fvorwahlen.cloudlab.zhaw.ch",

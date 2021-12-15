@@ -100,8 +100,8 @@ export default class Header extends Vue {
       name: "Statistiken",
       icon: "chart-pie",
       text: "Statistiken",
-      authNeeded: false,
-      adminNeeded: false,
+      authNeeded: true, // until implemented
+      adminNeeded: true,
     },
     {
       name: "Settings",
