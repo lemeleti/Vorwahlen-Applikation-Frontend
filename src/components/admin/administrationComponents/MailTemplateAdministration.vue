@@ -19,6 +19,7 @@ import { Component } from "vue-property-decorator";
 import MailTemplate from "@/models/mailTemplate";
 import CreateEditMailTemplate from "@/components/admin/createAddModals/CreateEditMailTemplate.vue";
 import Administration from "@/components/admin/administrationComponents/Administration.vue";
+import MailTemplateApi from "@/mixins/MailTemplateApi";
 
 @Component({
   components: {
@@ -28,6 +29,7 @@ import Administration from "@/components/admin/administrationComponents/Administ
 })
 export default class MailTemplateAdministration extends Administration<MailTemplate> {
   isMailTemplateDataLoading = true;
+  mailTemplateApi = new MailTemplateApi();
   mailTemplateRows: Array<MailTemplate> = [];
   checkedMailTemplateRows: Array<MailTemplate> = [];
   mailTemplateColumns = [
@@ -52,11 +54,11 @@ export default class MailTemplateAdministration extends Administration<MailTempl
 
   async created(): Promise<void> {
     this.isMailTemplateDataLoading = false;
-    this.mailTemplateRows = await this.$mailTemplateApi.getAll();
+    this.mailTemplateRows = await this.mailTemplateApi.getAll();
   }
 
   async deleteMailTemplate(mailTemplate: MailTemplate): Promise<void> {
-    await this.$mailTemplateApi.deleteById(mailTemplate.id.toString());
+    await this.mailTemplateApi.deleteById(mailTemplate.id.toString());
   }
 }
 </script>

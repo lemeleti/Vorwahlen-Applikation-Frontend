@@ -2,8 +2,8 @@
   <CreateEditModal
     :createObject="createObject"
     :partialObject="partialObject"
-    :addCalback="$moduleElectionApi.create"
-    :editCalback="$moduleElectionApi.update"
+    :addCalback="moduleElectionApi.create"
+    :editCalback="moduleElectionApi.update"
     :id="partialObject.id"
     @addToRow="(moduleElection) => $emit('addToRow', moduleElection)"
     @editInRow="(moduleElection) => $emit('editInRow', moduleElection)"
@@ -42,6 +42,7 @@ import ModuleElection from "@/models/moduleElection";
 import { getModule } from "vuex-module-decorators";
 import ModuleStore from "@/store/modules/ModuleStore";
 import Module from "@/models/module";
+import ModuleElectionApi from "@/mixins/ModuleElectionApi";
 
 @Component({
   components: {
@@ -49,6 +50,7 @@ import Module from "@/models/module";
   },
 })
 export default class CreateEditModuleElection extends CreateEditModal<ModuleElection> {
+  moduleElectionApi = new ModuleElectionApi();
   moduleStore: ModuleStore = getModule(ModuleStore);
   filteredModules: Array<Module> = [];
 

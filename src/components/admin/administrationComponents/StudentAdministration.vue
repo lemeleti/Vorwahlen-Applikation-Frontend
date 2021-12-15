@@ -38,6 +38,7 @@ import { Component } from "vue-property-decorator";
 import Student from "@/models/student";
 import CreateEditStudent from "@/components/admin/createAddModals/CreateEditStudent.vue";
 import Administration from "@/components/admin/administrationComponents/Administration.vue";
+import StudentApi from "@/mixins/StudentApi";
 
 @Component({
   components: {
@@ -47,6 +48,7 @@ import Administration from "@/components/admin/administrationComponents/Administ
 })
 export default class StudentAdministration extends Administration<Student> {
   isStudentDataLoading = true;
+  studentApi = new StudentApi();
   studentRows: Array<Student> = [];
   checkedStudentRows: Array<Student> = [];
   studentColumns = [
@@ -91,24 +93,24 @@ export default class StudentAdministration extends Administration<Student> {
 
   async created(): Promise<void> {
     this.isStudentDataLoading = false;
-    this.studentRows = await this.$studentApi.getAll();
+    this.studentRows = await this.studentApi.getAll();
   }
 
   async deleteStudent(student: Student): Promise<void> {
-    await this.$studentApi.deleteById(student.email);
+    await this.studentApi.deleteById(student.email);
     const studentIndex = this.studentRows.indexOf(student);
     this.studentRows.splice(studentIndex, 1);
   }
 
   async importClassList(): Promise<void> {
     this.listTitle = "Klassenliste";
-    this.importPath = `${this.$studentApi.basePath}`;
+    this.importPath = `${this.studentApi.basePath}`;
     await this.importList();
   }
 
   async importDispensations(): Promise<void> {
     this.listTitle = "Dispensationsliste";
-    this.importPath = `${this.$studentApi.basePath}/dispensations`;
+    this.importPath = `${this.studentApi.basePath}/dispensations`;
     await this.importList();
   }
 }

@@ -4,8 +4,5 @@ import Api from "./Api";
 
 @Component
 export default class MailTemplateApi extends Api<MailTemplate> {
-  get $mailTemplateApi(): MailTemplateApi {
-    this.basePath = "/mailtemplates";
-    return this;
-  }
+  path = "/mailtemplates";
 }

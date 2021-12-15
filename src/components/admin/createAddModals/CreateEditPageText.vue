@@ -2,8 +2,8 @@
   <CreateEditModal
     :createObject="createObject"
     :partialObject="partialObject"
-    :addCalback="$pageTextApi.create"
-    :editCalback="$pageTextApi.update"
+    :addCalback="pageTextApi.create"
+    :editCalback="pageTextApi.update"
     :id="partialObject.id"
     @addToRow="(pageText) => $emit('addToRow', pageText)"
     @editInRow="(pageText) => $emit('editInRow', pageText)"
@@ -50,6 +50,7 @@
 import { Component } from "vue-property-decorator";
 import CreateEditModal from "@/components/admin/createAddModals/CreateEditModal.vue";
 import PageText from "@/models/pageText";
+import PageTextApi from "@/mixins/PageTextApi";
 
 @Component({
   components: {
@@ -57,6 +58,7 @@ import PageText from "@/models/pageText";
   },
 })
 export default class CreateEditPageText extends CreateEditModal<PageText> {
+  pageTextApi = new PageTextApi();
   get title(): string {
     return this.createObject
       ? "Seitentext erstellen"

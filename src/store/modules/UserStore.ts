@@ -46,8 +46,8 @@ export default class UserStore extends VuexModule {
 
   @MutationAction
   async initUserStore(): Promise<StoreState> {
-    const studentApi = new StudentApi().$studentApi;
-    const sessionApi = new SessionApi().$sessionApi;
+    const studentApi = new StudentApi();
+    const sessionApi = new SessionApi();
     const isAuthenticated = await sessionApi.isAuthenticated();
     const isStoreInitialized = true;
     const user: User | null = isAuthenticated ? await sessionApi.get() : null;

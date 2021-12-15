@@ -60,6 +60,7 @@ import PageText from "@/models/pageText";
 import CreateEditPageText from "@/components/admin/createAddModals/CreateEditPageText.vue";
 import { BModalConfig } from "buefy/types/components";
 import _ from "lodash";
+import PageTextApi from "@/mixins/PageTextApi";
 
 @Component({
   components: {
@@ -68,6 +69,7 @@ import _ from "lodash";
 })
 export default class SiteText extends Vue {
   selectedSite: string | null = null;
+  pageTextApi = new PageTextApi();
   sites: Array<PageText> = [];
   selection = -1;
   labels = {
@@ -93,7 +95,7 @@ export default class SiteText extends Vue {
   };
 
   async created(): Promise<void> {
-    this.sites = await this.$pageTextApi.getAll();
+    this.sites = await this.pageTextApi.getAll();
   }
 
   get headerTexts(): Array<PageText> {
@@ -126,7 +128,7 @@ export default class SiteText extends Vue {
     const text = this.textBySelection;
     if (text) {
       try {
-        await this.$pageTextApi.update(
+        await this.pageTextApi.update(
           text,
           text.id.toString(),
           "Der Text wurde erfolgreich aktualisiert"
@@ -158,7 +160,7 @@ export default class SiteText extends Vue {
     const pageToDelete = this.textBySelection;
     try {
       if (pageToDelete) {
-        await this.$pageTextApi.deleteById(
+        await this.pageTextApi.deleteById(
           this.selection.toString(),
           "Der Text wurde erfolgreich gelöscht."
         );

@@ -146,7 +146,7 @@ export default class ModuleStore extends VuexModule {
   async initModuleSelection(): Promise<void> {
     const userStore = getModule(UserStore);
     if (userStore.isStudent && userStore.student) {
-      const api = new ModuleElectionApi().$moduleElectionApi;
+      const api = new ModuleElectionApi();
       const electionData: ElectionTansfer = await api.getElectionStructure(
         userStore.student.email
       );

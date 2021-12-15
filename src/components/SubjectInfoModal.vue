@@ -13,7 +13,7 @@
           <div class="level-left"></div>
           <div class="level-right">
             <div class="level-item">
-              <a :href="$moduleApi.eventoUrl(module.moduleId)" target="_blank">
+              <a :href="moduleApi.eventoUrl(module.moduleId)" target="_blank">
                 Direkt im Eventoweb ansehen
               </a>
             </div>
@@ -39,12 +39,14 @@
 import { Vue, Component, Prop, PropSync } from "vue-property-decorator";
 import Module from "@/models/module";
 import EventoData from "@/models/eventoData";
+import ModuleApi from "@/mixins/ModuleApi";
 
 @Component
 export default class SubjectInfoModal extends Vue {
   @Prop() module!: Module;
   @PropSync("isModalActive") syncedIsModalActive!: boolean;
   eventoData: EventoData | null = null;
+  moduleApi = new ModuleApi();
   fieldTitles = {
     shortDescription: "Kurzbeschreibung",
     coordinator: "Modulverantwortlicher",
@@ -61,7 +63,7 @@ export default class SubjectInfoModal extends Vue {
   async updated(): Promise<void> {
     try {
       if (this.module) {
-        this.eventoData = await this.$moduleApi.getEventoDataById(
+        this.eventoData = await this.moduleApi.getEventoDataById(
           this.module.moduleNo
         );
       }

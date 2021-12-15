@@ -6,10 +6,7 @@ import Api from "./Api";
 
 @Component
 export default class ModuleApi extends Api<Module> {
-  get $moduleApi(): ModuleApi {
-    this.basePath = "/modules";
-    return this;
-  }
+  path = "/modules";
 
   @ErrorHandler()
   async scrapeModuleData(): Promise<void> {

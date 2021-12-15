@@ -5,10 +5,7 @@ import ErrorHandler from "@/decorators/ErrorHandler";
 
 @Component
 export default class SessionApi extends Api<User> {
-  get $sessionApi(): SessionApi {
-    this.basePath = "/session";
-    return this;
-  }
+  path = "/session";
 
   @ErrorHandler()
   async get(): Promise<User> {

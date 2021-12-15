@@ -24,7 +24,7 @@
           label="Scrape"
           type="is-info"
           icon-left="file-upload"
-          @click="$moduleApi.scrapeModuleData"
+          @click="moduleApi.scrapeModuleData"
         />
       </div>
     </template>
@@ -37,6 +37,7 @@ import { Component } from "vue-property-decorator";
 import CreateEditModule from "@/components/admin/createAddModals/CreateEditModule.vue";
 import Administration from "@/components/admin/administrationComponents/Administration.vue";
 import Module from "@/models/module";
+import ModuleApi from "@/mixins/ModuleApi";
 
 @Component({
   components: {
@@ -46,6 +47,7 @@ import Module from "@/models/module";
 })
 export default class ModuleAdministration extends Administration<Module> {
   isModuleDataLoading = true;
+  moduleApi = new ModuleApi();
   moduleRows: Array<Module> = [];
   checkedModuleRows: Array<Module> = [];
 
@@ -90,17 +92,17 @@ export default class ModuleAdministration extends Administration<Module> {
 
   async created(): Promise<void> {
     this.modalOption.component = CreateEditModule;
-    this.moduleRows = await this.$moduleApi.getAll();
+    this.moduleRows = await this.moduleApi.getAll();
     this.isModuleDataLoading = false;
   }
 
   async deleteModule(module: Module): Promise<void> {
-    await this.$moduleApi.deleteById(module.moduleNo);
+    await this.moduleApi.deleteById(module.moduleNo);
   }
 
   async importModules(): Promise<void> {
     this.listTitle = "Modulliste";
-    this.importPath = this.$moduleApi.basePath;
+    this.importPath = this.moduleApi.basePath;
     await this.importList();
   }
 }

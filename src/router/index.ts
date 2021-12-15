@@ -7,7 +7,7 @@ import UserStore from "@/store/modules/UserStore";
 import SessionApi from "@/mixins/SessionApi";
 
 const userStore = getModule(UserStore);
-const sessionApi = new SessionApi().$sessionApi;
+const sessionApi = new SessionApi();
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [

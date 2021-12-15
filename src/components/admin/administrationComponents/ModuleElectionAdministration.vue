@@ -16,7 +16,7 @@
           label="Exportieren"
           type="is-info"
           icon-left="file-download"
-          @click="$moduleElectionApi.getModuleExport"
+          @click="moduleElectionApi.getModuleExport"
         />
       </div>
 
@@ -59,6 +59,8 @@ import ModuleElection from "@/models/moduleElection";
 import StudentNotify from "@/components/admin/StudentNotify.vue";
 import MailTemplate from "@/models/mailTemplate";
 import StudentNotification from "@/models/studentNotification";
+import ModuleElectionApi from "@/mixins/ModuleElectionApi";
+import MailTemplateApi from "@/mixins/MailTemplateApi";
 
 @Component({
   components: {
@@ -69,6 +71,8 @@ import StudentNotification from "@/models/studentNotification";
 })
 export default class ModuleElectionAdministration extends Administration<ModuleElection> {
   isModuleElectionDataLoading = true;
+  moduleElectionApi = new ModuleElectionApi();
+  mailTemplateApi = new MailTemplateApi();
   moduleElectionRows: Array<ModuleElection> = [];
   checkedModuleElectionRows: Array<ModuleElection> = [];
   mailTemplates: Array<MailTemplate> = [];
@@ -99,12 +103,12 @@ export default class ModuleElectionAdministration extends Administration<ModuleE
 
   async created(): Promise<void> {
     this.isModuleElectionDataLoading = false;
-    this.moduleElectionRows = await this.$moduleElectionApi.getAll();
-    this.mailTemplates = await this.$mailTemplateApi.getAll();
+    this.moduleElectionRows = await this.moduleElectionApi.getAll();
+    this.mailTemplates = await this.mailTemplateApi.getAll();
   }
 
   async deleteModuleElection(moduleElection: ModuleElection): Promise<void> {
-    await this.$moduleElectionApi.deleteById(moduleElection.id.toString());
+    await this.moduleElectionApi.deleteById(moduleElection.id.toString());
   }
 
   notifySelectedUsers(): void {

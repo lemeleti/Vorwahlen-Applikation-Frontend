@@ -17,13 +17,3 @@ declare global {
     }
   }
 }
-
-declare module "vue/types/vue" {
-  interface Vue {
-    $pageTextApi: PageTextApi;
-    $moduleApi: ModuleApi;
-    $moduleElectionApi: ModuleElectionApi;
-    $mailTemplateApi: MailTemplateApi;
-    $studentApi: StudentApi;
-  }
-}

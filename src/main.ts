@@ -104,11 +104,6 @@ axios.defaults.baseURL = "/api";
 
 Vue.use(VueAxios, axios);
 Vue.use(VueSweetalert2);
-Vue.mixin(ModuleApi);
-Vue.mixin(ModuleElectionApi);
-Vue.mixin(MailTemplateApi);
-Vue.mixin(StudentApi);
-Vue.mixin(PageTextApi);
 
 new Vue({
   router,

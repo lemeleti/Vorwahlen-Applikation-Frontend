@@ -24,6 +24,7 @@
 </template>
 
 <script lang="ts">
+import StudentApi from "@/mixins/StudentApi";
 import Student from "@/models/student";
 import StudentSetup from "@/models/studentSetup";
 import { Component, Prop, Vue } from "vue-property-decorator";
@@ -31,6 +32,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 @Component
 export default class SettingsModal extends Vue {
   @Prop() student!: Student;
+  studentApi = new StudentApi();
   studentSetup: StudentSetup = {
     ip: false,
     firstTimeSetup: false,
@@ -38,7 +40,7 @@ export default class SettingsModal extends Vue {
 
   async confirmSetup(): Promise<void> {
     try {
-      await this.$studentApi.updateStudentSetup(
+      await this.studentApi.updateStudentSetup(
         this.student.email,
         this.studentSetup,
         "Die Einrichtung wurde erfolgreich übernommen"

@@ -1,7 +1,7 @@
 <template>
   <CreateEditModal
-    :addCalback="$studentApi.create"
-    :editCalback="$studentApi.update"
+    :addCalback="studentApi.create"
+    :editCalback="studentApi.update"
     :id="partialObject.email"
     :createObject="createObject"
     :partialObject="partialObject"
@@ -80,6 +80,7 @@
 </template>
 
 <script lang="ts">
+import StudentApi from "@/mixins/StudentApi";
 import Student from "@/models/student";
 import { Component } from "vue-property-decorator";
 import CreateEditModal from "./CreateEditModal.vue";
@@ -90,6 +91,7 @@ import CreateEditModal from "./CreateEditModal.vue";
   },
 })
 export default class CreateUser extends CreateEditModal<Student> {
+  studentApi = new StudentApi();
   get title(): string {
     return this.createObject ? "Benutzer erstellen" : "Benutzer aktualisieren";
   }

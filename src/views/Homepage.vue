@@ -4,7 +4,10 @@
       <span v-html="headerText"></span>
       <hr />
     </div>
-    <div v-if="userStore.isAuthenticated && student" class="block">
+    <div
+      v-if="userStore.isAuthenticated && student && student.canElect"
+      class="block"
+    >
       <b-message
         title="Hinweis für alle Studierende mit dem Internationalen Profil"
         type="is-info"
@@ -85,6 +88,7 @@ import IModule from "@/models/module";
 import ModuleCategory from "@/models/moduleCategory";
 import Student from "@/models/student";
 import PageText from "@/models/pageText";
+import PageTextApi from "@/mixins/PageTextApi";
 
 interface ElectionCategoryMap {
   [index: string]: string;
@@ -135,7 +139,7 @@ export default class Homepage extends Vue {
 
   async setSiteTexts(): Promise<void> {
     let texts: Array<PageText> = [];
-    const api = this.$pageTextApi;
+    const api = new PageTextApi();
     try {
       if (this.userStore.isAuthenticated && this.userStore.student) {
         const student = this.userStore.student;

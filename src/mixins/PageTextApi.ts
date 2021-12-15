@@ -6,10 +6,7 @@ import Api from "./Api";
 
 @Component
 export default class PageTextApi extends Api<PageText> {
-  get $pageTextApi(): PageTextApi {
-    this.basePath = "/texts";
-    return this;
-  }
+  path = "/texts";
 
   @ErrorHandler()
   async getFullTimePageText(): Promise<Array<PageText>> {
