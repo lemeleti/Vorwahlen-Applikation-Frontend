@@ -48,11 +48,6 @@ import {
   faQuestionCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import ModuleApi from "./mixins/ModuleApi";
-import ModuleElectionApi from "./mixins/ModuleElectionApi";
-import MailTemplateApi from "./mixins/MailTemplateApi";
-import StudentApi from "./mixins/StudentApi";
-import PageTextApi from "./mixins/PageTextApi";
 require("@/assets/main.scss");
 
 library.add(
