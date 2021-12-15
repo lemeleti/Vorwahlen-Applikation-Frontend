@@ -186,7 +186,7 @@ export default class ModuleStore extends VuexModule {
           break;
         case ModuleCategory.DISPENSED_PA_MODULE:
         case ModuleCategory.DISPENSED_WPM_MODULE:
-          color = "is-info";
+          color = "is-dispensed";
           break;
       }
       return color;

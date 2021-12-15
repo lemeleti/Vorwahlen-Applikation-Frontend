@@ -5,8 +5,9 @@ $fullhd: 1632px;
 $contextModule: #95b599;
 $projectModule: #e99c3b;
 $electiveModule: #f2cf5a;
+$dispensed: #c7c7c7;
 
-$custom-colors: ("contextModule": $contextModule, "projectModule": $projectModule, "electiveModule": $electiveModule);
+$custom-colors: ("contextModule": $contextModule, "projectModule": $projectModule, "electiveModule": $electiveModule, "dispensed": $dispensed);
 
 @import "~bulma";
 
