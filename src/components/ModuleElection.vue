@@ -1,7 +1,7 @@
 <template>
   <div>
     <TileBox v-for="semester in semesters" :key="semester">
-      <template #title>{{ semester + getSemesterOffset() }}. Semester</template>
+      <template #title>{{ semester }}. Semester</template>
       <template #content>
         <div
           class="tile is-parent has-text-centered is-3"
@@ -18,12 +18,12 @@
         </div>
       </template>
     </TileBox>
-    <TileBox v-show="getTileForOverflowedModules().length > 0">
+    <TileBox v-show="overflowedElectionTiles.length > 0">
       <template #title>Zu viel gewählte Module</template>
       <template #content>
         <div
           class="tile is-parent has-text-centered is-3"
-          v-for="(tile, tileIndex) of getTileForOverflowedModules()"
+          v-for="(tile, tileIndex) of overflowedElectionTiles"
           :key="tileIndex"
         >
           <div
@@ -38,14 +38,14 @@
     </TileBox>
     <div
       class="box notification election-status is-radiusless"
-      :class="getElectionStatusColor()"
+      :class="electionStatusColor"
       v-if="
         userStore.isStudent &&
         moduleStore.isClientConnected &&
         userStore.student.canElect
       "
     >
-      <p v-for="(reason, index) of getElectionStatus()" :key="index">
+      <p v-for="(reason, index) of electionStatus" :key="index">
         {{ reason }}
       </p>
     </div>
@@ -80,11 +80,8 @@ export default class ModuleElection extends Vue {
   moduleStore: ModuleStore = getModule(ModuleStore);
   userStore: UserStore = getModule(UserStore);
 
-  semesters: Array<number> = [2, 1];
-
   getTilesForSemester(semester: number): Array<ModuleTile> {
     const tiles: Array<ModuleTile> = [];
-    semester += this.getSemesterOffset();
 
     if (this.moduleStore.getElectedModules) {
       const sortOrder = [
@@ -96,7 +93,7 @@ export default class ModuleElection extends Vue {
         ModuleCategory.INTERDISCIPLINARY_MODULE,
       ];
       this.moduleStore.getElectedModules
-        .filter((element) => element.semester === semester)
+        .filter((element) => element.semester % semester === 0)
         .sort(
           (el1, el2) =>
             sortOrder.indexOf(el1.category) - sortOrder.indexOf(el2.category)
@@ -108,7 +105,7 @@ export default class ModuleElection extends Vue {
     return tiles;
   }
 
-  getTileForOverflowedModules(): Array<ModuleTile> {
+  get overflowedElectionTiles(): Array<ModuleTile> {
     const tiles: Array<ModuleTile> = [];
     if (this.moduleStore.getOverflowedModules) {
       this.moduleStore.getOverflowedModules
@@ -118,13 +115,13 @@ export default class ModuleElection extends Vue {
     return tiles;
   }
 
-  getSemesterOffset(): number {
+  get semesters(): Array<number> {
     const student = this.userStore.student;
-    let offset = 4;
+    let semesters = [6, 5];
     if (student && student.tz && student.secondElection) {
-      offset = 6;
+      semesters = [8, 7];
     }
-    return offset;
+    return semesters;
   }
 
   electionStructureElementToTile(
@@ -137,7 +134,7 @@ export default class ModuleElection extends Vue {
     };
   }
 
-  getElectionStatus(): Array<string> {
+  get electionStatus(): Array<string> {
     const electionStatus: ElectionStatus = this.moduleStore.electionStatus;
     const reasons: Array<string> = [];
     if (electionStatus) {
@@ -155,7 +152,7 @@ export default class ModuleElection extends Vue {
     return reasons;
   }
 
-  getElectionStatusColor(): string {
+  get electionStatusColor(): string {
     let color = "is-warning";
     if (this.moduleStore.isElectionValid) {
       color = "is-success";
