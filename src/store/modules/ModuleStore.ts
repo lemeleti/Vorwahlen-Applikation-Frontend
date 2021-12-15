@@ -74,6 +74,9 @@ export default class ModuleStore extends VuexModule {
   createConnection(): void {
     const socket: WebSocket = new SockJS("/api/stomp-ws-endpoint");
     const stomp: Stomp.Client = Stomp.over(socket);
+    if (process.env.NODE_ENV === "production") {
+      stomp.debug = () => null;
+    }
     stomp.connect(
       {},
       () => {
