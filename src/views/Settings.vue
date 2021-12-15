@@ -32,8 +32,8 @@
           <div v-if="validationSetting && userStore.isPartTimeSecondElection">
             <div class="columns">
               <div class="column is-half">
-                <span
-                  >Anzahl gewählter kontext Module bei den ersten Vorwahlen
+                <span>
+                  Anzahl gewählter Kontext-Wahlpflichtmodule bei den ersten Vorwahlen
                 </span>
               </div>
 
