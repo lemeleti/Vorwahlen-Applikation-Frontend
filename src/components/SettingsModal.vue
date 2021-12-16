@@ -11,6 +11,18 @@
       <b-field label="Belegen Sie das internationale Profil">
         <b-checkbox v-model="studentSetup.ip"></b-checkbox>
       </b-field>
+
+      <div v-if="this.userStore.isPartTimeSecondElection">
+        <b-field
+          label="Wie viele Kontextmodule haben Sie in der letzten Vorwahl gewählt?"
+        >
+          <b-select
+            v-model="validationSetting.electedContextModulesInFirstElection"
+          >
+            <option v-for="n in 4" :key="n" :value="n - 1">{{ n - 1 }}</option>
+          </b-select>
+        </b-field>
+      </div>
     </section>
 
     <footer class="modal-card-foot">
@@ -27,15 +39,25 @@
 import StudentApi from "@/mixins/StudentApi";
 import Student from "@/models/student";
 import StudentSetup from "@/models/studentSetup";
+import ValidationSetting from "@/models/validationSetting";
+import UserStore from "@/store/modules/UserStore";
 import { Component, Prop, Vue } from "vue-property-decorator";
+import { getModule } from "vuex-module-decorators";
 
 @Component
 export default class SettingsModal extends Vue {
   @Prop() student!: Student;
+  userStore = getModule(UserStore);
   studentApi = new StudentApi();
   studentSetup: StudentSetup = {
     ip: false,
     firstTimeSetup: false,
+  };
+  validationSetting: ValidationSetting = {
+    isRepetent: false,
+    hadAlreadyElectedTwoConsecutiveModules: false,
+    isSkipConsecutiveModuleCheck: false,
+    electedContextModulesInFirstElection: 0,
   };
 
   async confirmSetup(): Promise<void> {
@@ -44,6 +66,10 @@ export default class SettingsModal extends Vue {
         this.student.email,
         this.studentSetup,
         "Die Einrichtung wurde erfolgreich übernommen"
+      );
+      await this.studentApi.updateValidationSetting(
+        this.student.email,
+        this.validationSetting
       );
     } catch (e) {
       // handled by error handler
