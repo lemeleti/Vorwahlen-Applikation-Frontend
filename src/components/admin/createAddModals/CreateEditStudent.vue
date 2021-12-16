@@ -93,7 +93,7 @@
               <b-checkbox v-model="partialObject.firstTimeSetup"></b-checkbox>
             </b-field>
           </div>
-      </div>
+        </div>
       </div>
     </template>
   </CreateEditModal>
