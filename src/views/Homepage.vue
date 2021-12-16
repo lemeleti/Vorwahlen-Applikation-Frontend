@@ -58,7 +58,11 @@
             :moduleNo="module.moduleNo"
             @moreInfo="showAdditionalSubjectInfo(module)"
           >
-            <template #title>{{ module.moduleTitle }}</template>
+            <template #title>{{
+              module.language === "Englisch"
+                ? module.moduleTitle.concat(" (E)")
+                : module.moduleTitle
+            }}</template>
           </Module>
         </template>
       </TileBox>

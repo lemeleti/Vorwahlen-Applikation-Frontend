@@ -6,7 +6,7 @@
       style="color: black; min-height: 100px"
     >
       <slot name="title">Modultitel</slot>
-      <b-field id="selectModule">
+      <b-field class="selectModule">
         <b-checkbox
           :value="true"
           type="is-info"
@@ -16,10 +16,12 @@
       <b-icon
         icon="info"
         type="is-info"
-        id="moduleInfo"
-        class="is-clickable"
+        class="is-clickable moduleInfo"
         @click.native="$emit('moreInfo')"
       ></b-icon>
+      <span class="executionSemester is-size-7">
+        Semester: {{ executionSemester }}
+      </span>
     </div>
   </div>
 </template>
@@ -33,7 +35,16 @@ import { getModule } from "vuex-module-decorators";
 export default class Module extends Vue {
   @Prop() moduleNo!: string;
   @Prop() color!: string;
+  @Prop() semester!: number;
   moduleStore: ModuleStore = getModule(ModuleStore);
+
+  get executionSemester(): string {
+    let executionSemester = "HS";
+    if (this.semester % 6 === 0) {
+      executionSemester = "FS";
+    }
+    return executionSemester;
+  }
 
   get moduleSelected(): boolean {
     return this.moduleStore.isModuleSelected(this.moduleNo);
@@ -46,13 +57,19 @@ export default class Module extends Vue {
 </script>
 
 <style>
-#selectModule {
+.executionSemester {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.selectModule {
   top: 0;
   right: -19px;
   position: absolute;
 }
 
-#moduleInfo {
+.moduleInfo {
   top: 0;
   left: 0px;
   position: absolute;

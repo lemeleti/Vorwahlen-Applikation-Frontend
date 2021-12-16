@@ -127,11 +127,22 @@ export default class ModuleElection extends Vue {
   electionStructureElementToTile(
     element: ElectionStructureElement
   ): ModuleTile {
+    const title = this.mapModuleTitle(element.id, element.name);
     return {
       semester: element.semester,
-      moduleName: element.name,
+      moduleName: title,
       moduleColor: this.moduleStore.getColorForCategory(element.category),
     };
+  }
+
+  mapModuleTitle(moduleNo: string, title: string): string {
+    const module = this.moduleStore.moduleArr.find(
+      (module) => module.moduleNo === moduleNo && module.language === "Englisch"
+    );
+    if (module) {
+      title = title.concat(" (E)");
+    }
+    return title;
   }
 
   get electionStatus(): Array<string> {
