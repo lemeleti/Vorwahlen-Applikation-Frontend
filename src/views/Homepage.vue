@@ -56,6 +56,7 @@
             :key="module.moduleNo"
             :color="moduleStore.getColorForCategory(module.category)"
             :moduleNo="module.moduleNo"
+            :semester="module.semester"
             @moreInfo="showAdditionalSubjectInfo(module)"
           >
             <template #title>{{
