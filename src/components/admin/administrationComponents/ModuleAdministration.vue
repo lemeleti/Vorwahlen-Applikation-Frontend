@@ -2,6 +2,7 @@
   <Administration
     @deleteSelected="deleteModule"
     :modal="modalComponent"
+    :partialObject="initValues"
     id="moduleNo"
     :columns.sync="moduleColumns"
     :rows.sync="moduleRows"
@@ -50,7 +51,7 @@ export default class ModuleAdministration extends Administration<Module> {
   moduleApi = new ModuleApi();
   moduleRows: Array<Module> = [];
   checkedModuleRows: Array<Module> = [];
-
+  initValues: Partial<Module> = { semester: 5, credits: 4 };
   moduleColumns = [
     {
       field: "moduleNo",
