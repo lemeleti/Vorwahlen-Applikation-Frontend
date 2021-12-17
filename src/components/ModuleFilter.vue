@@ -115,10 +115,14 @@ export default class ModuleFilter extends Vue {
 
   @Watch("moduleStore.moduleArr")
   updateOptionsOnModuleChange(): void {
-    const instituteFilterOption = this.filterOptions.find((filterOption) => filterOption.field === "institute");
+    const instituteFilterOption = this.filterOptions.find(
+      (filterOption) => filterOption.field === "institute"
+    );
     if (instituteFilterOption) {
       const indexOf = this.filterOptions.indexOf(instituteFilterOption);
-      instituteFilterOption.options = this.moduleStore.moduleArr.map((module) => module.institute);
+      instituteFilterOption.options = this.moduleStore.moduleArr.map(
+        (module) => module.institute
+      );
       this.filterOptions[indexOf] = instituteFilterOption;
     }
   }
@@ -143,43 +147,54 @@ export default class ModuleFilter extends Vue {
     for (const filter of this.filters as Array<Filter>) {
       const filteredModules = this.moduleStore.filteredModules;
       if (filter.field && filter.matcher && filter.option && filter.chaining) {
-        const key = filter.field as keyof Module;
         if (filter.chaining === "and") {
-          this.andChaining(filter, filteredModules, modules, key);
+          this.andChaining(filter, filteredModules, modules);
         } else {
-          this.orChaining(filter, filteredModules, modules, key);
+          this.orChaining(filter, filteredModules, modules);
         }
       } else if (filter.field && filter.matcher && filter.option) {
-        const key = filter.field as keyof Module;
-        this.orChaining(filter, filteredModules, modules, key);
+        this.orChaining(filter, filteredModules, modules);
       }
     }
     console.log(this.moduleStore.filteredModules);
   }
 
-  orChaining(filter: Filter, filteredModules: Array<Module>, modules: Array<Module>, key: keyof Module) {
-    let filterAppliedModules = modules.filter((module) => module[key] === filter.option);    
-    this.moduleStore.setFilteredModules(_.uniq(_.concat(filteredModules, filterAppliedModules)));
+  orChaining(
+    filter: Filter,
+    filteredModules: Array<Module>,
+    modules: Array<Module>
+  ): void {
+    let filterAppliedModules = this.applyOption(filter, modules);
+    this.moduleStore.setFilteredModules(
+      _.uniq(_.concat(filteredModules, filterAppliedModules))
+    );
   }
 
-  andChaining(filter: Filter, filteredModules: Array<Module>, modules: Array<Module>, key: keyof Module) { 
+  andChaining(
+    filter: Filter,
+    filteredModules: Array<Module>,
+    modules: Array<Module>
+  ): void {
     if (filteredModules.length > 0) {
-      let updatedFilteredModules = filteredModules.filter(
-        (module) => module[key] === filter.option
-      );
-      if (filter.matcher === "neq") {
-        updatedFilteredModules = filteredModules.filter(
-          (module) => module[key] !== filter.option
-        );
-      }
+      let updatedFilteredModules = this.applyOption(filter, filteredModules);
       this.moduleStore.setFilteredModules(updatedFilteredModules);
     } else {
-      let filterAppliedModules = modules.filter((module) => module[key] === filter.option);
-      if (filter.matcher === "neq") {
-        filterAppliedModules = modules.filter((module) => module[key] !== filter.option)
-      }
+      let filterAppliedModules = this.applyOption(filter, modules);
       this.moduleStore.setFilteredModules(filterAppliedModules);
     }
+  }
+
+  applyOption(filter: Filter, modules: Array<Module>): Array<Module> {
+    const key = filter.field as keyof Module;
+    let optionAppliedModules: Array<Module> = modules.filter(
+      (module) => module[key] === filter.option
+    );
+    if (filter.matcher === "neq") {
+      optionAppliedModules = modules.filter(
+        (module) => module[key] !== filter.option
+      );
+    }
+    return optionAppliedModules;
   }
 
   addFilter(): void {
