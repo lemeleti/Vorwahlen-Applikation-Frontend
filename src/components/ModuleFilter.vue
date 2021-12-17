@@ -144,19 +144,19 @@ export default class ModuleFilter extends Vue {
   applyFilter(): void {
     this.moduleStore.emptyFilteredModules();
     const modules = this.moduleStore.moduleArr;
+    let previousChaining = "and";
     for (const filter of this.filters as Array<Filter>) {
       const filteredModules = this.moduleStore.filteredModules;
-      if (filter.field && filter.matcher && filter.option && filter.chaining) {
-        if (filter.chaining === "and") {
+      if (filter.field && filter.matcher && filter.option) {
+        if (filter.chaining === "and" || previousChaining === "and") {
+          previousChaining = filter.chaining || "and";
           this.andChaining(filter, filteredModules, modules);
         } else {
+          previousChaining = "or";
           this.orChaining(filter, filteredModules, modules);
         }
-      } else if (filter.field && filter.matcher && filter.option) {
-        this.orChaining(filter, filteredModules, modules);
       }
     }
-    console.log(this.moduleStore.filteredModules);
   }
 
   orChaining(
