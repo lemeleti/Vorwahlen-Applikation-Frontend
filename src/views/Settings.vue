@@ -33,7 +33,8 @@
             <div class="columns">
               <div class="column is-half">
                 <span>
-                  Anzahl gewählter Kontext-Wahlpflichtmodule bei den ersten Vorwahlen
+                  Anzahl gewählter Kontext-Wahlpflichtmodule bei den ersten
+                  Vorwahlen
                 </span>
               </div>
 
