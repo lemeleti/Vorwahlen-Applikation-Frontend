@@ -5,7 +5,7 @@
       <div class="level-left">
         <div class="level-item">
           <div class="level-item">
-            <b-select v-model="filters[filter - 1].field">
+            <b-select v-model="moduleFilters[filter - 1].field">
               <option
                 v-for="filterOption in filterOptions"
                 :key="filterOption.field"
@@ -17,14 +17,14 @@
           </div>
 
           <div class="level-item">
-            <b-select v-model="filters[filter - 1].matcher">
+            <b-select v-model="moduleFilters[filter - 1].matcher">
               <option value="eq">Ist gleich</option>
               <option value="neq">Ist nicht gleich</option>
             </b-select>
           </div>
 
           <div class="level-item">
-            <b-select v-model="filters[filter - 1].option">
+            <b-select v-model="moduleFilters[filter - 1].option">
               <option
                 v-for="option in options(filter - 1)"
                 :key="option"
@@ -37,7 +37,7 @@
 
           <div class="level-item">
             <b-select
-              v-model="filters[filter - 1].chaining"
+              v-model="moduleFilters[filter - 1].chaining"
               v-if="filter !== numberOfFilters"
             >
               <option value="or">Oder</option>
@@ -66,7 +66,14 @@
         </div>
       </div>
     </div>
-    <b-button type="is-info" label="Anwenden" @click="applyFilter" />
+    <div class="buttons">
+      <b-button type="is-info" label="Anwenden" @click="applyFilter" />
+      <b-button
+        type="is-danger"
+        label="Zurücksetzen"
+        @click="this.moduleStore.emptyFilteredModules()"
+      />
+    </div>
   </div>
 </template>
 
@@ -76,20 +83,11 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
 import _ from "lodash";
 import Module from "@/models/module";
-
-interface Filter {
-  field: string;
-  matcher: string;
-  option: string;
-  chaining: string;
-}
+import IModuleFilter from "@/models/moduleFilter";
 
 @Component
 export default class ModuleFilter extends Vue {
   moduleStore: ModuleStore = getModule(ModuleStore);
-  filters: Array<Partial<Filter>> = [{}];
-  selectedOperator = [];
-  numberOfFilters = 1;
   filterOptions = [
     {
       name: "Sprache",
@@ -127,9 +125,25 @@ export default class ModuleFilter extends Vue {
     }
   }
 
+  get moduleFilters(): Array<Partial<IModuleFilter>> {
+    return this.moduleStore.moduleFilters;
+  }
+
+  set moduleFilters(filters: Array<Partial<IModuleFilter>>) {
+    this.moduleStore.setModuleFilters(filters);
+  }
+
+  get numberOfFilters(): number {
+    return this.moduleStore.numberOfFilters;
+  }
+
+  set numberOfFilters(numberOfFilters: number) {
+    this.moduleStore.setNumberOfFilters(numberOfFilters);
+  }
+
   options(filterIndex: number): Set<string> {
     let options: Array<string> = [];
-    const field = _.get(this.filters[filterIndex], "field");
+    const field = _.get(this.moduleFilters[filterIndex], "field");
 
     if (field) {
       const filterOption = this.filterOptions.find(
@@ -145,7 +159,7 @@ export default class ModuleFilter extends Vue {
     this.moduleStore.emptyFilteredModules();
     const modules = this.moduleStore.moduleArr;
     let previousChaining = "and";
-    for (const filter of this.filters as Array<Filter>) {
+    for (const filter of this.moduleFilters as Array<IModuleFilter>) {
       const filteredModules = this.moduleStore.filteredModules;
       if (filter.field && filter.matcher && filter.option) {
         if (filter.chaining === "and" || previousChaining === "and") {
@@ -160,7 +174,7 @@ export default class ModuleFilter extends Vue {
   }
 
   orChaining(
-    filter: Filter,
+    filter: IModuleFilter,
     filteredModules: Array<Module>,
     modules: Array<Module>
   ): void {
@@ -171,7 +185,7 @@ export default class ModuleFilter extends Vue {
   }
 
   andChaining(
-    filter: Filter,
+    filter: IModuleFilter,
     filteredModules: Array<Module>,
     modules: Array<Module>
   ): void {
@@ -184,7 +198,7 @@ export default class ModuleFilter extends Vue {
     }
   }
 
-  applyOption(filter: Filter, modules: Array<Module>): Array<Module> {
+  applyOption(filter: IModuleFilter, modules: Array<Module>): Array<Module> {
     const key = filter.field as keyof Module;
     let optionAppliedModules: Array<Module> = modules.filter(
       (module) => module[key] === filter.option
@@ -199,11 +213,12 @@ export default class ModuleFilter extends Vue {
 
   addFilter(): void {
     this.numberOfFilters++;
-    this.filters.push({});
+    this.moduleFilters.push({});
   }
 
   removeFilter(index: number): void {
-    this.filters.splice(index, 1);
+    const newFilters = this.moduleFilters.splice(index, 1);
+    this.moduleFilters = newFilters;
     this.numberOfFilters--;
   }
 }

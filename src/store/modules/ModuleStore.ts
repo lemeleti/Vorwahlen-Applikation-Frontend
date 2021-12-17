@@ -19,6 +19,7 @@ import SockJS from "sockjs-client";
 import ModuleElectionApi from "@/mixins/ModuleElectionApi";
 import UserStore from "./UserStore";
 import { NotificationProgrammatic as Notification } from "buefy";
+import ModuleFilter from "@/models/moduleFilter";
 interface ModuleWrapper {
   moduleArr: Array<IModule>;
 }
@@ -33,6 +34,8 @@ export default class ModuleStore extends VuexModule {
   filteredModules: Array<IModule> = [];
   electedModules: Array<ElectionStructureElement> = [];
   overflowedElectedModules: Array<ElectionStructureElement> = [];
+  moduleFilters: Array<Partial<ModuleFilter>> = [{}];
+  numberOfFilters = 1;
   isElectionValid = false;
   isFilterActive = false;
   electionStatus: ElectionStatus = <ElectionStatus>{};
@@ -41,6 +44,16 @@ export default class ModuleStore extends VuexModule {
   @Mutation
   addModules(arr: Array<IModule>): void {
     this.moduleArr.push(...arr);
+  }
+
+  @Mutation
+  setModuleFilters(moduleFilters: Array<Partial<ModuleFilter>>): void {
+    this.moduleFilters = moduleFilters;
+  }
+
+  @Mutation
+  setNumberOfFilters(numberOfFilters: number): void {
+    this.numberOfFilters = numberOfFilters;
   }
 
   @Mutation
