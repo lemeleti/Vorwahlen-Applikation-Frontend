@@ -30,15 +30,27 @@ interface HeaderMessage {
 @Module({ store, dynamic: true, name: "moduleStore" })
 export default class ModuleStore extends VuexModule {
   moduleArr: Array<IModule> = [];
+  filteredModules: Array<IModule> = [];
   electedModules: Array<ElectionStructureElement> = [];
   overflowedElectedModules: Array<ElectionStructureElement> = [];
   isElectionValid = false;
+  isFilterActive = false;
   electionStatus: ElectionStatus = <ElectionStatus>{};
   client: Stomp.Client | null = null;
 
   @Mutation
   addModules(arr: Array<IModule>): void {
     this.moduleArr.push(...arr);
+  }
+
+  @Mutation
+  setFilteredModules(filteredModules: Array<IModule>): void {
+    this.filteredModules = filteredModules;
+  }
+
+  @Mutation
+  emptyFilteredModules(): void {
+    this.filteredModules = [];
   }
 
   @Mutation

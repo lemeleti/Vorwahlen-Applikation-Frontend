@@ -7,5 +7,6 @@ export default interface Module {
   category: ModuleCategory;
   language: string;
   credits: number;
+  institute: string;
   consecutiveModuleNo: string;
 }

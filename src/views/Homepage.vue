@@ -23,6 +23,8 @@
       </b-message>
       <ModuleElection />
       <hr />
+      <ModuleFilter />
+      <hr />
       <TileBox
         v-for="(description, category, index) in getElectionCategoryMap()"
         :key="category"
@@ -94,6 +96,7 @@ import ModuleCategory from "@/models/moduleCategory";
 import Student from "@/models/student";
 import PageText from "@/models/pageText";
 import PageTextApi from "@/mixins/PageTextApi";
+import ModuleFilter from "@/components/ModuleFilter.vue";
 
 interface ElectionCategoryMap {
   [index: string]: string;
@@ -105,6 +108,7 @@ interface ElectionCategoryMap {
     ModuleElection,
     TileBox,
     Module,
+    ModuleFilter,
   },
 })
 export default class Homepage extends Vue {
