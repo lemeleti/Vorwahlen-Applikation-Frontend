@@ -60,6 +60,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
 import UserStore from "@/store/modules/UserStore";
+import SessionApi from "@/mixins/SessionApi";
 
 interface NavbarItemInfo {
   name: string;
@@ -141,8 +142,9 @@ export default class Header extends Vue {
   }
 
   async logout(): Promise<void> {
+    const sessionApi = new SessionApi();
     this.userStore.removeUserData();
-    await Vue.axios.delete("/session");
+    await sessionApi.destroy();
     this.$router.push({ name: "Logout" });
   }
 }

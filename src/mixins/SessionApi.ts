@@ -22,4 +22,9 @@ export default class SessionApi extends Api<User> {
   async isAdmin(): Promise<boolean> {
     return (await this.axios.get<boolean>(`${this.basePath}/is-admin`)).data;
   }
+
+  @ErrorHandler()
+  async destroy(): Promise<void> {
+    await this.axios.delete(this.path);
+  }
 }
