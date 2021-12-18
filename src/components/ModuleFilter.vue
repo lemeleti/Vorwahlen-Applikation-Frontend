@@ -68,11 +68,7 @@
     </div>
     <div class="buttons">
       <b-button type="is-info" label="Anwenden" @click="applyFilter" />
-      <b-button
-        type="is-danger"
-        label="Zurücksetzen"
-        @click="this.moduleStore.emptyFilteredModules()"
-      />
+      <b-button type="is-danger" label="Zurücksetzen" @click="resetFilter" />
     </div>
   </div>
 </template>
@@ -220,6 +216,12 @@ export default class ModuleFilter extends Vue {
     const newFilters = this.moduleFilters.splice(index, 1);
     this.moduleFilters = newFilters;
     this.numberOfFilters--;
+  }
+
+  resetFilter(): void {
+    this.moduleStore.emptyFilteredModules();
+    this.moduleStore.setNumberOfFilters(1);
+    this.moduleStore.setModuleFilters([{}]);
   }
 }
 </script>
