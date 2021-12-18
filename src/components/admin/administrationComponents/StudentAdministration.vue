@@ -109,14 +109,12 @@ export default class StudentAdministration extends Administration<Student> {
 
   async importClassList(): Promise<void> {
     this.listTitle = "Klassenliste";
-    this.importPath = `${this.studentApi.path}`;
-    await this.importList();
+    await this.importList(this.studentApi.import);
   }
 
   async importDispensations(): Promise<void> {
     this.listTitle = "Dispensationsliste";
-    this.importPath = `${this.studentApi.path}/dispensations`;
-    await this.importList();
+    await this.importList(this.studentApi.importDispensations);
   }
 }
 </script>

@@ -103,8 +103,7 @@ export default class ModuleAdministration extends Administration<Module> {
 
   async importModules(): Promise<void> {
     this.listTitle = "Modulliste";
-    this.importPath = this.moduleApi.path;
-    await this.importList();
+    await this.importList(this.moduleApi.import);
   }
 }
 </script>

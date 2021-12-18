@@ -4,16 +4,21 @@ import ExcelJs, { Buffer, Workbook, Worksheet } from "exceljs";
 @Component
 export default class ExcelSheetUpload extends Vue {
   listTitle = "";
-  importPath = "";
 
-  public async importList(): Promise<void> {
+  async importList(
+    callback: (formData: FormData) => Promise<void>
+  ): Promise<void> {
     const workbook = new ExcelJs.Workbook();
     const file = await this.getFile();
 
     if (file) {
       try {
         const worksheetIndex = await this.selectWorkSheet(workbook, file);
-        await this.sendListToServer(workbook.worksheets[worksheetIndex], file);
+        await this.sendListToServer(
+          workbook.worksheets[worksheetIndex],
+          file,
+          callback
+        );
         Vue.swal({
           title: "Import erfolgreich",
           text: `Die ${this.listTitle} wurde erfolgreich importiert.`,
@@ -29,7 +34,7 @@ export default class ExcelSheetUpload extends Vue {
     }
   }
 
-  private async getFile(): Promise<File> {
+  async getFile(): Promise<File> {
     const { value: file } = await Vue.swal({
       title: `${this.listTitle} importieren`,
       input: "file",
@@ -52,10 +57,7 @@ export default class ExcelSheetUpload extends Vue {
     return file;
   }
 
-  private async selectWorkSheet(
-    workbook: Workbook,
-    file: File
-  ): Promise<number> {
+  async selectWorkSheet(workbook: Workbook, file: File): Promise<number> {
     return new Promise<number>((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsArrayBuffer(file);
@@ -78,10 +80,14 @@ export default class ExcelSheetUpload extends Vue {
     });
   }
 
-  private sendListToServer(worksheet: Worksheet, file: File): Promise<void> {
+  async sendListToServer(
+    worksheet: Worksheet,
+    file: File,
+    callback: (formData: FormData) => Promise<void>
+  ): Promise<void> {
     const formData = new FormData();
     formData.append("file", file, `${this.listTitle}.xlsx`);
     formData.append("worksheet", worksheet.name);
-    return Vue.axios.post(this.importPath, formData);
+    await callback(formData);
   }
 }

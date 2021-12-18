@@ -41,4 +41,9 @@ export default class StudentApi extends Mixins<Api<Student>>(Api) {
   async notfiyStudents(notification: StudentNotification): Promise<void> {
     await this.axios.post(`${this.path}/notify`, notification);
   }
+
+  @ErrorHandler()
+  async importDispensations(formData: FormData): Promise<void> {
+    await this.axios.post(`${this.path}/dispensations`, formData);
+  }
 }

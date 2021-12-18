@@ -28,6 +28,11 @@ export default class Api<T> extends Vue {
   }
 
   @ErrorHandler()
+  async import(formData: FormData): Promise<void> {
+    this.axios.post(this.path, formData);
+  }
+
+  @ErrorHandler()
   async update(obj: T, id: string, message?: string): Promise<void> {
     await this.axios.put(`${this.path}/${id}`, obj);
     if (message) this.sendNotification(message);
