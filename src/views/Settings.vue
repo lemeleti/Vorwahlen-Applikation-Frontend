@@ -33,8 +33,10 @@
             <div class="columns">
               <div class="column is-half">
                 <span>
-                  Anzahl gewählter Kontext-Wahlpflichtmodule bei den ersten
-                  Vorwahlen
+                  Als Teilzeitstudent besuchen Sie in der Regel im 5. und 6.
+                  Semester zwei Kontext-Wahlpflichtmodule. Geben Sie diese hier
+                  an, damit das Tool Ihnen erlaubt weniger
+                  Kontext-Wahlpflichtmodule zu wählen.
                 </span>
               </div>
 
@@ -157,12 +159,12 @@ export default class Settings extends Vue {
   settingDescription: SettingsDescription = {
     isRepetent: [
       "Repetent",
-      "Wenn Sie repetieren wählen Sie diese Checkbox aus.",
+      "Wählen Sie die voraussichtlich nicht bestandenen Module, da Sie diese wiederholen müssen.",
     ],
     hadAlreadyElectedTwoConsecutiveModules: [
       "Konsekutive Wahlpflichtmodule bereits gewählt",
-      `Wenn Sie als Teilzeitstudent bereits die verlangten 
-      konsekutiven Wahlpflichtmodule gewählt haben`,
+      `Wenn Sie als Teilzeitstudent im 5. und 6. Semester konsekutive Wahlpflichtmodule besuchen, 
+      wählen Sie diese Feld an. Das Tool erlaubt Ihnen dann weniger konsekutive Wahlpflichtmodule zu wählen.`,
     ],
     isSkipConsecutiveModuleCheck: [
       "Konsekutive Wahlpflichmodulüberprüfung überspringen",

@@ -14,7 +14,8 @@
 
       <div v-if="this.userStore.isPartTimeSecondElection">
         <b-field
-          label="Wie viele Kontextmodule haben Sie in der letzten Vorwahl gewählt?"
+          label="Wenn Sie als Teilzeitstudent im 5. und 6. Semester konsekutive Wahlpflichtmodule besuchen, 
+          wählen Sie diese Feld an. Das Tool erlaubt Ihnen dann weniger konsekutive Wahlpflichtmodule zu wählen."
         >
           <b-select
             v-model="validationSetting.electedContextModulesInFirstElection"
