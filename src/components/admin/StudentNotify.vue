@@ -70,17 +70,18 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import StudentNotification from "@/models/studentNotification";
-import { AxiosResponse } from "axios";
+import StudentApi from "@/mixins/StudentApi";
 
 @Component
 export default class StudentNotify extends Vue {
   @Prop() studentNotification!: Partial<StudentNotification>;
 
   async sendNotification(): Promise<void> {
-    const response: AxiosResponse<void> = (
-      await Vue.axios.post("/students/notify", this.studentNotification)
-    ).data;
-    if (response.status) {
+    const studentApi = new StudentApi();
+    try {
+      await studentApi.notfiyStudents(
+        this.studentNotification as StudentNotification
+      );
       this.$buefy.notification.open({
         message: "Nachricht wurde erfolgreich versendet",
         type: "is-success",
@@ -88,6 +89,8 @@ export default class StudentNotify extends Vue {
         hasIcon: true,
         duration: 5000,
       });
+    } catch (e) {
+      //handled by error handler
     }
     this.$emit("close");
   }

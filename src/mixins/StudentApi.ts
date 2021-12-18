@@ -1,5 +1,6 @@
 import ErrorHandler from "@/decorators/ErrorHandler";
 import Student from "@/models/student";
+import StudentNotification from "@/models/studentNotification";
 import StudentSetup from "@/models/studentSetup";
 import ValidationSetting from "@/models/validationSetting";
 import { Component, Mixins } from "vue-property-decorator";
@@ -34,5 +35,10 @@ export default class StudentApi extends Mixins<Api<Student>>(Api) {
   ): Promise<void> {
     await this.axios.put(`${this.path}/${id}/settings`, setting);
     if (message) this.sendNotification(message);
+  }
+
+  @ErrorHandler()
+  async notfiyStudents(notification: StudentNotification): Promise<void> {
+    await this.axios.post(`${this.path}/notify`, notification);
   }
 }
