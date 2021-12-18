@@ -44,14 +44,14 @@ const routes: Array<RouteConfig> = [
     path: "/Shibboleth.sso/Login?target=https%3A%2F%2Fvorwahlen.cloudlab.zhaw.ch",
     name: "Login",
     beforeEnter(to) {
-      window.location.href = to.path;
+      window.location.replace(to.path)
     },
   },
   {
-    path: "/Shibboleth.sso/Logout",
+    path: "/api/logout",
     name: "Logout",
     beforeEnter(to) {
-      window.location.href = to.path;
+      window.location.replace(to.path);
     },
   },
 ];

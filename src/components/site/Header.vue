@@ -141,10 +141,8 @@ export default class Header extends Vue {
     });
   }
 
-  async logout(): Promise<void> {
-    const sessionApi = new SessionApi();
+  logout(): void {
     this.userStore.removeUserData();
-    await sessionApi.destroy();
     this.$router.push({ name: "Logout" });
   }
 }
