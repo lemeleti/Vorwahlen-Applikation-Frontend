@@ -62,7 +62,6 @@ import TileBox from "@/components/TileBox.vue";
 import ElectionStructureElement from "@/models/electionStructureElement";
 import ElectionStatus from "@/models/electionStatus";
 import ElectionStatusElement from "@/models/electionStatusElement";
-import _ from "lodash";
 import ModuleCategory from "@/models/moduleCategory";
 
 interface ModuleTile {
