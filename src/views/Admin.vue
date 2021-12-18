@@ -57,5 +57,9 @@ import { Vue, Component } from "vue-property-decorator";
 })
 export default class Admin extends Vue {
   activeTab = 0;
+
+  created(): void {
+    document.title = "Admin Dashboard";
+  }
 }
 </script>
