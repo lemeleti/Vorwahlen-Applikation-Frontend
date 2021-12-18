@@ -117,7 +117,7 @@ export default class ModuleFilter extends Vue {
       instituteFilterOption.options = this.moduleStore.moduleArr.map(
         (module) => module.institute
       );
-      this.filterOptions[indexOf] = instituteFilterOption;
+      this.$set(this.filterOptions, indexOf, instituteFilterOption);
     }
   }
 

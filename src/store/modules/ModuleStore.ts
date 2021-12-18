@@ -1,12 +1,10 @@
-import Vue from "vue";
-
 import {
   Module,
   VuexModule,
   Mutation,
-  MutationAction,
   Action,
   getModule,
+  MutationAction,
 } from "vuex-module-decorators";
 import IModule from "@/models/module";
 import store from "@/store";
@@ -20,9 +18,7 @@ import ModuleElectionApi from "@/mixins/ModuleElectionApi";
 import UserStore from "./UserStore";
 import { NotificationProgrammatic as Notification } from "buefy";
 import ModuleFilter from "@/models/moduleFilter";
-interface ModuleWrapper {
-  moduleArr: Array<IModule>;
-}
+import ModuleApi from "@/mixins/ModuleApi";
 
 interface HeaderMessage {
   message: string;
@@ -40,11 +36,6 @@ export default class ModuleStore extends VuexModule {
   isFilterActive = false;
   electionStatus: ElectionStatus = <ElectionStatus>{};
   client: Stomp.Client | null = null;
-
-  @Mutation
-  addModules(arr: Array<IModule>): void {
-    this.moduleArr.push(...arr);
-  }
 
   @Mutation
   setModuleFilters(moduleFilters: Array<Partial<ModuleFilter>>): void {
@@ -162,11 +153,9 @@ export default class ModuleStore extends VuexModule {
   }
 
   @MutationAction
-  async updateModules(): Promise<ModuleWrapper> {
-    const moduleArr: Array<IModule> = (
-      await Vue.axios.get<Array<IModule>>("modules")
-    ).data;
-    localStorage.setItem("modules", JSON.stringify(moduleArr));
+  async updateModules(): Promise<{ moduleArr: Array<IModule> }> {
+    const moduleApi = new ModuleApi();
+    const moduleArr: Array<IModule> = await moduleApi.getAll();
     return { moduleArr };
   }
 
@@ -185,6 +174,10 @@ export default class ModuleStore extends VuexModule {
       );
       this.context.commit("setElectionData", electionData);
     }
+  }
+
+  get institutes(): Array<string> {
+    return this.moduleArr.map((module) => module.institute);
   }
 
   get getModules(): Array<IModule> {
