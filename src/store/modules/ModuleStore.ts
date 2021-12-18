@@ -67,6 +67,11 @@ export default class ModuleStore extends VuexModule {
   }
 
   @Mutation
+  setIsFilterActive(isFilterActive: boolean): void {
+    this.isFilterActive = isFilterActive;
+  }
+
+  @Mutation
   updateElection(moduleNo: string): void {
     if (this.client && this.client.connected) {
       this.client.send("/app/save", {}, moduleNo);

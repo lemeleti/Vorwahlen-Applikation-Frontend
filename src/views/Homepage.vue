@@ -97,6 +97,7 @@ import Student from "@/models/student";
 import PageText from "@/models/pageText";
 import PageTextApi from "@/mixins/PageTextApi";
 import ModuleFilter from "@/components/ModuleFilter.vue";
+import _ from "lodash";
 
 interface ElectionCategoryMap {
   [index: string]: string;
@@ -210,6 +211,13 @@ export default class Homepage extends Vue {
         (module: IModule) => module.consecutiveModuleNo !== ""
       );
     }
+
+    if (this.moduleStore.isFilterActive) {
+      modules = _.remove(modules, (module: IModule) => {
+        return this.moduleStore.filteredModules.indexOf(module) !== -1;
+      });
+    }
+
     return modules;
   }
 

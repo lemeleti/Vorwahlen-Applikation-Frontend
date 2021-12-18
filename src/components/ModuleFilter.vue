@@ -167,6 +167,7 @@ export default class ModuleFilter extends Vue {
         }
       }
     }
+    this.moduleStore.setIsFilterActive(true);
   }
 
   orChaining(
@@ -222,6 +223,7 @@ export default class ModuleFilter extends Vue {
     this.moduleStore.emptyFilteredModules();
     this.moduleStore.setNumberOfFilters(1);
     this.moduleStore.setModuleFilters([{}]);
+    this.moduleStore.setIsFilterActive(false);
   }
 }
 </script>
