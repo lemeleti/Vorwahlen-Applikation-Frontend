@@ -196,8 +196,52 @@ export default class ModuleFilter extends Vue {
   }
 
   applyOption(filter: IModuleFilter, modules: Array<Module>): Array<Module> {
+    let optionAppliedModules: Array<Module> = [];
+    if (filter.field === "semester") {
+      optionAppliedModules = this.applySemester(filter, modules);
+    } else if (filter.field === "moduleGroup") {
+      optionAppliedModules = this.applyModuleGroup(filter, modules);
+    } else {
+      optionAppliedModules = this.applyOther(filter, modules);
+    }
+    return optionAppliedModules;
+  }
+
+  applySemester(filter: IModuleFilter, modules: Array<Module>): Array<Module> {
+    let semester = filter.option === "HS" ? 5 : 6;
+    let semesterAppliedModules: Array<Module> = modules.filter(
+      (module) => module.semester === semester
+    );
+
+    if (filter.matcher === "neq") {
+      semesterAppliedModules = modules.filter(
+        (module) => module.semester !== semester
+      );
+    }
+
+    return semesterAppliedModules;
+  }
+
+  applyModuleGroup(
+    filter: IModuleFilter,
+    modules: Array<Module>
+  ): Array<Module> {
+    let moduleGroupAppliedFilter = modules.filter((module) =>
+      module.moduleGroup.includes(filter.option)
+    );
+
+    if (filter.matcher === "neq") {
+      moduleGroupAppliedFilter = modules.filter(
+        (module) => !module.moduleGroup.includes(filter.option)
+      );
+    }
+
+    return moduleGroupAppliedFilter;
+  }
+
+  applyOther(filter: IModuleFilter, modules: Array<Module>): Array<Module> {
     const key = filter.field as keyof Module;
-    let optionAppliedModules: Array<Module> = modules.filter(
+    let optionAppliedModules = modules.filter(
       (module) => module[key] === filter.option
     );
     if (filter.matcher === "neq") {
