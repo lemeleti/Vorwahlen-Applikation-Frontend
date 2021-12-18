@@ -177,15 +177,18 @@ export default class Administration<T> extends Mixins(ModuleListUpload) {
         icon: "check",
         hasIcon: true,
       });
-      this.removeSubsetFromTable(this.syncedCheckedRows);
+      this.removeSubsetFromTable();
     }
   }
 
-  removeSubsetFromTable(rows: T[]): void {
-    for (const row of rows) {
-      const indexOf = this.syncedRows.indexOf(row);
-      this.syncedRows.splice(indexOf, 1);
+  removeSubsetFromTable(): void {
+    for (const row of this.syncedCheckedRows) {
+      const indexOf = _.indexOf(this.syncedRows, row);
+      if (indexOf !== -1) {
+        this.syncedRows.splice(indexOf, 1);
+      }
     }
+    this.syncedCheckedRows = [];
   }
 }
 </script>
