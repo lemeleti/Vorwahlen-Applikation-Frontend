@@ -1,4 +1,4 @@
-import { Component, Vue } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import Api from "./Api";
 import User from "@/models/user";
 import ErrorHandler from "@/decorators/ErrorHandler";

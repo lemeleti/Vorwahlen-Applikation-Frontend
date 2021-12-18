@@ -1,7 +1,7 @@
 import ErrorHandler from "@/decorators/ErrorHandler";
 import EventoData from "@/models/eventoData";
 import Module from "@/models/module";
-import { Component, Vue } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import Api from "./Api";
 
 @Component
