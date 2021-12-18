@@ -18,18 +18,18 @@ export default class Api<T> extends Vue {
 
   @ErrorHandler()
   async getAll(): Promise<Array<T>> {
-    return (await Vue.axios.get<Array<T>>(this.basePath)).data;
+    return (await this.axios.get<Array<T>>(this.basePath)).data;
   }
 
   @ErrorHandler()
   async deleteById(id: string, message?: string): Promise<void> {
-    await Vue.axios.delete(`${this.basePath}/${id}`);
+    await this.axios.delete(`${this.basePath}/${id}`);
     if (message) this.sendNotification(message);
   }
 
   @ErrorHandler()
   async getById(id: string): Promise<T> {
-    return (await Vue.axios.get<T>(`${this.basePath}/${id}`)).data;
+    return (await this.axios.get<T>(`${this.basePath}/${id}`)).data;
   }
 
   @ErrorHandler()

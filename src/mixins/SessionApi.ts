@@ -9,12 +9,12 @@ export default class SessionApi extends Api<User> {
 
   @ErrorHandler()
   async get(): Promise<User> {
-    return (await Vue.axios.get<User>(this.basePath)).data;
+    return (await this.axios.get<User>(this.basePath)).data;
   }
 
   @ErrorHandler()
   async isAuthenticated(): Promise<boolean> {
-    return (await Vue.axios.get<boolean>(`${this.basePath}/is-authenticated`))
+    return (await this.axios.get<boolean>(`${this.basePath}/is-authenticated`))
       .data;
   }
 

@@ -10,13 +10,13 @@ export default class ModuleApi extends Api<Module> {
 
   @ErrorHandler()
   async scrapeModuleData(): Promise<void> {
-    await Vue.axios.post(`${this.basePath}/eventodata/scrape`);
+    await this.axios.post(`${this.basePath}/eventodata/scrape`);
   }
 
   @ErrorHandler()
   async getEventoDataById(id: string): Promise<EventoData> {
     return (
-      await Vue.axios.get<EventoData>(`${this.basePath}/${id}/eventodata`)
+      await this.axios.get<EventoData>(`${this.basePath}/${id}/eventodata`)
     ).data;
   }
 
