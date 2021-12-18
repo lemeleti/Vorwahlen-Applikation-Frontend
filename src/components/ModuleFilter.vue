@@ -111,7 +111,7 @@ export default class ModuleFilter extends Vue {
     },
   ];
 
-  @Watch("moduleStore.moduleArr")
+  @Watch("moduleStore.moduleArr", { immediate: true })
   updateOptionsOnModuleChange(): void {
     const instituteFilterOption = this.filterOptions.find(
       (filterOption) => filterOption.field === "institute"
