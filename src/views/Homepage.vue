@@ -121,6 +121,10 @@ export default class Homepage extends Vue {
   headerText = "";
   footerText = "";
 
+  created(): void {
+    document.title = "Homepage";
+  }
+
   beforeMount(): void {
     this.setSiteTexts();
   }

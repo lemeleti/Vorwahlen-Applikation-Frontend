@@ -16,5 +16,9 @@ import ModuleElection from "@/components/ModuleElection.vue";
     ModuleElection,
   },
 })
-export default class MyElection extends Vue {}
+export default class MyElection extends Vue {
+  created(): void {
+    document.title = "Meine Wahl";
+  }
+}
 </script>

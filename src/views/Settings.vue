@@ -99,6 +99,7 @@ export default class Settings extends Vue {
   moduleElectionApi = new ModuleElectionApi();
 
   async created(): Promise<void> {
+    document.title = "Einstellungen";
     if (this.userStore.student) {
       try {
         this.validationSetting = await this.studentApi.getValidationSetting(

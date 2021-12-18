@@ -6,5 +6,9 @@
 import { Vue, Component } from "vue-property-decorator";
 
 @Component
-export default class Statistics extends Vue {}
+export default class Statistics extends Vue {
+  created(): void {
+    document.title = "Statistiken";
+  }
+}
 </script>
