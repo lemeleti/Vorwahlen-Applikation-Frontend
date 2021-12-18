@@ -200,14 +200,14 @@ export default class Homepage extends Vue {
 
   getModulesByCategory(category: ModuleCategory): Array<IModule> {
     let modules: Array<IModule> = [];
-    const filteredModules = this.moduleStore.getModules.filter(
+    const filteredModules = this.moduleStore.moduleArr.filter(
       (module: IModule) =>
         module.category === category && module.consecutiveModuleNo === ""
     );
     if (filteredModules.length > 0) {
       modules = filteredModules;
     } else {
-      modules = this.moduleStore.getModules.filter(
+      modules = this.moduleStore.moduleArr.filter(
         (module: IModule) => module.consecutiveModuleNo !== ""
       );
     }

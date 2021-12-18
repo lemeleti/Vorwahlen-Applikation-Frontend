@@ -19,6 +19,7 @@ import UserStore from "./UserStore";
 import { NotificationProgrammatic as Notification } from "buefy";
 import ModuleFilter from "@/models/moduleFilter";
 import ModuleApi from "@/mixins/ModuleApi";
+import _ from "lodash";
 
 interface HeaderMessage {
   message: string;
@@ -34,7 +35,7 @@ export default class ModuleStore extends VuexModule {
   numberOfFilters = 1;
   isElectionValid = false;
   isFilterActive = false;
-  electionStatus: ElectionStatus = <ElectionStatus>{};
+  electionStatus: ElectionStatus | null = null;
   client: Stomp.Client | null = null;
 
   @Mutation
@@ -176,22 +177,6 @@ export default class ModuleStore extends VuexModule {
     }
   }
 
-  get institutes(): Array<string> {
-    return this.moduleArr.map((module) => module.institute);
-  }
-
-  get getModules(): Array<IModule> {
-    return this.moduleArr;
-  }
-
-  get getElectedModules(): Array<ElectionStructureElement> {
-    return this.electedModules;
-  }
-
-  get getOverflowedModules(): Array<ElectionStructureElement> {
-    return this.overflowedElectedModules;
-  }
-
   get getColorForCategory() {
     return (cat: ModuleCategory): string => {
       let color = "";
@@ -232,25 +217,19 @@ export default class ModuleStore extends VuexModule {
   }
 
   get isClientConnected(): boolean {
-    return this.client !== null && this.client.connected;
+    return _.get(this.client, "connected", false);
   }
 
   get isModuleSelected() {
-    return (moduleNo: string): boolean => {
-      let isElected = false;
-      if (
-        (this.electedModules &&
-          this.electedModules.find(
-            (element: ElectionStructureElement) => element.id === moduleNo
-          )) ||
-        (this.overflowedElectedModules &&
-          this.overflowedElectedModules.find(
-            (element: ElectionStructureElement) => element.id === moduleNo
-          ))
-      ) {
-        isElected = true;
-      }
-      return isElected;
-    };
+    return (moduleNo: string): boolean =>
+      this.findElectedModule(this.electedModules, moduleNo) ||
+      this.findElectedModule(this.overflowedElectedModules, moduleNo);
+  }
+
+  get findElectedModule() {
+    return (arr: Array<ElectionStructureElement>, moduleNo: string): boolean =>
+      arr.find((structureElement) => structureElement.id === moduleNo)
+        ? true
+        : false;
   }
 }

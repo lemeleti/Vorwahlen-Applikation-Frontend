@@ -83,7 +83,7 @@ export default class ModuleElection extends Vue {
   getTilesForSemester(semester: number): Array<ModuleTile> {
     const tiles: Array<ModuleTile> = [];
 
-    if (this.moduleStore.getElectedModules) {
+    if (this.moduleStore.electedModules) {
       const sortOrder = [
         ModuleCategory.CONTEXT_MODULE,
         ModuleCategory.PROJECT_MODULE,
@@ -92,7 +92,7 @@ export default class ModuleElection extends Vue {
         ModuleCategory.SUBJECT_MODULE,
         ModuleCategory.INTERDISCIPLINARY_MODULE,
       ];
-      this.moduleStore.getElectedModules
+      this.moduleStore.electedModules
         .filter((element) => element.semester % semester === 0)
         .sort(
           (el1, el2) =>
@@ -107,8 +107,8 @@ export default class ModuleElection extends Vue {
 
   get overflowedElectionTiles(): Array<ModuleTile> {
     const tiles: Array<ModuleTile> = [];
-    if (this.moduleStore.getOverflowedModules) {
-      this.moduleStore.getOverflowedModules
+    if (this.moduleStore.overflowedElectedModules) {
+      this.moduleStore.overflowedElectedModules
         .map((element) => this.electionStructureElementToTile(element))
         .forEach((tile) => tiles.push(tile));
     }
@@ -146,7 +146,8 @@ export default class ModuleElection extends Vue {
   }
 
   get electionStatus(): Array<string> {
-    const electionStatus: ElectionStatus = this.moduleStore.electionStatus;
+    const electionStatus: ElectionStatus | null =
+      this.moduleStore.electionStatus;
     const reasons: Array<string> = [];
     if (electionStatus) {
       for (const value of Object.values(electionStatus)) {

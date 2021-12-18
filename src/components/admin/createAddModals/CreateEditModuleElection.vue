@@ -64,7 +64,7 @@ export default class CreateEditModuleElection extends CreateEditModal<ModuleElec
     const electedModules: Array<Module> = [];
     if (this.partialObject.electedModules) {
       this.partialObject.electedModules.forEach((moduleNo: string) => {
-        const module = this.moduleStore.getModules.find(
+        const module = this.moduleStore.moduleArr.find(
           (m) => m.moduleNo === moduleNo
         );
         if (module) {
@@ -84,7 +84,7 @@ export default class CreateEditModuleElection extends CreateEditModal<ModuleElec
   }
 
   getFilteredModules(text: string): void {
-    this.filteredModules = this.moduleStore.getModules.filter(
+    this.filteredModules = this.moduleStore.moduleArr.filter(
       (module: Module) => {
         return (
           module.moduleTitle.toLowerCase().indexOf(text.toLowerCase()) >= 0
