@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, PropSync } from "vue-property-decorator";
+import { Vue, Component, Prop, PropSync, Watch } from "vue-property-decorator";
 import Module from "@/models/module";
 import EventoData from "@/models/eventoData";
 import ModuleApi from "@/mixins/ModuleApi";
@@ -60,7 +60,8 @@ export default class SubjectInfoModal extends Vue {
     remarks: "Bemerkungen",
   };
 
-  async updated(): Promise<void> {
+  @Watch("module")
+  async updateInfoModalContent(): Promise<void> {
     try {
       if (this.module) {
         this.eventoData = await this.moduleApi.getEventoDataById(
