@@ -9,18 +9,18 @@ export default class SessionApi extends Api<User> {
 
   @ErrorHandler()
   async get(): Promise<User> {
-    return (await this.axios.get<User>(this.basePath)).data;
+    return (await this.axios.get<User>(this.path)).data;
   }
 
   @ErrorHandler()
   async isAuthenticated(): Promise<boolean> {
-    return (await this.axios.get<boolean>(`${this.basePath}/is-authenticated`))
+    return (await this.axios.get<boolean>(`${this.path}/is-authenticated`))
       .data;
   }
 
   @ErrorHandler()
   async isAdmin(): Promise<boolean> {
-    return (await this.axios.get<boolean>(`${this.basePath}/is-admin`)).data;
+    return (await this.axios.get<boolean>(`${this.path}/is-admin`)).data;
   }
 
   @ErrorHandler()
