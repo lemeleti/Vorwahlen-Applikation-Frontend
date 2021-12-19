@@ -14,6 +14,7 @@
         sort-icon="chevron-up"
         paginated
         :per-page="entriesPerPage"
+        class="admin-table"
       >
         <template #bottom-left>
           <div class="level">
@@ -192,3 +193,10 @@ export default class Administration<T> extends Mixins(ModuleListUpload) {
   }
 }
 </script>
+
+<style scoped>
+.admin-table {
+  table-layout: fixed;
+  word-break: break-word;
+}
+</style>
