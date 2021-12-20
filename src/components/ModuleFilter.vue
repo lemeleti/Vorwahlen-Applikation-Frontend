@@ -62,6 +62,7 @@
               type="is-danger"
               @click="removeFilter(filter - 1)"
               v-if="filter - 1 > 0"
+              icon-left="trash"
               outlined
             />
           </div>
