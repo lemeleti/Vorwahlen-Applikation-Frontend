@@ -85,7 +85,7 @@ export default class StudentNotify extends Vue {
       );
       this.$buefy.notification.open({
         message: "Nachricht wurde erfolgreich versendet",
-        type: "is-success",
+        type: "is-info",
         icon: "paper-plane",
         hasIcon: true,
         duration: 5000,
