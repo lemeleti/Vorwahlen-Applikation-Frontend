@@ -31,6 +31,7 @@
         type="is-success"
         label="Bestätigen"
         @click.native="confirmSetup"
+        outlined
       />
     </footer>
   </div>

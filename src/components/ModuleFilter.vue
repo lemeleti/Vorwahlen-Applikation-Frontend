@@ -52,6 +52,7 @@
               type="is-success"
               v-if="filter == numberOfFilters"
               @click="addFilter"
+              outlined
             />
           </div>
 
@@ -61,14 +62,20 @@
               type="is-danger"
               @click="removeFilter(filter - 1)"
               v-if="filter - 1 > 0"
+              outlined
             />
           </div>
         </div>
       </div>
     </div>
     <div class="buttons">
-      <b-button type="is-info" label="Anwenden" @click="applyFilter" />
-      <b-button type="is-danger" label="Zurücksetzen" @click="resetFilter" />
+      <b-button type="is-info" label="Anwenden" @click="applyFilter" outlined />
+      <b-button
+        type="is-danger"
+        label="Zurücksetzen"
+        @click="resetFilter"
+        outlined
+      />
     </div>
   </div>
 </template>

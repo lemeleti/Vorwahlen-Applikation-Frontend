@@ -59,9 +59,10 @@
           icon-left="paper-plane"
           type="is-info"
           @click="sendNotification"
+          outlined
         />
 
-        <b-button label="Abbrechen" @click="$emit('close')" />
+        <b-button label="Abbrechen" @click="$emit('close')" outlined />
       </div>
     </footer>
   </div>

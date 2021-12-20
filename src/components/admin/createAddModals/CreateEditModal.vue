@@ -15,8 +15,9 @@
         type="is-success"
         :label="createObject ? 'Erstellen' : 'Aktualisieren'"
         @click.native="createObject ? add() : edit()"
+        outlined
       />
-      <b-button label="Abbrechen" @click="$emit('close')" />
+      <b-button label="Abbrechen" @click="$emit('close')" outlined />
     </footer>
   </div>
 </template>

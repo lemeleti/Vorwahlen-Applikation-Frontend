@@ -17,6 +17,7 @@
           type="is-success"
           icon-left="file-upload"
           @click="importModules"
+          outlined
         />
       </div>
 
@@ -26,6 +27,7 @@
           type="is-info"
           icon-left="file-upload"
           @click="moduleApi.scrapeModuleData"
+          outlined
         />
       </div>
     </template>

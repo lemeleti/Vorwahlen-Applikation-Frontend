@@ -23,6 +23,7 @@
                 label="Alle abwählen"
                 @click="syncedCheckedRows = []"
                 type="is-info"
+                outlined
               />
             </div>
 
@@ -45,6 +46,7 @@
             icon-left="plus"
             label="Erstellen"
             type="is-success"
+            outlined
           />
         </div>
 
@@ -55,6 +57,7 @@
             type="is-info"
             label="Editieren"
             :disabled="syncedCheckedRows.length == 0"
+            outlined
           />
         </div>
 
@@ -65,6 +68,7 @@
             type="is-danger"
             label="Löschen"
             :disabled="syncedCheckedRows.length == 0"
+            outlined
           />
         </div>
 

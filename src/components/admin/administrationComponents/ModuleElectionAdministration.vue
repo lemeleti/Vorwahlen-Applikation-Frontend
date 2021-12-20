@@ -17,6 +17,7 @@
           type="is-info"
           icon-left="file-download"
           @click="moduleElectionApi.getModuleExport"
+          outlined
         />
       </div>
 
@@ -33,6 +34,7 @@
               icon-right="chevron-down"
               icon-left="paper-plane"
               @click="notifySelectedStudents"
+              outlined
             />
           </template>
 

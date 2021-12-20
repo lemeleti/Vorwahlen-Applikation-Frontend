@@ -17,6 +17,7 @@
           label="Klassenliste"
           icon-left="file-upload"
           type="is-success"
+          outlined
         />
       </div>
 
@@ -26,6 +27,7 @@
           label="Dispensationen"
           icon-left="file-upload"
           type="is-success"
+          outlined
         />
       </div>
     </template>

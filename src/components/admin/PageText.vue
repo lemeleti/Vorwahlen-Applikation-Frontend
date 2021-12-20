@@ -21,7 +21,12 @@
         <b-field label="Editor">
           <b-input v-model="content" type="textarea"></b-input>
         </b-field>
-        <b-button label="Speichern" type="is-info" @click.native="updateText" />
+        <b-button
+          label="Speichern"
+          type="is-info"
+          @click.native="updateText"
+          outlined
+        />
       </div>
 
       <div class="buttons">
@@ -29,6 +34,7 @@
           label="Erstellen"
           @click.native="createPageText"
           type="is-success"
+          outlined
         />
 
         <b-button
@@ -36,6 +42,7 @@
           @click.native="updatePageText"
           :disabled="selection < 0"
           type="is-info"
+          outlined
         />
 
         <b-button
@@ -43,6 +50,7 @@
           @click.native="deleteSelectedSite"
           :disabled="selection < 0"
           type="is-danger"
+          outlined
         />
       </div>
     </div>
