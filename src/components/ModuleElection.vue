@@ -36,18 +36,33 @@
         </div>
       </template>
     </TileBox>
-    <div
-      class="box notification election-status is-radiusless"
-      :class="electionStatusColor"
-      v-if="
-        userStore.isStudent &&
-        moduleStore.isClientConnected &&
-        userStore.student.canElect
-      "
-    >
-      <p v-for="(reason, index) of electionStatus" :key="index">
-        {{ reason }}
-      </p>
+    <div class="election-status">
+      <b-collapse v-model="isElectionInfoOpen" class="card">
+        <template #trigger="props">
+          <div class="card-header" :class="electionStatusColor" role="button">
+            <p class="card-header-title">Ihr Vorwahlenstatus</p>
+            <div class="card-header-icon">
+              <b-icon
+                :icon="props.open ? 'chevron-down' : 'chevron-right'"
+                v-model="isElectionInfoOpen"
+              ></b-icon>
+            </div>
+          </div>
+        </template>
+        <div
+          class="card-content"
+          :class="`${electionStatusColor}-light`"
+          v-if="
+            userStore.isStudent &&
+            moduleStore.isClientConnected &&
+            userStore.student.canElect
+          "
+        >
+          <p v-for="(reason, index) of electionStatus" :key="index">
+            {{ reason }}
+          </p>
+        </div>
+      </b-collapse>
     </div>
   </div>
 </template>
@@ -78,6 +93,7 @@ interface ModuleTile {
 export default class ModuleElection extends Vue {
   moduleStore: ModuleStore = getModule(ModuleStore);
   userStore: UserStore = getModule(UserStore);
+  isElectionInfoOpen = true;
 
   getTilesForSemester(semester: number): Array<ModuleTile> {
     const tiles: Array<ModuleTile> = [];
@@ -164,11 +180,9 @@ export default class ModuleElection extends Vue {
   }
 
   get electionStatusColor(): string {
-    let color = "is-warning";
-    if (this.moduleStore.isElectionValid) {
-      color = "is-success";
-    }
-    return color;
+    return this.moduleStore.isElectionValid
+      ? "has-background-success"
+      : "has-background-warning";
   }
 }
 </script>
