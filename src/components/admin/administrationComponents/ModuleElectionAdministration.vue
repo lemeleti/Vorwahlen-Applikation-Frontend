@@ -97,7 +97,7 @@ export default class ModuleElectionAdministration extends Administration<ModuleE
       label: "Wahlgültigkeit",
     },
   ];
-  initValues: Partial<ModuleElection> = { id: 0 };
+  initValues: Partial<ModuleElection> = { id: 0, electedModules: [] };
 
   get modalComponent(): typeof _Vue {
     return CreateEditModuleElection;
