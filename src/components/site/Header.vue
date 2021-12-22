@@ -3,7 +3,9 @@
     <div class="hero-head">
       <b-navbar centered type="is-info">
         <template #brand>
-          <img src="@/assets/logo.png" alt="ZHAW" id="logo" />
+          <b-navbar-item tag="div">
+            <img src="@/assets/logo.png" alt="ZHAW" class="logo" />
+          </b-navbar-item>
         </template>
         <template #start>
           <b-navbar-item
@@ -147,11 +149,8 @@ export default class Header extends Vue {
 }
 </script>
 
-<style lang="scss">
-#logo {
-  max-height: 60px;
-  position: relative;
-  top: 1rem;
-  left: 0.75rem;
+<style scoped>
+.logo {
+  min-height: 60px;
 }
 </style>
