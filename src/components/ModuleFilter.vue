@@ -4,68 +4,66 @@
     <div class="level" v-for="filter of numberOfFilters" :key="filter">
       <div class="level-left">
         <div class="level-item">
-          <div class="level-item">
-            <b-select v-model="moduleFilters[filter - 1].field">
-              <option
-                v-for="filterOption in filterOptions"
-                :key="filterOption.field"
-                :value="filterOption.field"
-              >
-                {{ filterOption.name }}
-              </option>
-            </b-select>
-          </div>
-
-          <div class="level-item">
-            <b-select v-model="moduleFilters[filter - 1].matcher">
-              <option value="eq">Ist gleich</option>
-              <option value="neq">Ist nicht gleich</option>
-            </b-select>
-          </div>
-
-          <div class="level-item">
-            <b-select v-model="moduleFilters[filter - 1].option">
-              <option
-                v-for="option in options(filter - 1)"
-                :key="option"
-                :value="option"
-              >
-                {{ option }}
-              </option>
-            </b-select>
-          </div>
-
-          <div class="level-item">
-            <b-select
-              v-model="moduleFilters[filter - 1].chaining"
-              v-if="filter !== numberOfFilters"
+          <b-select v-model="moduleFilters[filter - 1].field">
+            <option
+              v-for="filterOption in filterOptions"
+              :key="filterOption.field"
+              :value="filterOption.field"
             >
-              <option value="or">Oder</option>
-              <option value="and">Und</option>
-            </b-select>
-          </div>
+              {{ filterOption.name }}
+            </option>
+          </b-select>
+        </div>
 
-          <div class="level-item">
-            <b-button
-              label="Hinzufügen"
-              icon-left="plus"
-              type="is-success"
-              v-if="filter == numberOfFilters"
-              @click="addFilter"
-              outlined
-            />
-          </div>
+        <div class="level-item">
+          <b-select v-model="moduleFilters[filter - 1].matcher">
+            <option value="eq">Ist gleich</option>
+            <option value="neq">Ist nicht gleich</option>
+          </b-select>
+        </div>
 
-          <div class="level-item">
-            <b-button
-              label="Entfernen"
-              type="is-danger"
-              @click="removeFilter(filter - 1)"
-              v-if="filter - 1 > 0"
-              icon-left="trash"
-              outlined
-            />
-          </div>
+        <div class="level-item">
+          <b-select v-model="moduleFilters[filter - 1].option">
+            <option
+              v-for="option in options(filter - 1)"
+              :key="option"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </b-select>
+        </div>
+
+        <div class="level-item">
+          <b-select
+            v-model="moduleFilters[filter - 1].chaining"
+            v-if="filter !== numberOfFilters"
+          >
+            <option value="or">Oder</option>
+            <option value="and">Und</option>
+          </b-select>
+        </div>
+
+        <div class="level-item">
+          <b-button
+            label="Hinzufügen"
+            icon-left="plus"
+            type="is-success"
+            v-if="filter == numberOfFilters"
+            @click="addFilter"
+            outlined
+          />
+        </div>
+
+        <div class="level-item">
+          <b-button
+            label="Entfernen"
+            type="is-danger"
+            @click="removeFilter(filter - 1)"
+            v-if="filter - 1 > 0"
+            icon-left="trash"
+            outlined
+          />
         </div>
       </div>
     </div>
