@@ -13,5 +13,5 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class TileBox extends Vue {}
+export default class ColumnsBlock extends Vue {}
 </script>

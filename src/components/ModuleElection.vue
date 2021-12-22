@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TileBox v-for="semester in semesters" :key="semester">
+    <ColumnsBlock v-for="semester in semesters" :key="semester">
       <template #title>{{ semester }}. Semester</template>
       <template #content>
         <div
@@ -17,8 +17,8 @@
           </div>
         </div>
       </template>
-    </TileBox>
-    <TileBox v-show="overflowedElectionTiles.length > 0">
+    </ColumnsBlock>
+    <ColumnsBlock v-show="overflowedElectionTiles.length > 0">
       <template #title>Zu viel gewählte Module</template>
       <template #content>
         <div
@@ -35,7 +35,7 @@
           </div>
         </div>
       </template>
-    </TileBox>
+    </ColumnsBlock>
     <div class="election-status">
       <b-collapse v-model="isElectionInfoOpen" class="card">
         <template #trigger="props">
@@ -73,7 +73,7 @@ import "vue-class-component/hooks";
 import { getModule } from "vuex-module-decorators";
 import UserStore from "@/store/modules/UserStore";
 import ModuleStore from "@/store/modules/ModuleStore";
-import TileBox from "@/components/TileBox.vue";
+import ColumnsBlock from "@/components/ColumnsBlock.vue";
 import ElectionStructureElement from "@/models/electionStructureElement";
 import ElectionStatus from "@/models/electionStatus";
 import ElectionStatusElement from "@/models/electionStatusElement";
@@ -87,7 +87,7 @@ interface ModuleTile {
 
 @Component({
   components: {
-    TileBox,
+    ColumnsBlock,
   },
 })
 export default class ModuleElection extends Vue {

@@ -25,7 +25,7 @@
       <hr />
       <ModuleFilter />
       <hr />
-      <TileBox
+      <ColumnsBlock
         v-for="(description, category, index) in getElectionCategoryMap()"
         :key="category"
       >
@@ -68,7 +68,7 @@
             }}</template>
           </Module>
         </template>
-      </TileBox>
+      </ColumnsBlock>
       <SubjectInfoModal
         :module="selectedModule"
         :isModalActive.sync="isModalActive"
@@ -86,7 +86,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
 import SubjectInfoModal from "@/components/SubjectInfoModal.vue";
 import ModuleElection from "@/components/ModuleElection.vue";
-import TileBox from "@/components/TileBox.vue";
+import ColumnsBlock from "@/components/ColumnsBlock.vue";
 import ModuleStore from "@/store/modules/ModuleStore";
 import "vue-class-component/hooks";
 import UserStore from "@/store/modules/UserStore";
@@ -107,7 +107,7 @@ interface ElectionCategoryMap {
   components: {
     SubjectInfoModal,
     ModuleElection,
-    TileBox,
+    ColumnsBlock,
     Module,
     ModuleFilter,
   },
