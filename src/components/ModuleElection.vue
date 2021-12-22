@@ -4,12 +4,12 @@
       <template #title>{{ semester }}. Semester</template>
       <template #content>
         <div
-          class="tile is-parent has-text-centered is-3"
+          class="column has-text-centered is-3-desktop is-6-tablet"
           v-for="(tile, tileIndex) of getTilesForSemester(semester)"
           :key="tileIndex"
         >
           <div
-            class="tile is-child notification is-radiusless"
+            class="notification is-radiusless"
             :class="tile.moduleColor"
             style="color: black; min-height: 100px"
           >
@@ -22,12 +22,12 @@
       <template #title>Zu viel gewählte Module</template>
       <template #content>
         <div
-          class="tile is-parent has-text-centered is-3"
+          class="column has-text-centered is-3-desktop is-6-tablet"
           v-for="(tile, tileIndex) of overflowedElectionTiles"
           :key="tileIndex"
         >
           <div
-            class="tile is-child notification is-radiusless"
+            class="notification is-radiusless"
             :class="tile.moduleColor"
             style="color: black; min-height: 100px"
           >

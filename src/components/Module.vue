@@ -1,7 +1,7 @@
 <template>
-  <div class="tile is-parent has-text-centered is-3">
+  <div class="column has-text-centered is-3-desktop is-6-tablet">
     <div
-      class="tile is-child notification is-radiusless"
+      class="is-child notification is-radiusless"
       :class="color"
       style="color: black; min-height: 100px"
     >
