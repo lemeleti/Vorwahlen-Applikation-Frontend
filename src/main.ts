@@ -6,6 +6,7 @@ import Buefy from "buefy";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import "buefy/dist/buefy.css";
+import "vue-class-component/hooks";
 import VueSweetalert2 from "vue-sweetalert2";
 import "@sweetalert2/theme-bulma";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -25,6 +26,26 @@ import {
   faBell,
   faSearch,
   faFileUpload,
+  faSignInAlt,
+  faFileDownload,
+  faInfo,
+  faAngleLeft,
+  faAngleRight,
+  faExclamationCircle,
+  faTrash,
+  faPaperPlane,
+  faEye,
+  faEyeSlash,
+  faMinus,
+  faEnvelope,
+  faFile,
+  faVoteYea,
+  faInbox,
+  faFileAlt,
+  faChevronRight,
+  faExclamationTriangle,
+  faChevronUp,
+  faQuestionCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 require("@/assets/main.scss");
@@ -44,7 +65,27 @@ library.add(
   faPlus,
   faBell,
   faSearch,
-  faFileUpload
+  faFileUpload,
+  faSignInAlt,
+  faFileDownload,
+  faInfo,
+  faAngleLeft,
+  faAngleRight,
+  faExclamationCircle,
+  faTrash,
+  faPaperPlane,
+  faEye,
+  faEyeSlash,
+  faMinus,
+  faEnvelope,
+  faFile,
+  faVoteYea,
+  faInbox,
+  faFileAlt,
+  faChevronRight,
+  faExclamationTriangle,
+  faChevronUp,
+  faQuestionCircle
 );
 
 Vue.component("vue-fontawesome", FontAwesomeIcon);
@@ -54,11 +95,7 @@ Vue.use(Buefy, {
   defaultIconPack: "fas",
 });
 
-if (process.env.NODE_ENV === "development") {
-  axios.defaults.baseURL = "http://localhost:8080";
-} else if (process.env.NODE_ENV === "production") {
-  axios.defaults.baseURL = "/api";
-}
+axios.defaults.baseURL = "/api";
 
 Vue.use(VueAxios, axios);
 Vue.use(VueSweetalert2);

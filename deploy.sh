@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+if [ "$APPVEYOR_REPO_TAG" = true ] ; then
 echo "    ____             __           "
 echo "   / __ \___  ____  / /___  __  __"
 echo "  / / / / _ \/ __ \/ / __ \/ / / /"
@@ -24,3 +25,4 @@ ssh -i pa.pem ubuntu@vorwahlen.cloudlab.zhaw.ch "cd wpm; docker-compose pull && 
 
 echo "Image has been uploaded to Docker Hub."
 
+fi

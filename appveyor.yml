@@ -33,8 +33,5 @@ deploy_script:
   - chmod +x deploy.sh
   - sh: ./deploy.sh
 
-  # We do not want to build git tags.
-skip_tags: true
-
 # Use integers as build versions (1, 2, 3, …) instead of 1.0.X.
 version: "{build}"

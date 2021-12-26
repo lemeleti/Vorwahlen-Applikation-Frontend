@@ -1,5 +1,14 @@
 $info: #0064a6;
 $footer-background-color: $info;
+$fullhd: 1632px;
+
+$contextModule: #95b599;
+$projectModule: #e99c3b;
+$electiveModule: #f2cf5a;
+$dispensed: #c7c7c7;
+
+$custom-colors: ("contextModule": $contextModule, "projectModule": $projectModule, "electiveModule": $electiveModule, "dispensed": $dispensed);
 
 @import "~bulma";
 
+$colors: mergeColorMaps(("white": ($white, $black), "black": ($black, $white), "light": ($light, $light-invert), "dark": ($dark, $dark-invert), "primary": ($primary, $primary-invert, $primary-light, $primary-dark), "link": ($link, $link-invert, $link-light, $link-dark), "info": ($info, $info-invert, $info-light, $info-dark), "success": ($success, $success-invert, $success-light, $success-dark), "warning": ($warning, $warning-invert, $warning-light, $warning-dark), "danger": ($danger, $danger-invert, $danger-light, $danger-dark)), $custom-colors);

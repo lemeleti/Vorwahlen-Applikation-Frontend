@@ -1,4 +1,10 @@
 import Vue, { VNode } from "vue";
+import MailTemplateApi from "./mixins/MailTemplateApi";
+import ModuleApi from "./mixins/ModuleApi";
+import ModuleElectionApi from "./mixins/ModuleElectionApi";
+import Notification from "./mixins/Notification";
+import PageTextApi from "./mixins/PageTextApi";
+import StudentApi from "./mixins/StudentApi";
 
 declare global {
   namespace JSX {
