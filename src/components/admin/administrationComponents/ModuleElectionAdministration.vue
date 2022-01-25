@@ -63,6 +63,11 @@ import MailTemplate from "@/models/mailTemplate";
 import StudentNotification from "@/models/studentNotification";
 import ModuleElectionApi from "@/mixins/ModuleElectionApi";
 import MailTemplateApi from "@/mixins/MailTemplateApi";
+import StudentApi from "@/mixins/StudentApi";
+
+interface ModuleElectionWithStudentClass extends ModuleElection {
+  studentClass?: string;
+}
 
 @Component({
   components: {
@@ -71,12 +76,13 @@ import MailTemplateApi from "@/mixins/MailTemplateApi";
     StudentNotify,
   },
 })
-export default class ModuleElectionAdministration extends Administration<ModuleElection> {
+export default class ModuleElectionAdministration extends Administration<ModuleElectionWithStudentClass> {
   isModuleElectionDataLoading = true;
   moduleElectionApi = new ModuleElectionApi();
   mailTemplateApi = new MailTemplateApi();
-  moduleElectionRows: Array<ModuleElection> = [];
-  checkedModuleElectionRows: Array<ModuleElection> = [];
+  studentApi = new StudentApi();
+  moduleElectionRows: Array<ModuleElectionWithStudentClass> = [];
+  checkedModuleElectionRows: Array<ModuleElectionWithStudentClass> = [];
   mailTemplates: Array<MailTemplate> = [];
   studentNotification: Partial<StudentNotification> = {};
   moduleElectionColumns = [
@@ -87,6 +93,10 @@ export default class ModuleElectionAdministration extends Administration<ModuleE
     {
       field: "studentEmail",
       label: "Student",
+    },
+    {
+      field: "studentClass",
+      label: "Klasse",
     },
     {
       field: "electedModules",
@@ -105,8 +115,19 @@ export default class ModuleElectionAdministration extends Administration<ModuleE
 
   async created(): Promise<void> {
     this.isModuleElectionDataLoading = false;
-    this.moduleElectionRows = await this.moduleElectionApi.getAll();
+    this.moduleElectionRows =
+      (await this.moduleElectionApi.getAll()) as Array<ModuleElectionWithStudentClass>;
     this.mailTemplates = await this.mailTemplateApi.getAll();
+    const students = await this.studentApi.getAll();
+
+    this.moduleElectionRows.forEach((moduleElectionWithStudent) => {
+      const student = students.find(
+        (student) => student.email === moduleElectionWithStudent.studentEmail
+      );
+      if (student) {
+        moduleElectionWithStudent.studentClass = student.class;
+      }
+    });
   }
 
   async deleteModuleElection(moduleElection: ModuleElection): Promise<void> {
