@@ -59,7 +59,7 @@ export default class SettingsModal extends Vue {
     isRepetent: false,
     hadAlreadyElectedTwoConsecutiveModules: false,
     isSkipConsecutiveModuleCheck: false,
-    electedContextModulesInFirstElection: 0,
+    electedContextModulesInFirstElection: 2,
   };
 
   async confirmSetup(): Promise<void> {

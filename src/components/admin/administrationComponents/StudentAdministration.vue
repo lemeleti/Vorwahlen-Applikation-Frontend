@@ -86,6 +86,10 @@ export default class StudentAdministration extends Administration<Student> {
       field: "secondElection",
       label: "Zweite Modulvorwahl",
     },
+    {
+      field: "firstTimeSetup",
+      label: "Erstes Setup",
+    },
   ];
   initValues: Partial<Student> = {
     wpmDispensation: 0,
