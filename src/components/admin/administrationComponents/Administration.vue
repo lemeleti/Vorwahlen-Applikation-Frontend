@@ -78,11 +78,11 @@
       <div class="level-right">
         <div class="level-item">
           <b-select v-model="entriesPerPage">
-            <option value="5">5 pro Seite</option>
             <option value="15">15 pro Seite</option>
-            <option value="30">30 pro Seite</option>
             <option value="50">50 pro Seite</option>
             <option value="100">100 pro Seite</option>
+            <option value="500">500 pro Seite</option>
+            <option value="1000">1000 pro Seite</option>
           </b-select>
         </div>
         <slot name="buttons-right"></slot>
