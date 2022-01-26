@@ -22,6 +22,15 @@
       </div>
 
       <div class="level-item">
+        <b-button
+          label="Wahl schliessen"
+          type="is-warning"
+          @click="closeElection"
+          outlined
+        />
+      </div>
+
+      <div class="level-item">
         <b-dropdown
           :triggers="['hover']"
           aria-role="list"
@@ -165,6 +174,12 @@ export default class ModuleElectionAdministration extends Administration<ModuleE
     this.modalOption.component = StudentNotify;
     this.modalOption.props = { studentNotification: this.studentNotification };
     this.$buefy.modal.open(this.modalOption);
+  }
+
+  async closeElection(): Promise<void> {
+    await this.moduleElectionApi.closeElection(
+      "Die Wahl wurde erfolgreich geschlossen"
+    );
   }
 }
 </script>
